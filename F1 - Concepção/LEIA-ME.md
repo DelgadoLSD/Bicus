@@ -1,5 +1,13 @@
 # F1 – Concepção do Bicus
 
+> **⚠️ ATENÇÃO – gerador e Markdown desatualizados (02/10/2026)**
+>
+> O documento oficial agora é o **`Bicus - F1 Concepção.docx`** (e o `.pdf` gerado a partir dele), editado diretamente no Word.
+> A pasta `_gerador/` e os arquivos `.md` correspondem a uma versão anterior do conteúdo e **não refletem mais o documento**.
+> **Não rode o `gerar.py`**: ele sobrescreve o `.docx` e os diagramas com o conteúdo antigo.
+> O diagrama `diagramas/modelo_conceitual` (.svg/.png) já está atualizado e igual ao do documento.
+
+
 Entrega da fase de **Concepção (RUP)**: análise e especificação de requisitos do Bicus, no formato do `Docs/Exemplo_Concepção.pdf` e de acordo com a aula *"Análise e especificação de requisitos funcionais e não-funcionais"* (Wazlawick).
 
 ## O que tem nesta pasta
