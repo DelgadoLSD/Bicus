@@ -124,44 +124,11 @@ def rastreabilidade():
 # Markdown (arquivos de revisão)
 # ---------------------------------------------------------------------------
 
-NOTA_F9 = """> **Nota de revisão — exemplo numérico da pontuação (F9)**
-> Busca com raio R = 10 km; média geral da plataforma M = 4,2; C = 5; Pd = Pn = 0,5.
->
-> | Prestador | Distância | Avaliações | Nota ajustada N | Pontuação |
-> |---|---|---|---|---|
-> | A | 1 km | 2 (5 e 5) | (5×4,2 + 10)/7 = 4,43 | 0,5×0,9 + 0,5×0,886 = **0,89** |
-> | C (novo) | 2 km | nenhuma | 4,2 | 0,5×0,8 + 0,5×0,84 = **0,82** |
-> | B | 6 km | 40 (média 4,8) | (21 + 192)/45 = 4,73 | 0,5×0,4 + 0,5×0,947 = **0,67** |
->
-> Ordem: A, C, B. Sem a média bayesiana, A teria nota 5,0 com apenas duas avaliações e C (sem
-> avaliações) ficaria em último, justamente o problema do "prestador novo" descrito no tema.
-> Com pesos 0,5/0,5, a distância pesa bastante (B é o melhor avaliado, mas está a 6 km).
-> Os pesos são configuráveis (NF9.3) e devem ser calibrados nos testes de aceitação."""
-
-
-def md_visao():
-    L = [f"# 1. Visão Geral do Sistema", "",
-         f"**Sistema:** {C.SISTEMA} — {C.SUBTITULO}  ",
-         f"**Disciplina:** {C.DISCIPLINA} ({C.PROFESSOR})  ",
-         "**Equipe:** " + "; ".join(f"{n} ({m})" for n, m in C.EQUIPE), "",
-         "## 1.1. Problema", ""]
-    for p in C.VISAO_PROBLEMA:
-        L += [p, ""]
-    L += ["## 1.2. Proposta", "", C.VISAO_PROPOSTA, "", "Principais funcionalidades:", ""]
-    L += [f"- {x}" for x in C.VISAO_FUNCIONALIDADES] + [""]
-    L += ["## 1.3. Atores", "", "| Ator | Descrição |", "|---|---|"]
-    L += [f"| **{a}** | {d} |" for a, d in C.ATORES] + [""]
-    L += ["## 1.4. Escopo", "", "**Contemplado nesta versão:**", ""]
-    L += [f"- {x}" for x in C.ESCOPO_DENTRO] + ["", "**Fora do escopo desta versão:**", ""]
-    L += [f"- {x}" for x in C.ESCOPO_FORA] + [""]
-    return "\n".join(L)
-
-
 def md_rf():
     n_nf = sum(len(f["nfs"]) for f in C.RF)
     n_des = sum(nf[3] for f in C.RF for nf in f["nfs"])
     n_trans = sum(not nf[4] for f in C.RF for nf in f["nfs"])
-    L = ["# 2.1. Requisitos funcionais", "",
+    L = ["# Requisitos funcionais", "",
          "> **Legenda.** *Oculto (X)*: função executada pelo sistema sem o conhecimento explícito "
          "do usuário. *Desejável (X)*: pode ser atendido se houver tempo e recursos; `( )` = "
          "obrigatório. *Permanente (X)*: poucas chances de mudar; `( )` = transitório.", "",
@@ -181,13 +148,11 @@ def md_rf():
             L.append(f"| **{nf_code(f, i)}** {nome} | {rest} | {cat} | {mark(des)} | "
                      f"{mark(perm)} |")
         L.append("")
-        if f["cod"] == "F9":
-            L += [NOTA_F9, ""]
     return "\n".join(L)
 
 
 def md_sup():
-    L = ["# 2.2. Requisitos suplementares", "",
+    L = ["# Requisitos suplementares", "",
          "Restrições que se aplicam ao sistema como um todo, e não a uma função específica.", "",
          "| Nome | Restrição | Categoria | Desejável | Permanente |", "|---|---|---|:---:|:---:|"]
     for i, (nome, paras, cat, des, perm) in enumerate(C.SUPLEMENTARES):
@@ -197,26 +162,26 @@ def md_sup():
 
 
 def md_org():
-    L = ["# 3. Organização dos requisitos", "", "## 3.1. Casos de Uso", "",
+    L = ["# Organização dos requisitos", "", "## Casos de Uso", "",
          "| Nome | Atores | Descrição | Referências cruzadas |", "|---|---|---|---|"]
     for uc in C.CASOS_DE_USO:
         L.append(f"| {uc['nome']} | {', '.join(uc['atores'])} | {uc['desc']} | "
                  f"{', '.join(uc['refs'])} |")
-    L += ["", "## 3.2. Diagrama de Casos de Uso", "",
+    L += ["", "## Diagrama de Casos de Uso", "",
           "![Diagrama de casos de uso](diagramas/diagrama_casos_de_uso.png)", "",
           "*Prestador é uma especialização de Cliente (um prestador também pode contratar "
           "serviços).*", "",
-          "## 3.3. Modelo Conceitual Preliminar", "",
+          "## Modelo Conceitual Preliminar", "",
           "![Modelo conceitual preliminar](diagramas/modelo_conceitual.png)", "",
           "*Sem métodos, sem multiplicidades e sem direção nas associações, como pede o modelo "
           "preliminar da Concepção.*", "",
-          "## 3.4. Conceitos", "",
+          "## Conceitos", "",
           "| Conceito | C | R | U | D | Observações | Referências cruzadas |",
           "|---|:-:|:-:|:-:|:-:|---|---|"]
     for nome, c, r, u, d, obs, refs in C.CONCEITOS:
         x = lambda v: "X" if v else ""
         L.append(f"| {nome} | {x(c)} | {x(r)} | {x(u)} | {x(d)} | {obs} | {', '.join(refs)} |")
-    L += ["", "## 3.5. Consultas", "", "| Nome | Referências cruzadas |", "|---|---|"]
+    L += ["", "## Consultas", "", "| Nome | Referências cruzadas |", "|---|---|"]
     L += [f"| {n} | {', '.join(r)} |" for n, r in C.CONSULTAS]
 
     cols, m = rastreabilidade()
@@ -234,14 +199,14 @@ def md_org():
 
 
 def md_plan():
-    L = ["# 4. Planejamento Preliminar", "", "## 4.1. Planejamento de ciclos iterativos", "",
+    L = ["# Planejamento Preliminar", "", "## Planejamento de ciclos iterativos", "",
          "| Ciclo | Casos de uso | Manutenção de informações | Consultas | Observações | "
          "Esforço estimado |", "|:-:|---|---|---|---|:-:|"]
     for ciclo, ucs, crud, cons, obs, tot in C.CICLOS:
         L.append(f"| {ciclo} | {'<br>'.join(ucs)} | {'<br>'.join(crud)} | {'<br>'.join(cons)} "
                  f"| {obs} | {tot} h |")
     L += [f"| **Total** | | | | | **{sum(c[5] for c in C.CICLOS)} h** |", "",
-          C.JUSTIFICATIVA_CICLOS, "", "## 4.2. Cronograma para o desenvolvimento", ""]
+          C.JUSTIFICATIVA_CICLOS, "", "## Cronograma para o desenvolvimento", ""]
     blocos = [(i, i + 4) for i in range(1, C.DIAS_TOTAIS + 1, 5)]
     L.append("| Dias | " + " | ".join(f"{a}-{b}" for a, b in blocos) + " |")
     L.append("|---|" + ":-:|" * len(blocos))
@@ -257,21 +222,27 @@ def md_plan():
     L += ["", "**Legenda:** " + "; ".join(f"{n} ({s})" for s, n in C.LEGENDA_FASES) +
           "; Implantação (Impl.).", "", "| Fase | Responsável(is) | Cor |", "|---|---|---|"]
     L += [f"| {f} | {r} | {c} |" for f, r, c, _ in C.RESPONSAVEIS]
-    L += [""] + [f"**Obs.:** {C.OBS_CRONOGRAMA[0]}", "", C.OBS_CRONOGRAMA[1], "",
-                 "## 4.3. Prioridade para melhores práticas do RUP", ""]
-    for i, (titulo, texto) in enumerate(C.RUP, 1):
-        L += [f"**{i}. {titulo}**", "", texto, ""]
+    L += [""] + [f"**Obs.:** {C.OBS_CRONOGRAMA[0]}", "", C.OBS_CRONOGRAMA[1]]
     return "\n".join(L)
+
+
+# Nomes antigos de quando o documento tinha "1. Visão Geral" e "4.3. Prioridade RUP"
+# (seção 1 e 4.3 removidas do documento oficial em 02/10/2026 - ver ARQUIVADO em conteudo.py).
+_MD_ANTIGOS = ["1 - Visão Geral.md", "2.1 - Requisitos Funcionais.md",
+               "2.2 - Requisitos Suplementares.md", "3 - Organização dos Requisitos.md",
+               "4 - Planejamento Preliminar.md"]
 
 
 def gerar_md():
     arquivos = {
-        "1 - Visão Geral.md": md_visao(),
-        "2.1 - Requisitos Funcionais.md": md_rf(),
-        "2.2 - Requisitos Suplementares.md": md_sup(),
+        "1 - Requisitos Funcionais.md": md_rf(),
+        "2 - Requisitos Suplementares.md": md_sup(),
         "3 - Organização dos Requisitos.md": md_org(),
         "4 - Planejamento Preliminar.md": md_plan(),
     }
+    for nome in _MD_ANTIGOS:
+        if nome not in arquivos:
+            (RAIZ / nome).unlink(missing_ok=True)
     for nome, txt in arquivos.items():
         (RAIZ / nome).write_text(txt, encoding="utf-8")
     print("Markdown:", ", ".join(arquivos))
@@ -359,37 +330,70 @@ def diagrama_casos_de_uso():
 
 
 def diagrama_conceitual():
-    W, H = 1000, 660
+    W, H = 1040, 880
     BW, HEAD, LH, PAD = 240, 30, 19, 10
+    # Grade 3x3 (linha 3 / coluna 3 fica vazia - usada só pela linha "referente a" passar por lá).
     pos = {
-        "Denúncia": (30, 30), "Administrador": (380, 30), "Categoria": (730, 30),
-        "Usuário": (30, 250), "Prestador": (380, 250), "Serviço": (730, 250),
-        "Avaliação": (30, 480), "Solicitação": (380, 480),
+        "Denúncia": (70, 30), "Administrador": (420, 30), "Categoria": (770, 30),
+        "Usuário": (70, 270), "Prestador": (420, 270), "Serviço": (770, 270),
+        "Avaliação": (70, 580), "Solicitação": (420, 580),
     }
     assert set(pos) == set(C.CLASSES)
-    # pontos de ligação desenhados à mão para evitar cruzamentos
+    # Pontos de ligação desenhados à mão para evitar cruzamentos. Chave = (classeA, classeB,
+    # rótulo), pois há duas associações "denuncia" entre pares diferentes envolvendo Denúncia.
+    # Cada valor é (pontos [2+], (lx, ly, anchor) | ("rotate", cx, cy)).
     ligacoes = {
-        ("Denúncia", "Administrador"): ((270, 65), (380, 65), (325, 57, "middle")),
-        ("Administrador", "Categoria"): ((620, 65), (730, 65), (675, 57, "middle")),
-        ("Usuário", "Denúncia"): ((150, 250), (150, 165), (158, 213, "start")),
-        ("Serviço", "Categoria"): ((850, 250), (850, 127), (858, 194, "start")),
-        ("Usuário", "Prestador"): ((270, 310), (380, 310), (325, 302, "middle")),
-        ("Prestador", "Serviço"): ((620, 310), (730, 310), (675, 302, "middle")),
-        ("Solicitação", "Avaliação"): ((380, 540), (270, 540), (325, 532, "middle")),
-        ("Usuário", "Solicitação"): ((240, 423), (420, 480), (318, 438, "middle")),
-        ("Solicitação", "Serviço"): ((580, 480), (760, 404), (690, 430, "middle")),
+        ("Usuário", "Prestador", "atua como"):
+            ([(310, 330), (420, 330)], (365, 322, "middle")),
+        ("Usuário", "Solicitação", "solicita"):
+            ([(250, 481), (470, 580)], (330, 529, "middle")),
+        ("Usuário", "Denúncia", "registra"):
+            ([(130, 270), (130, 203)], (138, 250, "start")),
+        ("Prestador", "Serviço", "oferece"):
+            ([(660, 330), (770, 330)], (715, 322, "middle")),
+        ("Categoria", "Serviço", "classificado em"):
+            ([(890, 270), (890, 127)], (898, 240, "start")),
+        ("Serviço", "Solicitação", "referente a"):
+            ([(660, 620), (850, 424)], (775, 560, "middle")),
+        ("Avaliação", "Solicitação", "origina"):
+            ([(420, 640), (310, 640)], (365, 632, "middle")),
+        ("Denúncia", "Administrador", "analisada por"):
+            ([(310, 65), (420, 65)], (365, 57, "middle")),
+        ("Administrador", "Categoria", "mantém"):
+            ([(660, 65), (770, 65)], (715, 57, "middle")),
+        ("Denúncia", "Usuário", "denuncia"):
+            ([(260, 203), (260, 270)], (268, 250, "start")),
+        # Denúncia e Avaliação ficam na mesma coluna, com Usuário entre as duas: a linha contorna
+        # pela esquerda para não cruzar as caixas, com o rótulo girado -90°.
+        ("Denúncia", "Avaliação", "denuncia"):
+            ([(70, 120), (35, 120), (35, 640), (70, 640)], ("rotate", 27, 380)),
     }
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
            f'viewBox="0 0 {W} {H}">', f'<rect width="{W}" height="{H}" fill="white"/>']
     for a, b, rotulo in C.ASSOCIACOES:
-        (x1, y1), (x2, y2), (lx, ly, anc) = ligacoes[(a, b)]
-        out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#333" '
-                   f'stroke-width="1.3"/>')
+        pontos, info = ligacoes[(a, b, rotulo)]
+        if len(pontos) == 2:
+            (x1, y1), (x2, y2) = pontos
+            out.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#333" '
+                       f'stroke-width="1.3"/>')
+        else:
+            pstr = " ".join(f"{x},{y}" for x, y in pontos)
+            out.append(f'<polyline points="{pstr}" fill="none" stroke="#333" '
+                       f'stroke-width="1.3"/>')
         w = len(rotulo) * 6.6
-        bx = lx - w / 2 if anc == "middle" else lx - 2
-        out.append(f'<rect x="{bx:.0f}" y="{ly - 12}" width="{w + 4:.0f}" height="16" '
-                   f'fill="white"/>')
-        out.append(svg_texto(lx, ly, rotulo, 12, anchor=anc, fill="#333"))
+        if info[0] == "rotate":
+            _, cx, cy = info
+            out.append(f'<g transform="translate({cx} {cy}) rotate(-90)">'
+                       f'<rect x="{-w / 2 - 2:.0f}" y="-12" width="{w + 4:.0f}" height="16" '
+                       f'fill="white"/>'
+                       f'<text x="0" y="4" font-family="{FONTE}" font-size="12" '
+                       f'text-anchor="middle" fill="#333">{esc(rotulo)}</text></g>')
+        else:
+            lx, ly, anc = info
+            bx = lx - w / 2 if anc == "middle" else lx - 2
+            out.append(f'<rect x="{bx:.0f}" y="{ly - 12}" width="{w + 4:.0f}" height="16" '
+                       f'fill="white"/>')
+            out.append(svg_texto(lx, ly, rotulo, 12, anchor=anc, fill="#333"))
     for nome, attrs in C.CLASSES.items():
         x, y = pos[nome]
         h = HEAD + LH * len(attrs) + PAD
@@ -629,62 +633,41 @@ def capa(doc):
         r = p.add_run(texto)
         r.font.size, r.bold = Pt(tam), neg
 
-    linha(C.INSTITUICAO, 14, True, antes=60)
-    linha(C.DISCIPLINA)
-    linha(C.PROFESSOR)
     linha(C.SISTEMA, 40, True, antes=150)
     linha(C.SUBTITULO, 14)
     linha("Fase 1 – Concepção", 13, True, antes=18, depois=0)
-    linha("Análise e Especificação de Requisitos do Software", 13, True)
-    linha("Equipe", 12, True, antes=130)
+    linha("", antes=18)
+    linha("Grupo:", 12, True, antes=18)
     for nome, mat in C.EQUIPE:
         linha(f"{nome} – {mat}", depois=0)
-    linha(C.DATA, antes=90)
+    linha("", antes=90)
     quebra_pagina(doc)
 
 
-def sumario(doc):
-    p = doc.add_paragraph()
-    r = p.add_run("Sumário")
-    r.bold, r.font.size = True, Pt(20)
-    p.paragraph_format.space_after = Pt(12)
-    campo(doc.add_paragraph(), 'TOC \\o "1-2" \\h \\z \\u',
-          "Clique com o botão direito e escolha “Atualizar campo” para gerar o sumário.")
-    quebra_pagina(doc)
+# Numeração automática "1.", "2.1.", etc. foi removida à mão do documento oficial em 02/10/2026,
+# assim como a página de Sumário e a seção "1. Visão Geral do Sistema" (texto arquivado em
+# conteudo.py). Os títulos de nível 2 (h2) ficaram com marcador de lista (bullet) na frente -
+# reproduzido aqui reaproveitando o numId=1, que o modelo padrão do python-docx já reserva para
+# o estilo "List Bullet".
+NUM_ID_BULLET = 1
 
 
-def secao_visao(doc):
-    doc.add_heading("1. Visão Geral do Sistema", level=1)
-    for rot, txt in (("Sistema: ", f"{C.SISTEMA} – {C.SUBTITULO}."),
-                     ("Equipe: ", "; ".join(f"{n} ({m})" for n, m in C.EQUIPE) + ".")):
-        paragrafo(doc, txt, rot, after=2, align=WD_ALIGN_PARAGRAPH.LEFT)
-    doc.add_heading("1.1. Problema", level=2)
-    for p in C.VISAO_PROBLEMA:
-        paragrafo(doc, p)
-    doc.add_heading("1.2. Proposta", level=2)
-    paragrafo(doc, C.VISAO_PROPOSTA)
-    paragrafo(doc, "Principais funcionalidades:", after=2)
-    for x in C.VISAO_FUNCIONALIDADES:
-        doc.add_paragraph(x, style="List Bullet").paragraph_format.space_after = Pt(1)
-    doc.add_heading("1.3. Atores", level=2)
-    t = nova_tabela(doc, [3.2, 13.8])
-    row = nova_linha(t)
-    for c, txt in zip(row.cells, ("Ator", "Descrição")):
-        escrever(c, [(txt, True)], WD_ALIGN_PARAGRAPH.CENTER)
-        sombrear(c, CINZA)
-    for a, d in C.ATORES:
-        row = nova_linha(t)
-        escrever(row.cells[0], [(a, True)])
-        escrever(row.cells[1], d, WD_ALIGN_PARAGRAPH.JUSTIFY)
-    doc.add_heading("1.4. Escopo", level=2)
-    paragrafo(doc, "Contemplado nesta versão:", after=2).runs[0].bold = True
-    for x in C.ESCOPO_DENTRO:
-        doc.add_paragraph(x, style="List Bullet").paragraph_format.space_after = Pt(1)
-    p = paragrafo(doc, "Fora do escopo desta versão:", after=2)
-    p.runs[0].bold = True
-    p.paragraph_format.space_before = Pt(6)
-    for x in C.ESCOPO_FORA:
-        doc.add_paragraph(x, style="List Bullet").paragraph_format.space_after = Pt(1)
+def h1(doc, texto):
+    return doc.add_heading(texto, level=1)
+
+
+def h2(doc, texto):
+    p = doc.add_heading(texto, level=2)
+    pPr = p._p.get_or_add_pPr()
+    numPr = OxmlElement("w:numPr")
+    ilvl = OxmlElement("w:ilvl")
+    ilvl.set(qn("w:val"), "0")
+    numId = OxmlElement("w:numId")
+    numId.set(qn("w:val"), str(NUM_ID_BULLET))
+    numPr.append(ilvl)
+    numPr.append(numId)
+    pPr.append(numPr)
+    return p
 
 
 LARG_NF = [3.1, 6.6, 3.2, 1.95, 2.15]
@@ -725,9 +708,8 @@ def tabela_rf(doc, f):
 
 
 def secao_concepcao(doc):
-    quebra_pagina(doc)
-    doc.add_heading("2. Concepção", level=1)
-    doc.add_heading("2.1. Requisitos funcionais", level=2)
+    h1(doc, "Concepção")
+    h2(doc, "Requisitos funcionais")
     p = paragrafo(doc, "Oculto (X): função executada pelo sistema sem o conhecimento explícito "
                   "do usuário. Desejável (X): pode ser atendido se houver tempo e recursos; ( ) = "
                   "obrigatório. Permanente (X): poucas chances de mudar; ( ) = transitório.",
@@ -736,7 +718,7 @@ def secao_concepcao(doc):
         tabela_rf(doc, f)
 
     quebra_pagina(doc)
-    doc.add_heading("2.2. Requisitos suplementares", level=2)
+    h2(doc, "Requisitos suplementares")
     t = nova_tabela(doc, LARG_NF)
     repetir_cabecalho(cabecalho_nf(t))
     for i, (nome, paras, cat, des, perm) in enumerate(C.SUPLEMENTARES):
@@ -749,18 +731,21 @@ def secao_concepcao(doc):
     manter_junto(t, ate=1)
 
 
-def figura(doc, png, legenda, largura=16.5):
+def figura(doc, png, legenda=None, largura=16.5):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.keep_with_next = True
+    p.paragraph_format.keep_with_next = bool(legenda)
     p.add_run().add_picture(str(png), width=Cm(largura))
-    paragrafo(doc, legenda, size=9, italic=True, align=WD_ALIGN_PARAGRAPH.CENTER, after=10)
+    if legenda:
+        paragrafo(doc, legenda, size=9, italic=True, align=WD_ALIGN_PARAGRAPH.CENTER, after=10)
+    else:
+        p.paragraph_format.space_after = Pt(10)
 
 
 def secao_organizacao(doc, pngs):
     quebra_pagina(doc)
-    doc.add_heading("3. Organização dos requisitos", level=1)
-    doc.add_heading("3.1. Casos de Uso", level=2)
+    h1(doc, "Organização dos requisitos")
+    h2(doc, "Casos de Uso")
     t = nova_tabela(doc, [3.2, 2.6, 8.4, 2.8])
     row = nova_linha(t)
     for c, txt in zip(row.cells, ("Nome", "Atores", "Descrição", "Referências cruzadas")):
@@ -775,18 +760,14 @@ def secao_organizacao(doc, pngs):
         escrever(row.cells[3], ", ".join(uc["refs"]), WD_ALIGN_PARAGRAPH.CENTER)
     manter_junto(t, ate=1)
 
-    doc.add_heading("3.2. Diagrama de Casos de Uso", level=2)
-    figura(doc, pngs["diagrama_casos_de_uso"],
-           "Figura 1 – Diagrama de casos de uso do Bicus (versão da Concepção). Prestador é uma "
-           "especialização de Cliente.")
+    h2(doc, "Diagrama de Casos de Uso")
+    figura(doc, pngs["diagrama_casos_de_uso"])
 
     quebra_pagina(doc)
-    doc.add_heading("3.3. Modelo Conceitual Preliminar", level=2)
-    figura(doc, pngs["modelo_conceitual"],
-           "Figura 2 – Modelo conceitual preliminar (sem métodos, multiplicidades ou direção nas "
-           "associações).")
+    h2(doc, "Modelo Conceitual Preliminar")
+    figura(doc, pngs["modelo_conceitual"])
 
-    doc.add_heading("3.4. Conceitos", level=2)
+    h2(doc, "Conceitos")
     t = nova_tabela(doc, [2.6, 0.75, 0.75, 0.75, 0.75, 8.6, 2.8])
     row = nova_linha(t)
     for c, txt in zip(row.cells, ("Conceito", "C", "R", "U", "D", "Observações",
@@ -803,7 +784,7 @@ def secao_organizacao(doc, pngs):
         escrever(row.cells[6], ", ".join(refs), WD_ALIGN_PARAGRAPH.CENTER)
     manter_junto(t, ate=1)
 
-    doc.add_heading("3.5. Consultas", level=2)
+    h2(doc, "Consultas")
     t = nova_tabela(doc, [11.0, 6.0])
     row = nova_linha(t)
     for c, txt in zip(row.cells, ("Nome", "Referências cruzadas")):
@@ -818,8 +799,8 @@ def secao_organizacao(doc, pngs):
 
 def secao_planejamento(doc):
     quebra_pagina(doc)
-    doc.add_heading("4. Planejamento Preliminar", level=1)
-    doc.add_heading("4.1. Planejamento de ciclos iterativos", level=2)
+    h1(doc, "Planejamento Preliminar")
+    h2(doc, "Planejamento de ciclos iterativos")
     t = nova_tabela(doc, [1.4, 3.6, 3.3, 2.1, 4.6, 2.0])
     row = nova_linha(t)
     for c, txt in zip(row.cells, ("Ciclos", "Casos de uso", "Manutenção de informações",
@@ -845,7 +826,7 @@ def secao_planejamento(doc):
     # 4.2 em página paisagem
     sec = doc.add_section(WD_SECTION.NEW_PAGE)
     margens(sec, paisagem=True)
-    doc.add_heading("4.2. Cronograma para o desenvolvimento", level=2)
+    h2(doc, "Cronograma para o desenvolvimento")
     blocos = [(i, i + 4) for i in range(1, C.DIAS_TOTAIS + 1, 5)]
     larg = [2.3] + [(25.7 - 2.3) / len(blocos)] * len(blocos)
     t = nova_tabela(doc, larg)
@@ -914,14 +895,9 @@ def secao_planejamento(doc):
     paragrafo(doc, C.OBS_CRONOGRAMA[0], "Obs.: ", size=10)
     paragrafo(doc, C.OBS_CRONOGRAMA[1], size=10)
 
-    sec = doc.add_section(WD_SECTION.NEW_PAGE)
-    margens(sec)
-    doc.add_heading("4.3. Prioridade para melhores práticas do RUP", level=2)
-    for i, (titulo, texto) in enumerate(C.RUP, 1):
-        p = paragrafo(doc, "", f"{i}. {titulo}", after=3)
-        p.paragraph_format.keep_with_next = True
-        p.paragraph_format.space_before = Pt(6)
-        paragrafo(doc, texto, after=6).paragraph_format.first_line_indent = Cm(1.0)
+    # Volta para retrato, pois o documento termina aqui (a seção "4.3. Prioridade para melhores
+    # práticas do RUP" foi removida intencionalmente em 02/10/2026 - texto arquivado em
+    # conteudo.py, RUP_ARQUIVADO).
 
 
 def rodape(doc):
@@ -948,8 +924,6 @@ def gerar_docx(pngs):
     margens(doc.sections[0])
     rodape(doc)
     capa(doc)
-    sumario(doc)
-    secao_visao(doc)
     secao_concepcao(doc)
     secao_organizacao(doc, pngs)
     secao_planejamento(doc)

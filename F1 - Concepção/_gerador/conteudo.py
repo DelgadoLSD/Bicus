@@ -7,6 +7,10 @@ Este arquivo é a ÚNICA fonte do conteúdo. O script gerar.py lê estes dados e
   - os arquivos .md de revisão (um por seção);
   - os diagramas (casos de uso e modelo conceitual).
 
+SINCRONIZADO em 08/10/2026 com o `Bicus - F1 Concepção.docx` editado à mão pelo
+Luis Felipe (commit 920619c, 02/10/2026). A partir de agora o fluxo de trabalho é:
+Claude gera com `gerar.py` -> o grupo revisa e ajusta à mão no Word se precisar.
+
 Convenções dos requisitos não-funcionais (NF) e suplementares (S):
   (nome, restrição, categoria, desejável, permanente)
   desejável  = True  -> "(X)" na coluna Desejável  (False = obrigatório)
@@ -16,660 +20,443 @@ Os códigos NFx.y e Sx são numerados automaticamente pela ordem das listas.
 
 SISTEMA = "Bicus"
 SUBTITULO = "Marketplace online de bicos e pequenos serviços locais"
-DISCIPLINA = "INF323 – Engenharia de Software II"
-PROFESSOR = "Prof. Lucas Francisco da Matta Vegi"
-INSTITUICAO = "Universidade Federal de Viçosa"
-DATA = "Setembro de 2026"
-
 EQUIPE = [
     ("Hugo Costa Araújo", "112684"),
     ("Lucas Silva Delgado", "112685"),
     ("Luis Felipe Martins Pereira", "112710"),
 ]
 
-# ---------------------------------------------------------------------------
-# 1. VISÃO GERAL DO SISTEMA
-# ---------------------------------------------------------------------------
-
-VISAO_PROBLEMA = [
-    "Quem presta pequenos serviços, como jardinagem, aulas particulares, pequenos reparos "
-    "domésticos, faxina e reforço escolar, costuma divulgar seu trabalho de maneira informal: "
-    "indicações boca a boca, grupos de WhatsApp e Facebook ou redes sociais pessoais. Para quem "
-    "precisa contratar um serviço pontual, encontrar um prestador de confiança é um processo lento, "
-    "baseado em recomendações de conhecidos ou em informações dispersas na internet. Também não é "
-    "possível verificar rapidamente se o prestador está próximo, qual é o seu histórico de "
-    "avaliações, sua disponibilidade e a qualidade dos serviços já realizados.",
-    "Essa falta de organização prejudica os dois lados. Prestadores novos, sem uma rede de "
-    "indicações estabelecida, têm dificuldade em conseguir os primeiros trabalhos, mesmo sendo "
-    "qualificados. Clientes acabam recorrendo sempre ao mesmo prestador por falta de uma forma "
-    "fácil de comparar alternativas.",
-]
-
-VISAO_PROPOSTA = (
-    "O Bicus é uma plataforma online (web e mobile) que aproxima clientes e prestadores de pequenos "
-    "serviços locais. Prestadores se cadastram informando categoria de atuação, descrição do "
-    "serviço, faixa de preço e localização. Ao buscar por uma categoria, o cliente recebe a lista "
-    "de prestadores daquela categoria dentro de um raio de distância configurável a partir da sua "
-    "localização, ordenada pela combinação de proximidade geográfica e nota média das avaliações "
-    "anteriores. Após a conclusão de cada serviço, o cliente avalia o prestador, alimentando um "
-    "histórico de reputação que passa a fazer parte do processo de recomendação."
-)
-
-VISAO_FUNCIONALIDADES = [
-    "Cadastro de usuários e ativação de perfil de prestador, com serviços, faixa de preço, "
-    "localização e disponibilidade;",
-    "Busca de prestadores por categoria dentro de um raio configurável, com ordenação por "
-    "proximidade e reputação;",
-    "Solicitação de serviço ao prestador, com aceite ou recusa e liberação do contato após o aceite;",
-    "Registro de conclusão do serviço e avaliação do prestador pelo cliente (nota e comentário);",
-    "Histórico de reputação usado na recomendação, incluindo tratamento justo para prestadores novos;",
-    "Denúncia de conteúdo inadequado e moderação pelo administrador.",
-]
-
-ATORES = [
-    ("Cliente",
-     "Qualquer pessoa cadastrada que busca e contrata serviços. Busca prestadores, envia "
-     "solicitações, confirma a conclusão e avalia o prestador."),
-    ("Prestador",
-     "Cliente que ativou um perfil de prestador. Além de contratar serviços, cadastra os serviços "
-     "que oferece, define sua disponibilidade, responde às solicitações e registra a conclusão dos "
-     "serviços. Na UML, é uma especialização do ator Cliente."),
-    ("Administrador",
-     "Membro da equipe do Bicus. Mantém as categorias de serviço e modera as denúncias de "
-     "conteúdo inadequado."),
-]
-
-ESCOPO_DENTRO = [
-    "Cadastro e autenticação de usuários; perfil de prestador, serviços oferecidos e disponibilidade;",
-    "Busca geográfica por categoria e raio, com ranking por proximidade e nota;",
-    "Ciclo da solicitação de serviço (envio, aceite/recusa, conclusão, cancelamento);",
-    "Avaliação do prestador, reputação e resposta do prestador à avaliação;",
-    "Denúncias, moderação e manutenção de categorias.",
-]
-
-ESCOPO_FORA = [
-    "Pagamento intermediado pela plataforma: preço e pagamento são combinados diretamente entre "
-    "cliente e prestador (ver S8);",
-    "Chat interno: após o aceite, a conversa segue pelo telefone/WhatsApp liberado pelo sistema;",
-    "Avaliação do cliente pelo prestador;",
-    "Verificação de documentos ou antecedentes dos prestadores;",
-    "Cálculo de rotas reais: a distância considerada é em linha reta.",
-]
+# Metadados usados só nas propriedades do arquivo (autor/título), não aparecem mais na capa
+# (a capa foi simplificada em 02/10/2026 - ver ARQUIVADO no fim do arquivo).
+DISCIPLINA = "INF323 – Engenharia de Software II"
+PROFESSOR = "Prof. Lucas Francisco da Matta Vegi"
+INSTITUICAO = "Universidade Federal de Viçosa"
+DATA = "Setembro de 2026"
 
 # ---------------------------------------------------------------------------
-# 2.1 REQUISITOS FUNCIONAIS
+# REQUISITOS FUNCIONAIS
 # ---------------------------------------------------------------------------
 # Cada item: cod, nome, oculto, desc, nfs=[(nome, restrição, categoria, desejável, permanente)]
 
 RF = [
-    dict(cod="F1", nome="Cadastrar usuário", oculto=False,
-         desc="O sistema deverá conter uma tela de cadastro onde solicitará os dados do usuário, "
-              "tais como: nome completo, e-mail, senha, CPF, telefone (WhatsApp), data de "
-              "nascimento, endereço (CEP, logradouro, número, complemento, bairro, cidade e UF) e "
-              "foto de perfil. Todo usuário cadastrado pode contratar serviços como cliente e, "
-              "posteriormente, ativar um perfil de prestador (F4).",
+    dict(cod='F1', nome='Cadastrar usuário', oculto=False,
+         desc='O sistema deverá conter uma tela de cadastro onde solicitará os dados do usuário, tais como: nome completo, e-mail, senha, CPF, telefone, data de nascimento, endereço e foto de perfil. Todo usuário cadastrado pode contratar serviços como cliente e, posteriormente, ativar um perfil de prestador (F4).',
          nfs=[
-             ("Formato do CPF", "O CPF deverá ser no formato XXX.XXX.XXX-XX.",
-              "Interface", True, True),
-             ("Validação do CPF", "O sistema deve validar os dígitos verificadores do CPF. Caso "
-              "não seja válido, o sistema deverá avisar o usuário e interromper o cadastro.",
-              "Segurança", False, True),
-             ("Dados obrigatórios", "O sistema deve associar obrigatoriamente à conta: nome "
-              "completo, e-mail, senha, CPF, telefone, data de nascimento e endereço.",
-              "Segurança", False, True),
-             ("Dados opcionais", "O sistema deve associar opcionalmente à conta: foto de perfil e "
-              "complemento do endereço.", "Interface", False, True),
-             ("Unicidade da conta", "Não poderá existir mais de uma conta com o mesmo CPF ou com o "
-              "mesmo e-mail.", "Segurança", False, True),
-             ("Idade mínima", "A data de nascimento deve indicar idade igual ou superior a 18 "
-              "anos; caso contrário, o sistema deverá avisar o usuário e interromper o cadastro "
-              "(S5).", "Legal", False, True),
-             ("Política de senha", "A senha deve ter no mínimo 8 caracteres, com ao menos uma "
-              "letra e um número.", "Segurança", False, False),
-             ("Endereço pelo CEP", "Ao digitar o CEP, o sistema preenche automaticamente "
-              "logradouro, bairro, cidade e UF por meio de uma API pública de CEP (ex.: ViaCEP).",
-              "Usabilidade", True, False),
-             ("Termos de uso e privacidade", "O cadastro só será concluído após o aceite dos "
-              "Termos de Uso e da Política de Privacidade (S6).", "Legal", False, True),
-             ("Confirmação de e-mail", "O sistema enviará um link de confirmação para o e-mail "
-              "informado; a conta só é ativada após a confirmação.", "Segurança", True, True),
+             ('Validação do CPF', 'O sistema deve validar os dígitos verificadores do CPF. Caso não seja válido, o sistema deverá avisar o usuário e interromper o cadastro.',
+              'Segurança', False, True),
+             ('Dados obrigatórios', 'O sistema deve associar obrigatoriamente à conta: nome completo, e-mail, senha, CPF, telefone, data de nascimento e endereço.',
+              'Segurança', False, True),
+             ('Dados opcionais', 'O sistema deve associar opcionalmente à conta: foto de perfil e complemento do endereço.',
+              'Interface', False, True),
+             ('Unicidade da conta', 'Não poderá existir mais de uma conta com o mesmo CPF ou com o mesmo e-mail.',
+              'Segurança', False, True),
+             ('Idade mínima', 'A data de nascimento deve indicar idade igual ou superior a 18 anos; caso contrário, o sistema deverá avisar o usuário e interromper o cadastro.',
+              'Legal', False, True),
+             ('Política de senha', 'A senha deve ter no mínimo 8 caracteres, com ao menos uma letra e um número.',
+              'Segurança', False, False),
+             ('Termos de uso e privacidade', 'O cadastro só será concluído após o aceite dos Termos de Uso e da Política de Privacidade.',
+              'Legal', False, True),
+             ('Confirmação de e-mail', 'O sistema enviará um link de confirmação para o e-mail informado. A conta só é ativada após a confirmação.',
+              'Segurança', True, True),
          ]),
 
-    dict(cod="F2", nome="Login", oculto=False,
-         desc="O sistema irá conter uma tela de login que solicitará o e-mail e a senha do usuário.",
+    dict(cod='F2', nome='Login', oculto=False,
+         desc='O sistema irá conter uma tela de login que solicitará o e-mail e a senha do usuário.',
          nfs=[
-             ("Permissão de acesso", "O usuário só terá acesso ao sistema caso esteja cadastrado, "
-              "com conta ativa (confirmada e não suspensa), e a senha digitada corresponda à senha "
-              "cadastrada.", "Segurança", False, True),
-             ("Bloqueio por tentativas", "Após 5 tentativas de login inválidas consecutivas, o "
-              "acesso à conta será bloqueado por 15 minutos.", "Segurança", True, False),
-             ("Recuperação de senha", "O usuário poderá redefinir a senha por meio de um link "
-              "enviado ao e-mail cadastrado, válido por 1 hora.", "Usabilidade", False, True),
-             ("Manter conectado", "O sistema manterá a sessão ativa no dispositivo por até 30 "
-              "dias, salvo se o usuário sair explicitamente.", "Usabilidade", True, False),
+             ('Permissão de acesso', 'O usuário só terá acesso ao sistema caso esteja cadastrado, com conta ativa e a senha digitada corresponda à senha cadastrada.',
+              'Segurança', False, True),
+             ('Recuperação de senha', 'O usuário poderá redefinir a senha por meio de um link enviado ao e-mail cadastrado.',
+              'Usabilidade', False, True),
          ]),
 
-    dict(cod="F3", nome="Editar dados da conta de usuário", oculto=False,
-         desc="Os usuários poderão alterar alguns dados da conta, como nome, telefone, endereço, "
-              "foto de perfil, e-mail e senha, e também solicitar a exclusão da conta.",
+    dict(cod='F3', nome='Editar dados da conta de usuário', oculto=False,
+         desc='Os usuários poderão alterar alguns dados da conta, como nome, telefone, endereço, foto de perfil, e-mail e senha, e também solicitar a exclusão da conta.',
          nfs=[
-             ("Dados não alteráveis", "As informações de CPF e data de nascimento não poderão ser "
-              "alteradas.", "Segurança", False, True),
-             ("Alteração de e-mail", "A alteração do e-mail exige nova confirmação pelo novo "
-              "endereço (NF1.10).", "Segurança", True, True),
-             ("Alteração de senha", "Para alterar a senha, o usuário deve informar a senha atual.",
-              "Segurança", False, True),
-             ("Atualização da localização", "Ao alterar o endereço, o sistema deve recalcular as "
-              "coordenadas geográficas do usuário (F7).", "Implementação", False, True),
-             ("Exclusão da conta", "O usuário pode solicitar a exclusão da conta. Os dados "
-              "pessoais serão anonimizados e as avaliações já feitas permanecerão, sem "
-              "identificação do autor. Não é possível excluir a conta com solicitações em "
-              "andamento.", "Legal", False, True),
+             ('Dados não alteráveis', 'As informações de CPF e data de nascimento não poderão ser alteradas.',
+              'Segurança', False, True),
+             ('Alteração de e-mail', 'A alteração do e-mail exige nova confirmação pelo novo endereço.',
+              'Segurança', True, True),
+             ('Alteração de senha', 'Para alterar a senha, o usuário deve informar a senha atual.',
+              'Segurança', False, True),
+             ('Atualização da localização', 'Ao alterar o endereço, o sistema deve recalcular as coordenadas geográficas do usuário.',
+              'Usabilidade', False, True),
+             ('Exclusão da conta', 'O usuário pode solicitar a exclusão da conta. As avaliações já feitas permanecerão, sem identificação do autor. Não é possível excluir a conta com solicitações em andamento.',
+              'Legal', False, True),
          ]),
 
-    dict(cod="F4", nome="Cadastrar perfil de prestador", oculto=False,
-         desc="O sistema deverá permitir que um usuário cadastrado ative um perfil de prestador, "
-              "informando uma apresentação profissional, o local base de atendimento (por padrão, "
-              "o endereço da conta) e, opcionalmente, a distância máxima que aceita se deslocar e "
-              "fotos de trabalhos já realizados (portfólio).",
+    dict(cod='F4', nome='Cadastrar perfil de prestador', oculto=False,
+         desc='O sistema deverá permitir que um usuário cadastrado ative um perfil de prestador, informando uma apresentação profissional, o local base de atendimento (caso exista) e, opcionalmente, fotos de trabalhos já realizados.',
          nfs=[
-             ("Conta única", "O perfil de prestador fica vinculado à conta do usuário, que "
-              "continua podendo contratar serviços como cliente.", "Segurança", False, True),
-             ("Visibilidade nas buscas", "O prestador só aparecerá nas buscas após cadastrar ao "
-              "menos um serviço ativo (F5).", "Especificação", False, True),
-             ("Privacidade do endereço", "O endereço completo do prestador nunca é exibido "
-              "publicamente; apenas bairro, cidade e distância aproximada.", "Segurança", False,
-              True),
-             ("Raio de deslocamento", "O prestador pode definir a distância máxima (em km) que "
-              "aceita se deslocar; clientes fora desse raio não o encontrarão nas buscas.",
-              "Configurabilidade", True, False),
-             ("Portfólio", "O prestador pode adicionar até 10 fotos de trabalhos realizados, nos "
-              "formatos JPG ou PNG, com até 5 MB cada.", "Implementação", True, False),
-             ("Desativação do perfil", "O prestador pode desativar o perfil e deixar de aparecer "
-              "nas buscas; não é possível desativá-lo com solicitações em andamento.",
-              "Usabilidade", False, True),
+             ('Conta única', 'O perfil de prestador fica vinculado à conta do usuário, que continua podendo contratar serviços como cliente.',
+              'Segurança', False, True),
+             ('Privacidade do endereço', 'O endereço completo do prestador nunca é exibido publicamente. Apenas bairro, cidade e distância aproximada.',
+              'Segurança', False, True),
+             ('Raio de deslocamento', 'O prestador pode definir a distância máxima (em km) que aceita se deslocar. Clientes fora desse raio não o encontrarão nas buscas.',
+              'Configurabilidade', True, False),
+             ('Portfólio', 'O prestador pode adicionar até 10 fotos de trabalhos realizados.',
+              'Implementação', True, False),
+             ('Desativação do perfil', 'O prestador pode desativar o perfil e deixar de aparecer nas buscas. Não é possível desativá-lo com solicitações em andamento.',
+              'Usabilidade', False, True),
          ]),
 
-    dict(cod="F5", nome="Gerenciar serviços oferecidos", oculto=False,
-         desc="O prestador poderá cadastrar, editar, pausar e remover os serviços que oferece, "
-              "informando para cada um: categoria, título, descrição, faixa de preço (valor mínimo "
-              "e máximo) e unidade de cobrança.",
+    dict(cod='F5', nome='Gerenciar serviços oferecidos', oculto=False,
+         desc='O prestador poderá cadastrar, editar e remover os serviços que oferece, informando para cada um: categoria, título, descrição, faixa de preço (valor mínimo e máximo) e unidade de cobrança.',
          nfs=[
-             ("Seleção de categoria", "A categoria deve ser escolhida em uma lista pré-definida, "
-              "mantida pelo administrador (F20), e não digitada livremente.", "Interface", False,
-              True),
-             ("Faixa de preço", "Os valores devem ser informados em reais (R$ 0,00), com valor "
-              "mínimo menor ou igual ao valor máximo.", "Interface", False, True),
-             ("Unidade de cobrança", "A unidade de cobrança será escolhida entre: por hora, por "
-              "diária ou por serviço.", "Configurabilidade", False, False),
-             ("Um serviço por categoria", "O prestador pode ter no máximo um serviço em cada "
-              "categoria, evitando que apareça repetido nos resultados de uma busca.",
-              "Especificação", False, False),
-             ("Tamanho da descrição", "A descrição do serviço deve ter no máximo 1.000 caracteres.",
-              "Interface", False, False),
-             ("Pausar serviço", "O prestador pode pausar um serviço temporariamente; serviços "
-              "pausados não aparecem nas buscas.", "Usabilidade", True, True),
-             ("Remoção de serviço", "Um serviço com solicitações em andamento não pode ser "
-              "removido, apenas pausado.", "Especificação", False, True),
+             ('Seleção de categoria', 'A categoria deve ser escolhida em uma lista pré-definida e não digitada livremente.',
+              'Interface', False, True),
+             ('Faixa de preço', 'Os valores devem ser informados em reais com valor mínimo menor ou igual ao valor máximo.',
+              'Interface', False, True),
+             ('Unidade de cobrança', 'A unidade de cobrança será escolhida entre: por hora, por diária ou por serviço.',
+              'Configurabilidade', False, False),
+             ('Um serviço por categoria', 'O prestador pode ter no máximo um serviço em cada categoria, evitando que apareça repetido nos resultados de uma busca.',
+              'Configurabilidade', False, False),
+             ('Remoção de serviço', 'Um serviço com solicitações em andamento não pode ser removido.',
+              'Configurabilidade', False, True),
          ]),
 
-    dict(cod="F6", nome="Definir disponibilidade", oculto=False,
-         desc="O prestador poderá informar os dias da semana e turnos em que costuma atender, bem "
-              "como marcar períodos de indisponibilidade temporária (ex.: férias).",
+    dict(cod='F6', nome='Definir disponibilidade', oculto=False,
+         desc='O prestador poderá informar os dias da semana e turnos em que costuma atender, bem como marcar períodos de indisponibilidade temporária (ex.: férias).',
          nfs=[
-             ("Grade semanal", "A disponibilidade é informada marcando os dias da semana e os "
-              "turnos (manhã, tarde e noite) de atendimento.", "Interface", True, True),
-             ("Indisponibilidade temporária", "Durante um período marcado como indisponível, o "
-              "prestador não aparece nas buscas; o perfil volta a aparecer automaticamente na data "
-              "de retorno.", "Usabilidade", True, True),
-             ("Exibição no perfil", "A grade de disponibilidade é exibida no perfil do prestador "
-              "(F10).", "Interface", True, True),
+             ('Grade semanal', 'A disponibilidade é informada marcando os dias da semana e os turnos (manhã, tarde e noite) de atendimento.',
+              'Interface', True, True),
+             ('Indisponibilidade temporária', 'Durante um período marcado como indisponível, o prestador não aparece nas buscas.',
+              'Usabilidade', True, True),
+             ('Exibição no perfil', 'A grade de disponibilidade é exibida no perfil do prestador.',
+              'Interface', True, True),
          ]),
 
-    dict(cod="F7", nome="Obter localização geográfica", oculto=True,
-         desc="O sistema obtém as coordenadas geográficas (latitude e longitude) dos usuários: "
-              "para prestadores, a partir do endereço base de atendimento; para clientes, a partir "
-              "da localização atual do dispositivo ou do endereço cadastrado.",
+    dict(cod='F7', nome='Obter localização geográfica', oculto=True,
+         desc='O sistema obtém as coordenadas geográficas dos usuários: para prestadores, a partir do endereço base de atendimento. Para clientes, a partir do endereço cadastrado.',
          nfs=[
-             ("Consentimento de localização", "O acesso ao GPS do dispositivo só ocorre com "
-              "permissão do usuário; se negado, é utilizado o endereço cadastrado.", "Legal",
-              False, True),
-             ("Geocodificação", "A conversão de endereço em coordenadas será feita por uma API "
-              "externa de geocodificação (ex.: Nominatim/OpenStreetMap ou Google Geocoding).",
-              "Implementação", False, False),
-             ("Armazenamento das coordenadas", "As coordenadas dos prestadores são calculadas uma "
-              "única vez, no cadastro ou na alteração do endereço, e armazenadas, evitando "
-              "geocodificar a cada busca.", "Desempenho", False, True),
-             ("Endereço não localizado", "Caso o endereço não seja localizado pela API, o sistema "
-              "deve avisar o usuário e permitir ajustar a posição em um mapa.", "Usabilidade",
-              True, False),
-             ("Outro ponto de partida", "O cliente pode buscar a partir de outro endereço ou CEP "
-              "(ex.: a casa de um familiar) sem alterar o seu cadastro.", "Usabilidade", True,
-              True),
+             ('Obtenção de coordenadas', 'A conversão de endereço em coordenadas será feita por uma API externa de geocodificação.',
+              'Implementação', False, False),
+             ('Armazenamento das coordenadas', 'As coordenadas dos prestadores são calculadas uma única vez, no cadastro ou na alteração do endereço, e armazenadas, evitando geocodificar a cada busca.',
+              'Desempenho', False, True),
+             ('Endereço não localizado', 'Caso o endereço não seja localizado pela API, o sistema deve avisar o usuário e permitir ajustar a posição em um mapa.',
+              'Usabilidade', True, False),
+             ('Outro ponto de partida', 'O cliente pode buscar a partir de outro endereço ou CEP sem alterar o seu cadastro.',
+              'Usabilidade', True, True),
          ]),
 
-    dict(cod="F8", nome="Buscar prestadores por categoria", oculto=False,
-         desc="O cliente seleciona uma categoria de serviço e o sistema identifica todos os "
-              "prestadores com serviço ativo nessa categoria dentro de um raio de distância "
-              "configurável a partir da localização do cliente, exibindo uma lista ordenada pela "
-              "combinação de proximidade geográfica e nota média das avaliações (F9).",
+    dict(cod='F8', nome='Buscar prestadores por categoria', oculto=False,
+         desc='O cliente seleciona uma categoria de serviço e o sistema identifica todos os prestadores com serviço ativo nessa categoria dentro de um raio de distância configurável a partir da localização do cliente, exibindo uma lista ordenada pela combinação de proximidade geográfica e nota média das avaliações (F9).',
          nfs=[
-             ("Raio configurável", "O cliente define o raio de busca entre 1 e 50 km; o valor "
-              "padrão é 10 km.", "Configurabilidade", False, False),
-             ("Cálculo da distância", "A distância é calculada em linha reta entre as coordenadas "
-              "do cliente e do prestador, pela fórmula de Haversine.", "Implementação", False,
-              False),
-             ("Prestadores exibidos", "Não são exibidos na lista: o próprio usuário, prestadores "
-              "com perfil desativado ou suspenso, serviços pausados, prestadores em período de "
-              "indisponibilidade (NF6.2) e prestadores cujo raio de deslocamento não alcança o "
-              "cliente (NF4.4).", "Especificação", False, True),
-             ("Informações da lista", "Cada item exibe: nome e foto do prestador, título do "
-              "serviço, faixa de preço, nota média (estrelas), quantidade de avaliações e "
-              "distância aproximada (em km, com uma casa decimal).", "Interface", False, True),
-             ("Nenhum resultado", "Caso nenhum prestador seja encontrado no raio, o sistema "
-              "informa o cliente e sugere ampliar o raio de busca.", "Usabilidade", True, True),
-             ("Filtros adicionais", "A lista pode ser filtrada por faixa de preço, nota mínima e "
-              "disponibilidade (dia e turno).", "Configurabilidade", True, True),
-             ("Ordenação alternativa", "Além da ordenação padrão (F9), o cliente pode ordenar a "
-              "lista por menor distância, maior nota ou menor preço.", "Configurabilidade", True,
-              True),
-             ("Paginação", "Os resultados são carregados em blocos de 20 prestadores, à medida que "
-              "o cliente rola a lista.", "Desempenho", False, True),
-             ("Tempo de resposta", "A busca deve retornar os resultados em até 3 segundos, "
-              "considerando uma base de até 10.000 prestadores.", "Desempenho", True, False),
-             ("Visualização em mapa", "O cliente pode alternar entre a lista e um mapa com a "
-              "posição aproximada dos prestadores encontrados.", "Interface", True, False),
+             ('Raio configurável', 'O cliente define o raio de busca.',
+              'Configurabilidade', False, False),
+             ('Cálculo da distância', 'A distância é calculada em linha reta entre as coordenadas do cliente e do prestador.',
+              'Implementação', False, False),
+             ('Prestadores exibidos', 'Não são exibidos na lista: o próprio usuário, prestadores com perfil excluído ou prestadores em período de indisponibilidade e prestadores cujo raio de deslocamento não alcança o cliente.',
+              'Usabilidade', False, True),
+             ('Informações da lista', 'Cada item exibe: nome e foto do prestador, título do serviço, faixa de preço, nota média (estrelas), quantidade de avaliações e distância aproximada.',
+              'Interface', False, True),
+             ('Nenhum resultado', 'Caso nenhum prestador seja encontrado no raio, o sistema informa o cliente e sugere ampliar o raio de busca.',
+              'Usabilidade', True, True),
+             ('Filtros adicionais', 'A lista pode ser filtrada por faixa de preço, nota mínima e disponibilidade (dia e turno).',
+              'Configurabilidade', True, True),
+             ('Visualização em mapa', 'O cliente pode alternar entre a lista e um mapa com a posição aproximada dos prestadores encontrados.',
+              'Interface', True, False),
          ]),
 
-    dict(cod="F9", nome="Calcular pontuação de recomendação", oculto=True,
-         desc="Para cada prestador encontrado na busca, o sistema calcula uma pontuação que "
-              "combina a proximidade geográfica e a nota do prestador. Essa pontuação define a "
-              "ordem da lista de resultados.",
+    dict(cod='F9', nome='Calcular pontuação de recomendação', oculto=True,
+         desc='Para cada prestador encontrado na busca, o sistema calcula uma pontuação que combina a proximidade geográfica e a nota do prestador. Essa pontuação define a ordem da lista de resultados.',
          nfs=[
-             ("Fórmula de pontuação", "Pontuação = Pd × (1 − d/R) + Pn × (N/5), em que d é a "
-              "distância até o cliente, R é o raio da busca e N é a nota ajustada do prestador "
-              "(NF9.2). Pesos iniciais: Pd = 0,5 e Pn = 0,5.", "Especificação", False, False),
-             ("Nota ajustada", "Para não favorecer nem penalizar quem tem poucas avaliações, a "
-              "nota usada no ranking é uma média bayesiana: N = (C × M + S) / (C + k), em que S é "
-              "a soma das notas do prestador, k é a quantidade de avaliações, M é a média geral da "
-              "plataforma e C = 5. Um prestador novo, sem avaliações, recebe N = M.",
-              "Especificação", False, False),
-             ("Pesos configuráveis", "Os pesos Pd e Pn e a constante C podem ser alterados pelo "
-              "administrador sem necessidade de alterar o código.", "Configurabilidade", True,
-              True),
-             ("Critério de desempate", "Em caso de empate, aparece primeiro o prestador com mais "
-              "serviços concluídos e, depois, o mais próximo.", "Especificação", True, False),
+             ('Fórmula de pontuação', 'Fórmula a definir. Mas atribuirá um peso maior para a pontuação em relação à proximidade geográfica.',
+              'Especificação', False, False),
+             ('Critério de desempate', 'Em caso de empate, aparece primeiro o prestador com mais serviços concluídos e, depois, o mais próximo.',
+              'Especificação', True, False),
          ]),
 
-    dict(cod="F10", nome="Visualizar perfil do prestador", oculto=False,
-         desc="O cliente poderá acessar o perfil de um prestador, que exibe: nome, foto, "
-              "apresentação, serviços oferecidos (categoria, descrição, faixa de preço e unidade "
-              "de cobrança), disponibilidade, bairro e cidade, distância aproximada, nota média, "
-              "quantidade de avaliações, quantidade de serviços concluídos, avaliações recebidas e "
-              "portfólio.",
+    dict(cod='F10', nome='Visualizar perfil do prestador', oculto=False,
+         desc='O cliente poderá acessar o perfil de um prestador, que exibe: nome, foto, apresentação, serviços oferecidos (categoria, descrição, faixa de preço e unidade de cobrança), disponibilidade, bairro e cidade, distância aproximada, nota média, quantidade de avaliações, quantidade de serviços concluídos, avaliações recebidas e portfólio.',
          nfs=[
-             ("Privacidade do contato", "O telefone/WhatsApp do prestador só é exibido ao cliente "
-              "depois que o prestador aceitar uma solicitação dele (NF12.3).", "Segurança", False,
-              True),
-             ("Lista de avaliações", "As avaliações são exibidas das mais recentes para as mais "
-              "antigas e podem ser filtradas por nota.", "Configurabilidade", True, True),
-             ("Distribuição das notas", "O perfil exibe a quantidade de avaliações recebidas em "
-              "cada nota (1 a 5 estrelas).", "Interface", True, False),
-             ("Selo de novo prestador", "Prestadores com menos de 5 serviços concluídos exibem o "
-              "selo “Novo no Bicus”.", "Interface", True, False),
+             ('Privacidade do contato', 'O telefone do prestador só é exibido ao cliente depois que o prestador aceitar uma solicitação dele.',
+              'Segurança', False, False),
+             ('Lista de avaliações', 'As avaliações são exibidas das mais recentes para as mais antigas e podem ser filtradas por nota.',
+              'Configurabilidade', True, True),
+             ('Distribuição das notas', 'O perfil exibe a quantidade de avaliações recebidas em cada nota (1 a 5 estrelas).',
+              'Interface', True, False),
          ]),
 
-    dict(cod="F11", nome="Solicitar serviço", oculto=False,
-         desc="O cliente poderá enviar uma solicitação de serviço a um prestador, escolhendo um "
-              "dos serviços oferecidos e informando a descrição da necessidade, a data e o turno "
-              "desejados e o endereço onde o serviço será realizado.",
+    dict(cod='F11', nome='Solicitar serviço', oculto=False,
+         desc='O cliente poderá enviar uma solicitação de serviço a um prestador, escolhendo um dos serviços oferecidos e informando a descrição da necessidade, a data e o turno desejados e o endereço onde o serviço será realizado.',
          nfs=[
-             ("Dados da solicitação", "São obrigatórios: serviço escolhido, descrição da "
-              "necessidade (até 500 caracteres), data desejada e turno. O endereço de execução é, "
-              "por padrão, o endereço do cliente.", "Interface", False, True),
-             ("Data válida", "A data desejada deve ser igual ou posterior à data atual.",
-              "Interface", False, True),
-             ("Autossolicitação", "O usuário não pode enviar solicitação ao seu próprio perfil de "
-              "prestador.", "Segurança", False, True),
-             ("Notificação ao prestador", "Ao ser criada a solicitação, o prestador recebe uma "
-              "notificação no aplicativo e por e-mail.", "Interface", True, True),
-             ("Limite de solicitações pendentes", "Cada cliente pode ter no máximo 10 "
-              "solicitações pendentes (sem resposta) ao mesmo tempo, evitando envios em massa.",
-              "Segurança", True, False),
-             ("Cancelamento pelo cliente", "O cliente pode cancelar a solicitação enquanto ela "
-              "estiver pendente, sem necessidade de justificativa.", "Usabilidade", False, True),
-             ("Expiração", "Solicitações não respondidas em 72 horas expiram automaticamente e o "
-              "cliente é notificado.", "Especificação", True, False),
+             ('Dados da solicitação', 'São obrigatórios: serviço escolhido, descrição da necessidade, data desejada e turno.',
+              'Interface', False, True),
+             ('Data válida', 'A data desejada deve ser igual ou posterior à data atual.',
+              'Interface', False, True),
+             ('Autossolicitação', 'O usuário não pode enviar solicitação ao seu próprio perfil de prestador.',
+              'Segurança', False, True),
+             ('Notificação ao prestador', 'Ao ser criada a solicitação, o prestador recebe uma notificação por e-mail.',
+              'Interface', True, True),
+             ('Limite de solicitações pendentes', 'Cada cliente pode ter no máximo 10 solicitações pendentes (sem resposta) ao mesmo tempo, evitando envios em massa.',
+              'Desempenho', True, False),
+             ('Cancelamento pelo cliente', 'O cliente pode cancelar a solicitação enquanto ela estiver pendente, sem necessidade de justificativa.',
+              'Usabilidade', False, True),
+             ('Expiração', 'Solicitações não respondidas em 72 horas expiram automaticamente.',
+              'Usabilidade', True, False),
          ]),
 
-    dict(cod="F12", nome="Responder solicitação", oculto=False,
-         desc="O prestador poderá aceitar ou recusar as solicitações recebidas. Ao aceitar, pode "
-              "informar um valor proposto (orçamento) e confirmar a data combinada.",
+    dict(cod='F12', nome='Responder solicitação', oculto=False,
+         desc='O prestador poderá aceitar ou recusar as solicitações recebidas. Ao aceitar, pode fazer observações em relação ao serviço que será prestado.',
          nfs=[
-             ("Motivo da recusa", "Ao recusar, o prestador pode selecionar um motivo (ex.: sem "
-              "disponibilidade, fora da área de atendimento, serviço não realizado).",
-              "Usabilidade", True, True),
-             ("Notificação ao cliente", "O cliente é notificado da resposta do prestador.",
-              "Interface", True, True),
-             ("Liberação dos contatos", "Após o aceite, cliente e prestador passam a visualizar o "
-              "telefone/WhatsApp um do outro para combinar os detalhes.", "Segurança", False,
-              True),
-             ("Valor proposto", "O valor proposto é apenas informativo e pode ficar fora da faixa "
-              "de preço anunciada; a plataforma não processa pagamentos (S8).", "Especificação",
-              True, False),
-             ("Atalho para WhatsApp", "O sistema oferece um botão que abre a conversa no WhatsApp "
-              "com o contato liberado.", "Interface", True, False),
+             ('Motivo da recusa', 'Ao recusar, o prestador pode selecionar um motivo (ex.: sem disponibilidade, fora da área de atendimento, serviço não realizado).',
+              'Usabilidade', True, True),
+             ('Notificação ao cliente', 'O cliente é notificado da resposta do prestador.',
+              'Interface', True, True),
+             ('Liberação dos contatos', 'Após o aceite, cliente e prestador passam a visualizar o telefone um do outro para combinar os detalhes.',
+              'Segurança', False, True),
+             ('Atalho para WhatsApp', 'O sistema oferece um botão que abre a conversa no WhatsApp com o contato liberado.',
+              'Interface', True, False),
          ]),
 
-    dict(cod="F13", nome="Concluir serviço", oculto=False,
-         desc="Após a realização do serviço, o prestador registra a conclusão da solicitação e o "
-              "cliente confirma que o serviço foi realizado. A conclusão confirmada habilita a "
-              "avaliação do prestador (F14). Antes da conclusão, a solicitação aceita pode ser "
-              "cancelada por qualquer uma das partes.",
+    dict(cod='F13', nome='Concluir serviço', oculto=False,
+         desc='Após a realização do serviço, o prestador registra a conclusão da solicitação e o cliente confirma que o serviço foi realizado. A conclusão confirmada habilita a avaliação do prestador (F14). Antes da conclusão, a solicitação aceita pode ser cancelada por qualquer uma das partes.',
          nfs=[
-             ("Estados da solicitação", "Uma solicitação pode estar nos estados: Pendente, "
-              "Aceita, Recusada, Expirada, Cancelada, Aguardando confirmação e Concluída.",
-              "Implementação", False, False),
-             ("Confirmação do cliente", "O serviço só é considerado concluído após a confirmação "
-              "do cliente; sem manifestação em 7 dias, a conclusão é confirmada automaticamente.",
-              "Especificação", False, False),
-             ("Valor final", "Ao registrar a conclusão, o prestador pode informar o valor "
-              "efetivamente cobrado.", "Usabilidade", True, True),
-             ("Cancelamento", "Cliente ou prestador podem cancelar uma solicitação aceita antes da "
-              "conclusão, informando o motivo; o cancelamento fica registrado no histórico de "
-              "ambos.", "Segurança", False, True),
-             ("Pedido de avaliação", "Ao ser confirmada a conclusão, o cliente recebe uma "
-              "notificação convidando-o a avaliar o prestador.", "Interface", True, True),
+             ('Estados da solicitação', 'Uma solicitação pode estar nos estados: Pendente, Aceita, Recusada, Expirada, Cancelada e Concluída.',
+              'Implementação', False, False),
+             ('Confirmação do cliente', 'O serviço só é considerado concluído após a confirmação do cliente.',
+              'Usabilidade', False, False),
+             ('Valor final', 'Ao registrar a conclusão, o cliente pode informar o valor efetivamente cobrado.',
+              'Usabilidade', True, True),
+             ('Cancelamento', 'Cliente ou prestador podem cancelar uma solicitação aceita, informando o motivo. O cancelamento fica registrado no histórico de ambos.',
+              'Segurança', False, True),
+             ('Pedido de avaliação', 'Ao ser confirmada a conclusão, o cliente recebe uma notificação convidando-o a avaliar o prestador.',
+              'Interface', False, True),
          ]),
 
-    dict(cod="F14", nome="Avaliar prestador", oculto=False,
-         desc="Após a conclusão de um serviço, o cliente poderá avaliar o prestador atribuindo uma "
-              "nota de 1 a 5 estrelas e, opcionalmente, um comentário.",
+    dict(cod='F14', nome='Avaliar prestador', oculto=False,
+         desc='Após a conclusão de um serviço, o cliente poderá avaliar o prestador atribuindo uma nota de 1 a 5 estrelas e, opcionalmente, um comentário.',
          nfs=[
-             ("Direito de avaliar", "Somente o cliente de uma solicitação concluída pode avaliá-la, "
-              "e cada solicitação admite uma única avaliação.", "Segurança", False, True),
-             ("Escala da nota", "A nota é um número inteiro de 1 a 5, selecionado por estrelas.",
-              "Interface", False, True),
-             ("Comentário", "O comentário é opcional e limitado a 500 caracteres.", "Interface",
-              False, True),
-             ("Prazo para avaliar", "A avaliação pode ser feita em até 30 dias após a conclusão "
-              "do serviço.", "Especificação", True, False),
-             ("Edição da avaliação", "O cliente pode editar sua avaliação uma única vez, em até 7 "
-              "dias após publicá-la.", "Usabilidade", True, False),
-             ("Critérios detalhados", "Além da nota geral, o cliente pode avaliar pontualidade, "
-              "qualidade e custo-benefício (1 a 5), exibidos no perfil do prestador.",
-              "Interface", True, False),
+             ('Direito de avaliar', 'Somente o cliente de uma solicitação concluída pode avaliá-la, e cada solicitação admite uma única avaliação.',
+              'Segurança', False, True),
+             ('Escala da nota', 'A nota é um número inteiro de 1 a 5, selecionado por estrelas.',
+              'Interface', False, True),
+             ('Comentário', 'O comentário é opcional, assim como anexos.',
+              'Interface', False, True),
+             ('Prazo para avaliar', 'A avaliação pode ser feita em até 7 dias após a conclusão do serviço.',
+              'Usabilidade', True, False),
          ]),
 
-    dict(cod="F15", nome="Atualizar reputação do prestador", oculto=True,
-         desc="A cada avaliação registrada, editada ou removida, o sistema recalcula a reputação "
-              "do prestador (nota média e quantidade de avaliações), que passa a ser utilizada no "
-              "processo de recomendação (F9).",
+    dict(cod='F15', nome='Atualizar reputação do prestador', oculto=True,
+         desc='A cada avaliação registrada, editada ou removida, o sistema recalcula a reputação do prestador (nota média e quantidade de avaliações), que passa a ser utilizada no processo de recomendação (F9).',
          nfs=[
-             ("Atualização imediata", "A reputação deve ser recalculada no momento em que a "
-              "avaliação é registrada, editada ou removida.", "Desempenho", False, True),
-             ("Exibição da nota", "A nota média é exibida com uma casa decimal (ex.: 4,7).",
-              "Interface", False, True),
-             ("Média geral da plataforma", "O sistema mantém atualizada a média geral das notas "
-              "da plataforma, usada no cálculo da nota ajustada (NF9.2).", "Implementação", False,
-              False),
+             ('Atualização imediata', 'A reputação deve ser recalculada no momento em que a avaliação é registrada, editada ou removida.',
+              'Desempenho', False, True),
          ]),
 
-    dict(cod="F16", nome="Responder avaliação", oculto=False,
-         desc="O prestador poderá publicar uma resposta a uma avaliação recebida, exibida logo "
-              "abaixo dela no seu perfil.",
+    dict(cod='F16', nome='Responder avaliação', oculto=False,
+         desc='O prestador poderá publicar uma resposta a uma avaliação recebida, exibida logo abaixo dela no seu perfil.',
          nfs=[
-             ("Resposta única", "Cada avaliação admite uma única resposta do prestador, com até "
-              "500 caracteres.", "Interface", True, True),
-             ("Notificação ao cliente", "O cliente autor da avaliação é notificado da resposta.",
-              "Interface", True, False),
+             ('Resposta única', 'Cada avaliação admite uma única resposta do prestador.',
+              'Interface', True, True),
          ]),
 
-    dict(cod="F17", nome="Consultar histórico de solicitações", oculto=False,
-         desc="Clientes e prestadores poderão consultar o histórico das solicitações enviadas e "
-              "recebidas, com o estado de cada uma e os dados do serviço.",
+    dict(cod='F17', nome='Consultar histórico de solicitações', oculto=False,
+         desc='Clientes e prestadores poderão consultar o histórico das solicitações enviadas e recebidas, com o estado de cada uma e os dados do serviço.',
          nfs=[
-             ("Permissão de acesso", "Cada usuário só visualiza as solicitações em que é o "
-              "cliente ou o prestador.", "Segurança", False, True),
-             ("Separação por papel", "Usuários que também são prestadores visualizam "
-              "separadamente os serviços que contrataram e os serviços que prestaram.",
-              "Interface", False, True),
-             ("Filtro por estado", "O histórico pode ser filtrado pelo estado da solicitação "
-              "(NF13.1).", "Configurabilidade", True, True),
-             ("Ordenação do histórico", "O histórico pode ser ordenado por data ascendente ou "
-              "descendente.", "Configurabilidade", True, True),
+             ('Permissão de acesso', 'Cada usuário só visualiza as solicitações em que é o cliente ou o prestador.',
+              'Segurança', False, True),
+             ('Separação por papel', 'Usuários que também são prestadores visualizam separadamente os serviços que contrataram e os serviços que prestaram.',
+              'Interface', False, True),
+             ('Filtro por estado', 'O histórico pode ser filtrado pelo estado da solicitação.',
+              'Configurabilidade', True, True),
+             ('Ordenação do histórico', 'O histórico pode ser ordenado por data.',
+              'Configurabilidade', True, True),
          ]),
 
-    dict(cod="F18", nome="Denunciar conteúdo", oculto=False,
-         desc="Qualquer usuário poderá denunciar um perfil de prestador, um serviço ou uma "
-              "avaliação que considere inadequado, informando o motivo.",
+    dict(cod='F18', nome='Denunciar conteúdo', oculto=False,
+         desc='Qualquer usuário poderá denunciar um perfil de outro ou uma avaliação que considere inadequado, informando o motivo.',
          nfs=[
-             ("Motivo da denúncia", "O motivo é escolhido de uma lista pré-definida (conteúdo "
-              "ofensivo, informação falsa, spam, golpe ou fraude, outro), com descrição opcional "
-              "de até 500 caracteres.", "Interface", False, False),
-             ("Denúncia única", "Um usuário só pode denunciar o mesmo item uma vez.", "Segurança",
-              False, True),
-             ("Sigilo do denunciante", "A identidade do denunciante não é revelada ao usuário "
-              "denunciado.", "Segurança", False, True),
-             ("Aviso ao administrador", "Cada nova denúncia gera um aviso no painel do "
-              "administrador.", "Interface", True, True),
+             ('Motivo da denúncia', 'O motivo é escolhido de uma lista pré-definida com descrição opcional.',
+              'Interface', False, False),
+             ('Denúncia única', 'Um usuário só pode denunciar o mesmo item uma vez.',
+              'Segurança', False, True),
+             ('Sigilo do denunciante', 'A identidade do denunciante não é revelada ao usuário denunciado.',
+              'Segurança', False, True),
+             ('Aviso ao administrador', 'Cada nova denúncia gera um aviso no painel do administrador.',
+              'Interface', True, True),
          ]),
 
-    dict(cod="F19", nome="Moderar denúncias", oculto=False,
-         desc="O administrador analisa as denúncias recebidas e decide entre arquivá-las ou "
-              "aplicar uma medida: remover a avaliação ou o serviço denunciado, advertir, "
-              "suspender ou banir o usuário.",
+    dict(cod='F19', nome='Moderar denúncias', oculto=False,
+         desc='O administrador analisa as denúncias recebidas e decide entre arquivá-las ou aplicar uma medida: remover a avaliação denunciada ou advertir, suspender ou banir o usuário.',
          nfs=[
-             ("Acesso restrito", "Apenas usuários com perfil de administrador podem acessar a "
-              "moderação.", "Segurança", False, True),
-             ("Remoção de avaliação", "A remoção de uma avaliação dispara o recálculo da "
-              "reputação do prestador (F15).", "Implementação", False, True),
-             ("Suspensão de usuário", "Um usuário suspenso não consegue fazer login durante a "
-              "suspensão; se for prestador, deixa de aparecer nas buscas e suas solicitações "
-              "pendentes são canceladas.", "Segurança", False, True),
-             ("Registro das decisões", "Toda decisão de moderação é registrada com data, "
-              "administrador responsável e justificativa.", "Segurança", False, True),
-             ("Notificação do resultado", "O denunciante e o usuário denunciado são notificados "
-              "da decisão, sem que o denunciante seja identificado.", "Interface", True, True),
+             ('Acesso restrito', 'Apenas usuários com perfil de administrador podem acessar a moderação.',
+              'Segurança', False, True),
+             ('Remoção de avaliação', 'A remoção de uma avaliação dispara o recálculo da reputação do prestador.',
+              'Implementação', False, True),
+             ('Suspensão de usuário', 'Um usuário suspenso não consegue fazer login durante a suspensão. Se for prestador, deixa de aparecer nas buscas e suas solicitações pendentes são canceladas.',
+              'Segurança', False, True),
+             ('Registro das decisões', 'Toda decisão de moderação é registrada com data, administrador responsável e justificativa.',
+              'Segurança', False, True),
+             ('Notificação do resultado', 'O denunciante e o usuário denunciado são notificados da decisão, sem que o denunciante seja identificado.',
+              'Interface', True, True),
          ]),
 
-    dict(cod="F20", nome="Gerenciar categorias de serviço", oculto=False,
-         desc="O administrador poderá cadastrar, editar e desativar as categorias de serviço "
-              "disponíveis na plataforma (ex.: jardinagem, aulas particulares, reforço escolar, "
-              "pequenos reparos domésticos e faxina).",
+    dict(cod='F20', nome='Gerenciar categorias de serviço', oculto=False,
+         desc='O administrador poderá cadastrar, editar e desativar as categorias de serviço disponíveis na plataforma (ex.: jardinagem, aulas particulares, faxina, etc).',
          nfs=[
-             ("Nome único", "Não podem existir duas categorias com o mesmo nome.", "Segurança",
-              False, True),
-             ("Exclusão de categoria", "Uma categoria com serviços associados não pode ser "
-              "excluída, apenas desativada; categorias desativadas não aparecem nas buscas nem no "
-              "cadastro de novos serviços.", "Especificação", False, True),
-             ("Ícone da categoria", "Cada categoria possui um ícone, exibido na tela de busca.",
-              "Interface", True, True),
-             ("Carga inicial", "O sistema será implantado com as categorias: Jardinagem, Aulas "
-              "particulares, Reforço escolar, Pequenos reparos domésticos, Faxina, Pintura, "
-              "Montagem de móveis e Cuidado de animais.", "Implementação", False, False),
-             ("Sugestão de categoria", "Prestadores podem sugerir uma nova categoria, que fica "
-              "pendente até a aprovação do administrador.", "Usabilidade", True, False),
+             ('Nome único', 'Não podem existir duas categorias com o mesmo nome.',
+              'Segurança', False, True),
+             ('Exclusão de categoria', 'Uma categoria com serviços associados não pode ser excluída, apenas desativada. Categorias desativadas não aparecem nas buscas nem no cadastro de novos serviços.',
+              'Especificação', False, True),
+             ('Ícone da categoria', 'Cada categoria possui um ícone, exibido na tela de busca.',
+              'Interface', True, True),
+             ('Carga inicial', 'O sistema será implantado com as categorias: Jardinagem, Aulas particulares, Pequenos reparos domésticos, Faxina, Pintura, Montagem de móveis e Cuidado de animais.',
+              'Implementação', False, False),
+             ('Sugestão de categoria', 'Prestadores podem sugerir uma nova categoria, que fica pendente até a aprovação do administrador.',
+              'Usabilidade', True, False),
          ]),
 ]
 
 # ---------------------------------------------------------------------------
-# 2.2 REQUISITOS SUPLEMENTARES
+# REQUISITOS SUPLEMENTARES
 # ---------------------------------------------------------------------------
 # (nome, restrição (lista de parágrafos), categoria, desejável, permanente)
 
 SUPLEMENTARES = [
-    ("Interface web", ["O sistema terá uma interface web responsiva, que se adapta a telas de "
-     "computadores e smartphones e pode ser usada pelo navegador, sem necessidade de instalação."],
-     "Interface", False, True),
-    ("Aplicativo mobile", ["O sistema terá também um aplicativo nativo para smartphones (Android e "
-     "iOS), com as mesmas funcionalidades da versão web."], "Interface", True, False),
-    ("Acesso aos dados via API", ["O acesso ao banco de dados deve ser feito através de uma API "
-     "REST, de modo que as aplicações web e mobile compartilhem as mesmas funcionalidades e regras "
-     "de negócio."], "Implementação", False, True),
-    ("Perfis de usuário", [
-        "Cliente – qualquer usuário cadastrado; busca prestadores, solicita, acompanha e avalia "
-        "serviços.",
-        "Prestador – cliente que ativou o perfil de prestador; além das funções de cliente, "
-        "gerencia serviços, disponibilidade e solicitações recebidas.",
-        "Administrador – mantém as categorias e modera denúncias. Contas de administrador são "
-        "criadas apenas por outro administrador."], "Segurança", False, True),
-    ("Idade mínima", ["O sistema deve ser usado somente por maiores de 18 anos."], "Legal", False,
-     True),
-    ("Proteção de dados pessoais", ["O tratamento de dados pessoais (incluindo CPF e localização) "
-     "deve seguir a Lei Geral de Proteção de Dados (Lei nº 13.709/2018): coleta apenas dos dados "
-     "necessários, finalidade informada, consentimento e direito de acesso, correção e exclusão."],
-     "Legal", False, True),
-    ("Segurança da comunicação e das senhas", ["Toda comunicação entre as aplicações e o servidor "
-     "deve usar HTTPS (TLS). As senhas são armazenadas apenas na forma de hash, com algoritmo "
-     "próprio para senhas (ex.: bcrypt)."], "Segurança", False, True),
-    ("Intermediação do serviço", ["A plataforma apenas aproxima clientes e prestadores: não "
-     "processa pagamentos nem se responsabiliza pela execução do serviço. Preço e forma de "
-     "pagamento são combinados diretamente entre as partes, conforme os Termos de Uso."], "Legal",
-     False, False),
-    ("Idioma e formatos", ["Interface em português do Brasil; valores em reais (R$), datas no "
-     "formato dd/mm/aaaa e distâncias em quilômetros."], "Interface", False, True),
-    ("Disponibilidade do sistema", ["O sistema deve estar disponível em 99% do tempo de cada mês, "
-     "excluídas as janelas de manutenção programada."], "Confiabilidade", True, False),
-    ("Cópias de segurança", ["Deve ser feito backup diário do banco de dados, mantendo as cópias "
-     "dos últimos 30 dias."], "Confiabilidade", True, True),
-    ("Falha de serviços externos", ["Se a API de geocodificação ou de CEP estiver indisponível, o "
-     "sistema deve informar o usuário e permitir que ele tente novamente, sem perder os dados já "
-     "digitados."], "Confiabilidade", True, True),
-    ("Persistência geoespacial", ["A persistência será feita em banco de dados relacional com "
-     "suporte a consultas geoespaciais (ex.: PostgreSQL com PostGIS), permitindo a busca de "
-     "prestadores por raio de distância."], "Implementação", False, False),
-    ("Distribuição", ["A versão web será hospedada em um serviço de nuvem; o aplicativo mobile "
-     "será distribuído pelas lojas oficiais (Google Play e App Store)."], "Empacotamento", True,
-     False),
-    ("Acessibilidade", ["A interface deve seguir as diretrizes WCAG 2.1, nível AA: contraste "
-     "adequado, textos alternativos em imagens e navegação por teclado na versão web."],
-     "Interface", True, False),
+    ('Interface web', ['O sistema terá uma interface web responsiva, que se adapta a telas de computadores e smartphones e pode ser usada pelo navegador, sem necessidade de instalação.'],
+     'Interface', False, True),
+    ('Aplicativo mobile', ['O sistema terá também um aplicativo nativo para smartphones (Android e iOS), com as mesmas funcionalidades da versão web.'],
+     'Interface', True, False),
+    ('Idade mínima', ['O sistema deve ser usado somente por maiores de 18 anos.'],
+     'Legal', False, True),
+    ('Proteção de dados pessoais', ['O tratamento de dados pessoais deve seguir a Lei Geral de Proteção de Dados: coleta apenas dos dados necessários, finalidade informada, consentimento e direito de acesso, correção e exclusão.'],
+     'Legal', False, True),
+    ('Segurança das senhas', ['As senhas são armazenadas apenas na forma de hash, com algoritmo próprio para senhas.'],
+     'Segurança', False, True),
+    ('Intermediação do serviço', ['A plataforma apenas aproxima clientes e prestadores: não processa pagamentos nem se responsabiliza pela execução do serviço. Preço e forma de pagamento são combinados diretamente entre as partes, conforme os Termos de Uso.'],
+     'Legal', False, False),
+    ('Idioma e formatos', ['Interface em português do Brasil; valores em reais, datas no formato dd/mm/aaaa e distâncias em quilômetros.'],
+     'Interface', False, True),
+    ('Distribuição', ['A versão web será hospedada em um serviço de nuvem.'],
+     'Empacotamento', True, False),
 ]
 
 # ---------------------------------------------------------------------------
-# 3. ORGANIZAÇÃO DOS REQUISITOS
+# ORGANIZAÇÃO DOS REQUISITOS
 # ---------------------------------------------------------------------------
 
-# 3.1 Casos de uso (processos de negócio: monossessão, interativos, resultado consistente)
+# Casos de uso (processos de negócio: monossessão, interativos, resultado consistente)
 CASOS_DE_USO = [
     dict(nome="Contratar serviço", atores=["Cliente"],
-         desc="O cliente escolhe uma categoria e o raio de busca; o sistema obtém a localização do "
-              "cliente e exibe os prestadores próximos, ordenados por proximidade e nota. O "
-              "cliente compara as opções, acessa o perfil de um prestador e envia a ele uma "
-              "solicitação de serviço.",
+         desc="O cliente escolhe uma categoria e o raio de busca. O sistema obtém a localização do "
+              "cliente e exibe os prestadores próximos, ordenados por proximidade e nota. O cliente "
+              "compara as opções, acessa o perfil de um prestador e envia a ele uma solicitação de "
+              "serviço.",
          refs=["F7", "F8", "F9", "F10", "F11"]),
     dict(nome="Responder solicitação", atores=["Prestador"],
-         desc="O prestador analisa uma solicitação recebida e a aceita, informando valor proposto "
-              "e data combinada, ou a recusa, informando o motivo. Com o aceite, os contatos das "
-              "duas partes são liberados.",
+         desc="O prestador analisa uma solicitação recebida e a aceita ou a recusa, informando o "
+              "motivo. Com o aceite, os contatos das duas partes são liberados.",
          refs=["F12", "F17"]),
     dict(nome="Concluir serviço", atores=["Prestador"],
-         desc="Após realizar o serviço, o prestador localiza a solicitação no histórico e registra "
-              "a conclusão, informando o valor cobrado, ou registra o cancelamento, com o motivo. "
-              "O cliente é notificado para confirmar.",
+         desc="Após realizar o serviço, o prestador localiza a solicitação no histórico e registra a "
+              "conclusão ou registra o cancelamento, com o motivo. O cliente é notificado para "
+              "confirmar.",
          refs=["F13", "F17"]),
     dict(nome="Avaliar prestador", atores=["Cliente"],
-         desc="O cliente confirma a conclusão do serviço e avalia o prestador com nota e "
-              "comentário; o sistema recalcula a reputação do prestador, que passa a influenciar "
-              "a ordem das buscas.",
+         desc="O cliente confirma a conclusão do serviço e avalia o prestador com nota e comentário. "
+              "O sistema recalcula a reputação do prestador, que passa a influenciar a ordem das "
+              "buscas.",
          refs=["F13", "F14", "F15"]),
     dict(nome="Tornar-se prestador", atores=["Cliente"],
-         desc="O usuário ativa seu perfil de prestador: escreve a apresentação, confirma o local "
-              "de atendimento, cadastra os serviços oferecidos (categoria, descrição e faixa de "
-              "preço) e define a disponibilidade. Ao final, passa a aparecer nas buscas.",
+         desc="O usuário ativa seu perfil de prestador: escreve a apresentação, confirma o local de "
+              "atendimento, cadastra os serviços oferecidos e define a disponibilidade. Ao final, "
+              "passa a aparecer nas buscas.",
          refs=["F4", "F5", "F6", "F7"]),
     dict(nome="Moderar denúncia", atores=["Administrador"],
-         desc="O administrador analisa uma denúncia pendente, examina o conteúdo denunciado e "
-              "decide arquivá-la ou aplicar uma medida (remover o conteúdo, suspender ou banir o "
-              "usuário); o sistema aplica os efeitos e notifica os envolvidos.",
+         desc="O administrador analisa uma denúncia pendente, examina o conteúdo denunciado e decide "
+              "arquivá-la ou aplicar uma medida. O sistema aplica os efeitos e notifica os "
+              "envolvidos.",
          refs=["F18", "F19", "F15"]),
 ]
 
-# 3.3 Modelo conceitual preliminar: (nome, [atributos])
+# Modelo conceitual preliminar: (nome, [atributos])
 CLASSES = {
-    "Usuário": ["nome: String", "email: String", "cpf: String", "telefone: String",
-                "dataNascimento: Data", "endereco: String", "localizacao: Coordenada"],
-    "Prestador": ["apresentacao: String", "raioAtendimento: Real",
-                  "disponibilidade: GradeSemanal", "notaMedia: Real", "totalAvaliacoes: Inteiro"],
-    "Serviço": ["titulo: String", "descricao: String", "precoMinimo: Moeda",
-                "precoMaximo: Moeda", "unidadeCobranca: Enumeração", "ativo: Booleano"],
-    "Categoria": ["nome: String", "icone: Imagem", "ativa: Booleano"],
-    "Solicitação": ["descricao: String", "dataDesejada: Data", "turno: Enumeração",
-                    "endereco: String", "estado: Enumeração", "valorCombinado: Moeda"],
-    "Avaliação": ["nota: Inteiro", "comentario: String", "data: Data", "resposta: String"],
-    "Denúncia": ["motivo: Enumeração", "descricao: String", "data: Data",
-                 "situacao: Enumeração", "decisao: String"],
+    "Denúncia": ["motivo: Enumeração", "descricao: String", "data: Data", "situacao: Enumeração",
+                 "medida: Enumeração", "justificativa: String", "dataDecisao: Data"],
     "Administrador": ["nome: String", "email: String"],
+    "Categoria": ["nome: String", "icone: Imagem", "situacao: Enumeração"],
+    "Usuário": ["nome: String", "email: String", "cpf: String", "telefone: String",
+                "dataNascimento: Data", "endereco: Endereço", "localizacao: Coordenada",
+                "fotoPerfil: Imagem", "ativo: Booleano"],
+    "Prestador": ["apresentacao: String", "localBase: Endereço", "localizacaoBase: Coordenada",
+                  "raioAtendimento: Real", "disponibilidade: GradeSemanal",
+                  "inicioIndisponibilidade: Data", "fimIndisponibilidade: Data",
+                  "portfolio: Imagem [0..10]", "ativo: Booleano", "dataCadastro: Data",
+                  "notaMedia: Real", "totalAvaliacoes: Inteiro"],
+    "Serviço": ["titulo: String", "descricao: String", "precoMinimo: Moeda", "precoMaximo: Moeda",
+                "unidadeCobranca: Enumeração", "ativo: Booleano"],
+    "Avaliação": ["nota: Inteiro", "comentario: String", "anexos: Imagem [*]", "data: Data",
+                  "resposta: String"],
+    "Solicitação": ["descricao: String", "dataDesejada: Data", "turno: Enumeração",
+                     "endereco: Endereço", "estado: Enumeração", "dataCriacao: Data",
+                     "observacao: String", "motivoRecusa: Enumeração", "motivoCancelamento: String",
+                     "valorCobrado: Moeda", "dataConclusao: Data"],
 }
 
+# (classeA, classeB, rótulo) — há duas associações "denuncia" (Denúncia->Usuário e Denúncia->Avaliação,
+# pois F18 permite denunciar tanto um perfil quanto uma avaliação).
 ASSOCIACOES = [
     ("Usuário", "Prestador", "atua como"),
     ("Usuário", "Solicitação", "solicita"),
     ("Usuário", "Denúncia", "registra"),
     ("Prestador", "Serviço", "oferece"),
-    ("Serviço", "Categoria", "classificado em"),
-    ("Solicitação", "Serviço", "referente a"),
-    ("Solicitação", "Avaliação", "origina"),
+    ("Categoria", "Serviço", "classificado em"),
+    ("Serviço", "Solicitação", "referente a"),
+    ("Avaliação", "Solicitação", "origina"),
     ("Denúncia", "Administrador", "analisada por"),
     ("Administrador", "Categoria", "mantém"),
+    ("Denúncia", "Usuário", "denuncia"),
+    ("Denúncia", "Avaliação", "denuncia"),
 ]
 
-# 3.4 Conceitos (CRUD): nome, C, R, U, D, observação, refs
+# Conceitos (CRUD): nome, C, R, U, D, observação, refs
 CONCEITOS = [
-    ("Usuário", True, True, True, True,
-     "Qualquer pessoa maior de 18 anos pode se cadastrar. A exclusão anonimiza os dados pessoais "
-     "e só é possível sem solicitações em andamento.", ["F1", "F2", "F3"]),
-    ("Prestador", False, True, True, True,
-     "Como a criação do perfil de prestador é um processo iterativo, não trivial (apresentação, "
-     "serviços e disponibilidade), está descrita no caso de uso “Tornar-se prestador”. "
-     "A exclusão corresponde à desativação do perfil, só permitida sem solicitações em andamento.",
-     ["F4", "F6", "F10"]),
-    ("Serviço", True, True, True, True,
-     "Só é possível excluir um serviço sem solicitações em andamento; caso contrário, ele pode "
-     "apenas ser pausado.", ["F5"]),
-    ("Categoria", True, True, True, True,
-     "Mantida apenas pelo administrador. Só é possível excluir uma categoria sem serviços "
-     "associados; caso contrário, ela é desativada.", ["F5", "F20"]),
-    ("Solicitação", False, True, True, False,
-     "Criada apenas pelo caso de uso “Contratar serviço” e alterada (mudança de estado) "
-     "pelos casos de uso “Responder solicitação”, “Concluir serviço” e "
-     "“Avaliar prestador”. Não é excluída: cancelamentos permanecem no histórico.",
-     ["F11", "F12", "F13", "F17"]),
-    ("Avaliação", False, True, True, True,
-     "Criada apenas pelo caso de uso “Avaliar prestador”. Pode ser editada uma vez pelo "
-     "cliente e receber resposta do prestador. É excluída somente por decisão de moderação.",
-     ["F14", "F15", "F16", "F19"]),
-    ("Denúncia", True, True, True, False,
-     "Qualquer usuário pode registrar. A decisão é registrada no caso de uso “Moderar "
-     "denúncia”. Não é excluída, para manter o registro das decisões.", ["F18", "F19"]),
-    ("Administrador", True, True, True, True,
-     "Contas de administrador são criadas apenas por outro administrador; não há cadastro "
-     "público. O primeiro administrador é criado na implantação do sistema.",
-     ["S4", "F19", "F20"]),
+    ('Usuário', True, True, True, True,
+     'Qualquer pessoa maior de 18 anos pode se cadastrar. A exclusão anonimiza os dados pessoais e só é possível sem solicitações em andamento.',
+     ['F1', 'F2', 'F3']),
+    ('Prestador', False, True, True, True,
+     'Como a criação do perfil de prestador é um processo iterativo, não trivial (apresentação, serviços e disponibilidade), está descrita no caso de uso “Tornar-se prestador”. A exclusão corresponde à desativação do perfil, só permitida sem solicitações em andamento.',
+     ['F4', 'F6', 'F10']),
+    ('Serviço', True, True, True, True,
+     'Só é possível excluir um serviço sem solicitações em andamento.',
+     ['F5']),
+    ('Categoria', True, True, True, True,
+     'Mantida apenas pelo administrador. Só é possível excluir uma categoria sem serviços associados; caso contrário, ela é desativada.',
+     ['F5', 'F20']),
+    ('Solicitação', False, True, True, False,
+     'Criada apenas pelo caso de uso “Contratar serviço” e alterada (mudança de estado) pelos casos de uso “Responder solicitação”, “Concluir serviço” e “Avaliar prestador”, pelo cancelamento do cliente, pela expiração automática e pela suspensão do prestador. Não é excluída: cancelamentos permanecem no histórico.',
+     ['F11', 'F12', 'F13', 'F17', 'F19']),
+    ('Avaliação', False, True, True, True,
+     'Criada apenas pelo caso de uso “Avaliar prestador”. Pode ser editada pelo cliente e receber resposta do prestador. É excluída somente por decisão de moderação.',
+     ['F14', 'F15', 'F16', 'F19']),
+    ('Denúncia', True, True, True, False,
+     'Qualquer usuário pode registrar. A decisão é registrada no caso de uso “Moderar denúncia”. Não é excluída, para manter o registro das decisões.',
+     ['F18', 'F19']),
+    ('Administrador', True, True, True, True,
+     'Contas de administrador são criadas apenas por outro administrador; não há cadastro público. O primeiro administrador é criado na implantação do sistema.',
+     ['F19', 'F20']),
 ]
 
-# 3.5 Consultas (relatórios)
+# Consultas (relatórios)
 CONSULTAS = [
-    ("Prestadores mais bem avaliados por categoria e cidade", ["F2", "F8", "F14", "F15"]),
-    ("Categorias mais solicitadas por período", ["F2", "F11", "F20"]),
-    ("Serviços concluídos por prestador por mês (quantidade e nota média)",
-     ["F2", "F13", "F14", "F17"]),
-    ("Taxa de aceitação e de cancelamento de solicitações por prestador",
-     ["F2", "F11", "F12", "F13"]),
-    ("Novos prestadores cadastrados por categoria e período", ["F2", "F4", "F5"]),
-    ("Denúncias por motivo e situação em um período", ["F2", "F18", "F19"]),
+    ('Prestadores mais bem avaliados por categoria e cidade', ['F1', 'F5', 'F8', 'F14', 'F15']),
+    ('Categorias mais solicitadas por período', ['F11', 'F20']),
+    ('Serviços concluídos por prestador por mês (quantidade e nota média)', ['F13', 'F14', 'F17']),
+    ('Taxa de aceitação e de cancelamento de solicitações por prestador', ['F11', 'F12', 'F13']),
+    ('Novos prestadores cadastrados por categoria e período', ['F4', 'F5']),
+    ('Denúncias por motivo e situação em um período', ['F18', 'F19']),
 ]
 
 # ---------------------------------------------------------------------------
-# 4. PLANEJAMENTO PRELIMINAR
+# PLANEJAMENTO PRELIMINAR
 # ---------------------------------------------------------------------------
 
-# 4.1 Ciclos iterativos: (ciclo, casos de uso, manutenção (CRUD), consultas, observações, total)
+# Ciclos iterativos: (ciclo, casos de uso, manutenção (CRUD), consultas, observações, total)
 CICLOS = [
     ("1", ["Contratar serviço (250h)"], ["Categoria (50h)"], ["-"],
      "Parte do mecanismo de persistência (banco de dados geoespacial) e integração com a API de "
-     "geocodificação (100h). Prestadores de teste inseridos por stubs.", 400),
+     "geocodificação (100h). Clientes e prestadores de teste inseridos por stubs.", 400),
     ("2", ["Tornar-se prestador (160h)", "Responder solicitação (120h)"], ["Usuário (80h)"], ["-"],
      "Terminar de implementar o mecanismo de persistência (40h).", 400),
     ("3", ["Concluir serviço (100h)", "Avaliar prestador (160h)"],
@@ -683,12 +470,12 @@ JUSTIFICATIVA_CICLOS = (
     "Os casos de uso foram priorizados por risco: primeiro os processos de negócio, depois a "
     "manutenção de informações (CRUD) e, por último, as consultas, que dependem de dados já "
     "estruturados. “Contratar serviço” vem no ciclo 1 por ser o núcleo do Bicus e o ponto "
-    "de maior incerteza técnica (geolocalização, busca por raio e ranking). Nesse ciclo, os "
-    "prestadores ainda não podem se cadastrar pelo sistema, então dados de teste são inseridos por "
-    "stubs."
+    "de maior incerteza técnica (geolocalização, busca por raio e ranking). Nesse ciclo, clientes e "
+    "prestadores ainda não podem se cadastrar pelo sistema (o cadastro de usuários entra no ciclo "
+    "2), então dados de teste são inseridos por stubs."
 )
 
-# 4.2 Cronograma: blocos de 5 dias; cada ciclo -> {fase: [(dia_inicio, dia_fim)]}
+# Cronograma: blocos de 5 dias; cada ciclo -> {fase: [(dia_inicio, dia_fim)]}
 DIAS_TOTAIS = 100
 CRONOGRAMA = [
     ("Ciclo 1", [("A", 1, 10), ("P", 11, 20), ("I", 21, 30), ("T", 31, 35), ("C", 36, 40)]),
@@ -717,7 +504,9 @@ OBS_CRONOGRAMA = [
     "analista-projetista e 2 programadores-testadores. Cada ciclo soma 400 horas: Análise (10 "
     "dias × 1 pessoa × 8h = 80h) + Projeto (10 × 1 × 8h = 80h) + Implementação (10 × 2 × 8h = "
     "160h) + Testes (5 × 2 × 8h = 80h). Os 4 ciclos totalizam 1.600 horas em 100 dias úteis "
-    "(cerca de 20 semanas), com cada ciclo durando 7 semanas.",
+    "(cerca de 20 semanas). Cada ciclo dura 8 semanas (o ciclo 4, sem a etapa de correções, dura "
+    "7). Os 5 dias de “Correções / folga” (C) não entram nas 400 horas de cada ciclo: "
+    "funcionam como reserva.",
     "Os ciclos se sobrepõem: enquanto os programadores implementam e testam um ciclo, o "
     "analista-projetista já trabalha na análise e no projeto do ciclo seguinte. Os 5 dias de "
     "“Correções / folga” (C) acomodam correções de defeitos e mudanças de requisitos "
@@ -725,8 +514,85 @@ OBS_CRONOGRAMA = [
     "analista-projetista prepara a implantação (manual do usuário e testes de aceitação).",
 ]
 
-# 4.3 Prioridade para melhores práticas do RUP
-RUP = [
+# ---------------------------------------------------------------------------
+# ARQUIVADO — removido do documento oficial em 02/10/2026 (commit 920619c)
+# ---------------------------------------------------------------------------
+# Mantido aqui só para o grupo decidir depois se quer restaurar algo. gerar.py NÃO usa
+# nada a partir daqui. Ver LEIA-ME.md e a conversa com o Claude de 08/10/2026 para o
+# resumo do que foi removido e por quê.
+
+# "1. Visão Geral do Sistema" (Problema, Proposta, Atores, Escopo) e a página de Sumário
+# saíram do documento inteiras. Texto original preservado abaixo.
+
+VISAO_PROBLEMA_ARQUIVADO = [
+    "Quem presta pequenos serviços, como jardinagem, aulas particulares, pequenos reparos "
+    "domésticos, faxina e reforço escolar, costuma divulgar seu trabalho de maneira informal: "
+    "indicações boca a boca, grupos de WhatsApp e Facebook ou redes sociais pessoais. Para quem "
+    "precisa contratar um serviço pontual, encontrar um prestador de confiança é um processo lento, "
+    "baseado em recomendações de conhecidos ou em informações dispersas na internet. Também não é "
+    "possível verificar rapidamente se o prestador está próximo, qual é o seu histórico de "
+    "avaliações, sua disponibilidade e a qualidade dos serviços já realizados.",
+    "Essa falta de organização prejudica os dois lados. Prestadores novos, sem uma rede de "
+    "indicações estabelecida, têm dificuldade em conseguir os primeiros trabalhos, mesmo sendo "
+    "qualificados. Clientes acabam recorrendo sempre ao mesmo prestador por falta de uma forma "
+    "fácil de comparar alternativas.",
+]
+
+VISAO_PROPOSTA_ARQUIVADO = (
+    "O Bicus é uma plataforma online (web e mobile) que aproxima clientes e prestadores de pequenos "
+    "serviços locais. Prestadores se cadastram informando categoria de atuação, descrição do "
+    "serviço, faixa de preço e localização. Ao buscar por uma categoria, o cliente recebe a lista "
+    "de prestadores daquela categoria dentro de um raio de distância configurável a partir da sua "
+    "localização, ordenada pela combinação de proximidade geográfica e nota média das avaliações "
+    "anteriores. Após a conclusão de cada serviço, o cliente avalia o prestador, alimentando um "
+    "histórico de reputação que passa a fazer parte do processo de recomendação."
+)
+
+VISAO_FUNCIONALIDADES_ARQUIVADO = [
+    "Cadastro de usuários e ativação de perfil de prestador, com serviços, faixa de preço, "
+    "localização e disponibilidade;",
+    "Busca de prestadores por categoria dentro de um raio configurável, com ordenação por "
+    "proximidade e reputação;",
+    "Solicitação de serviço ao prestador, com aceite ou recusa e liberação do contato após o aceite;",
+    "Registro de conclusão do serviço e avaliação do prestador pelo cliente (nota e comentário);",
+    "Histórico de reputação usado na recomendação, incluindo tratamento justo para prestadores novos;",
+    "Denúncia de conteúdo inadequado e moderação pelo administrador.",
+]
+
+ATORES_ARQUIVADO = [
+    ("Cliente",
+     "Qualquer pessoa cadastrada que busca e contrata serviços. Busca prestadores, envia "
+     "solicitações, confirma a conclusão e avalia o prestador."),
+    ("Prestador",
+     "Cliente que ativou um perfil de prestador. Além de contratar serviços, cadastra os serviços "
+     "que oferece, define sua disponibilidade, responde às solicitações e registra a conclusão dos "
+     "serviços. Na UML, é uma especialização do ator Cliente."),
+    ("Administrador",
+     "Membro da equipe do Bicus. Mantém as categorias de serviço e modera as denúncias de "
+     "conteúdo inadequado."),
+]
+
+ESCOPO_DENTRO_ARQUIVADO = [
+    "Cadastro e autenticação de usuários; perfil de prestador, serviços oferecidos e disponibilidade;",
+    "Busca geográfica por categoria e raio, com ranking por proximidade e nota;",
+    "Ciclo da solicitação de serviço (envio, aceite/recusa, conclusão, cancelamento);",
+    "Avaliação do prestador, reputação e resposta do prestador à avaliação;",
+    "Denúncias, moderação e manutenção de categorias.",
+]
+
+ESCOPO_FORA_ARQUIVADO = [
+    "Pagamento intermediado pela plataforma: preço e pagamento são combinados diretamente entre "
+    "cliente e prestador;",
+    "Chat interno: após o aceite, a conversa segue pelo telefone/WhatsApp liberado pelo sistema;",
+    "Avaliação do cliente pelo prestador;",
+    "Verificação de documentos ou antecedentes dos prestadores;",
+    "Cálculo de rotas reais: a distância considerada é em linha reta.",
+]
+
+# "4.3. Prioridade para melhores práticas do RUP" — removida intencionalmente (confirmado
+# pelo grupo em 08/10/2026). Texto original preservado abaixo.
+
+RUP_ARQUIVADO = [
     ("Desenvolva software iterativamente",
      "O valor do Bicus depende de uma regra que só pode ser validada com uso real: a ordenação "
      "dos prestadores por proximidade e nota. Entregar o sistema em ciclos permite que, ao fim de "
@@ -748,9 +614,9 @@ RUP = [
      "por um processo de solicitação que avalie viabilidade e impacto antes de serem "
      "incorporadas."),
     ("Use arquiteturas baseadas em componentes",
-     "As interfaces web e mobile consomem a mesma API (S3), e os serviços externos de CEP e "
-     "geocodificação devem ficar isolados em componentes próprios, para que possam ser trocados "
-     "sem afetar o restante do sistema."),
+     "As interfaces web e mobile consomem a mesma API, e os serviços externos de geocodificação "
+     "devem ficar isolados em componentes próprios, para que possam ser trocados sem afetar o "
+     "restante do sistema."),
     ("Modele visualmente o software",
      "Os diagramas UML (casos de uso e modelo conceitual) mantêm a equipe alinhada sobre o "
      "domínio. Por ser uma equipe pequena, com comunicação direta, esta prática recebe a menor "
