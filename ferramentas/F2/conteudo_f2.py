@@ -508,3 +508,40 @@ CRITERIO_PRODUTIVIDADE = (
 
 PLANEJAMENTO_F1_HORAS = 1600   # 4 ciclos de 400 h do planejamento preliminar da F1
 EQUIPES_ALTERNATIVAS = [2, 3, 4, 5, 6]
+
+# Texto (no lugar da tabela de alterações, pedido do grupo em 09/10/2026): (prefixo em negrito, texto)
+MODELO_ALTERACOES_TEXTO = [
+    ("Prestador e Usuário. ",
+     "No modelo preliminar, os dois eram ligados pela associação \"atua como\". Como todo "
+     "prestador é um usuário cadastrado que ativou um perfil profissional e continua podendo "
+     "contratar serviços (F4, NF4.1), Prestador passou a ser subclasse de Usuário."),
+    ("Usuário. ",
+     "Recebeu senha, exigida no cadastro, no login e na alteração de senha (F1, F2, F3, S5), e "
+     "dataAceiteTermos, que registra o aceite dos Termos de Uso e da Política de Privacidade "
+     "(NF1.7, S4). O atributo ativo foi substituído por situacao, porque a conta precisa "
+     "distinguir os estados aguardando confirmação, ativa, suspensa, banida e excluída (NF1.8, "
+     "NF2.1, NF3.5, F19); fimSuspensao guarda até quando vale uma suspensão (NF19.3)."),
+    ("Prestador. ",
+     "raioAtendimento passou a se chamar raioDeslocamento, nome usado no NF4.3 e na tela de "
+     "perfil. notaMedia e totalAvaliacoes foram marcados como derivados, pois são recalculados a "
+     "cada avaliação (F15)."),
+    ("Solicitação. ",
+     "Recebeu canceladaPor, que indica se o cancelamento foi feito pelo cliente, pelo prestador "
+     "ou pelo sistema (NF11.6, NF13.4, NF19.3) e é necessário para a consulta de taxa de "
+     "cancelamento por prestador; e dataRegistroConclusao, porque a conclusão é registrada pelo "
+     "prestador antes da confirmação do cliente (F13, NF13.2)."),
+    ("Avaliação. ",
+     "Recebeu removida: a remoção por moderação não apaga o registro, que continua ligado à "
+     "denúncia e à decisão do administrador (F19, NF19.2, NF19.4)."),
+    ("Denúncia. ",
+     "Passou a guardar sempre o usuário denunciado (dono do perfil ou autor da avaliação), que "
+     "recebe a medida e a notificação da decisão; a ligação com a avaliação existe só quando ela "
+     "é o item denunciado (F18, F19, NF19.5)."),
+    ("Administrador. ", "Recebeu senha, necessária para o login (F2)."),
+    ("Categoria. ",
+     "A associação \"mantém\" com Administrador foi removida, porque a categoria não guarda quem "
+     "a cadastrou ou alterou (F20)."),
+    ("Multiplicidades e tipos. ",
+     "Foram indicadas as multiplicidades das associações e os atributos opcionais ([0..1]). Os "
+     "tipos compostos e as enumerações estão detalhados na tabela a seguir."),
+]

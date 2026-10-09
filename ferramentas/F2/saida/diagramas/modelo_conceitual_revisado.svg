@@ -68,89 +68,89 @@
 <rect x="30" y="300" width="270" height="268" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="30" y="300" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="165.0" y="320" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Usuário</text>
-<text x="40" y="346" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome: String</text>
-<text x="40" y="365" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ email: String</text>
-<text x="40" y="384" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ senha: String</text>
-<text x="40" y="403" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ cpf: String</text>
-<text x="40" y="422" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ telefone: String</text>
-<text x="40" y="441" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataNascimento: Data</text>
-<text x="40" y="460" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ endereco: Endereço</text>
-<text x="40" y="479" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localizacao: Coordenada</text>
-<text x="40" y="498" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fotoPerfil: Imagem [0..1]</text>
-<text x="40" y="517" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataAceiteTermos: Data</text>
-<text x="40" y="536" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao: Enumeração</text>
-<text x="40" y="555" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fimSuspensao: Data [0..1]</text>
+<text x="40" y="346" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome</text>
+<text x="40" y="365" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ email</text>
+<text x="40" y="384" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ senha</text>
+<text x="40" y="403" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ cpf</text>
+<text x="40" y="422" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ telefone</text>
+<text x="40" y="441" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataNascimento</text>
+<text x="40" y="460" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ endereco</text>
+<text x="40" y="479" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localizacao</text>
+<text x="40" y="498" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fotoPerfil [0..1]</text>
+<text x="40" y="517" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataAceiteTermos</text>
+<text x="40" y="536" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao</text>
+<text x="40" y="555" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fimSuspensao [0..1]</text>
 <rect x="30" y="680" width="270" height="268" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="30" y="680" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="165.0" y="700" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Prestador</text>
-<text x="40" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ apresentacao: String</text>
-<text x="40" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localBase: Endereço [0..1]</text>
-<text x="40" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localizacaoBase: Coordenada</text>
-<text x="40" y="783" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ raioDeslocamento: Real [0..1]</text>
-<text x="40" y="802" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ disponibilidade: GradeSemanal</text>
-<text x="40" y="821" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ inicioIndisponibilidade: Data [0..1]</text>
-<text x="40" y="840" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fimIndisponibilidade: Data [0..1]</text>
-<text x="40" y="859" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ portfolio: Imagem [0..10]</text>
-<text x="40" y="878" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ ativo: Booleano</text>
-<text x="40" y="897" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataCadastro: Data</text>
-<text x="40" y="916" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ /notaMedia: Real</text>
-<text x="40" y="935" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ /totalAvaliacoes: Inteiro</text>
+<text x="40" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ apresentacao</text>
+<text x="40" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localBase [0..1]</text>
+<text x="40" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ localizacaoBase</text>
+<text x="40" y="783" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ raioDeslocamento [0..1]</text>
+<text x="40" y="802" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ disponibilidade</text>
+<text x="40" y="821" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ inicioIndisponibilidade [0..1]</text>
+<text x="40" y="840" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ fimIndisponibilidade [0..1]</text>
+<text x="40" y="859" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ portfolio [0..10]</text>
+<text x="40" y="878" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ ativo</text>
+<text x="40" y="897" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataCadastro</text>
+<text x="40" y="916" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ /notaMedia</text>
+<text x="40" y="935" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ /totalAvaliacoes</text>
 <rect x="430" y="680" width="270" height="154" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="430" y="680" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="565.0" y="700" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Serviço</text>
-<text x="440" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ titulo: String</text>
-<text x="440" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao: String</text>
-<text x="440" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ precoMinimo: Moeda</text>
-<text x="440" y="783" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ precoMaximo: Moeda</text>
-<text x="440" y="802" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ unidadeCobranca: Enumeração</text>
-<text x="440" y="821" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ ativo: Booleano</text>
+<text x="440" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ titulo</text>
+<text x="440" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao</text>
+<text x="440" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ precoMinimo</text>
+<text x="440" y="783" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ precoMaximo</text>
+<text x="440" y="802" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ unidadeCobranca</text>
+<text x="440" y="821" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ ativo</text>
 <rect x="830" y="680" width="270" height="97" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="830" y="680" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="965.0" y="700" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Categoria</text>
-<text x="840" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome: String</text>
-<text x="840" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ icone: Imagem [0..1]</text>
-<text x="840" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao: Enumeração</text>
+<text x="840" y="726" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome</text>
+<text x="840" y="745" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ icone [0..1]</text>
+<text x="840" y="764" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao</text>
 <rect x="430" y="300" width="270" height="287" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="430" y="300" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="565.0" y="320" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Solicitação</text>
-<text x="440" y="346" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao: String</text>
-<text x="440" y="365" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataDesejada: Data</text>
-<text x="440" y="384" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ turno: Enumeração</text>
-<text x="440" y="403" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ endereco: Endereço</text>
-<text x="440" y="422" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ estado: Enumeração</text>
-<text x="440" y="441" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataCriacao: Data</text>
-<text x="440" y="460" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ observacao: String [0..1]</text>
-<text x="440" y="479" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivoRecusa: Enumeração [0..1]</text>
-<text x="440" y="498" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ canceladaPor: Enumeração [0..1]</text>
-<text x="440" y="517" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivoCancelamento: String [0..1]</text>
-<text x="440" y="536" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataRegistroConclusao: Data [0..1]</text>
-<text x="440" y="555" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataConclusao: Data [0..1]</text>
-<text x="440" y="574" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ valorCobrado: Moeda [0..1]</text>
+<text x="440" y="346" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao</text>
+<text x="440" y="365" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataDesejada</text>
+<text x="440" y="384" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ turno</text>
+<text x="440" y="403" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ endereco</text>
+<text x="440" y="422" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ estado</text>
+<text x="440" y="441" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataCriacao</text>
+<text x="440" y="460" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ observacao [0..1]</text>
+<text x="440" y="479" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivoRecusa [0..1]</text>
+<text x="440" y="498" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ canceladaPor [0..1]</text>
+<text x="440" y="517" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivoCancelamento [0..1]</text>
+<text x="440" y="536" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataRegistroConclusao [0..1]</text>
+<text x="440" y="555" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataConclusao [0..1]</text>
+<text x="440" y="574" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ valorCobrado [0..1]</text>
 <rect x="830" y="30" width="270" height="154" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="830" y="30" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="965.0" y="50" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Avaliação</text>
-<text x="840" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nota: Inteiro</text>
-<text x="840" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ comentario: String [0..1]</text>
-<text x="840" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ anexos: Imagem [0..*]</text>
-<text x="840" y="133" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ data: Data</text>
-<text x="840" y="152" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ resposta: String [0..1]</text>
-<text x="840" y="171" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ removida: Booleano</text>
+<text x="840" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nota</text>
+<text x="840" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ comentario [0..1]</text>
+<text x="840" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ anexos [0..*]</text>
+<text x="840" y="133" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ data</text>
+<text x="840" y="152" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ resposta [0..1]</text>
+<text x="840" y="171" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ removida</text>
 <rect x="430" y="30" width="270" height="173" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="430" y="30" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="565.0" y="50" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Denúncia</text>
-<text x="440" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivo: Enumeração</text>
-<text x="440" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao: String [0..1]</text>
-<text x="440" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ data: Data</text>
-<text x="440" y="133" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao: Enumeração</text>
-<text x="440" y="152" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ medida: Enumeração [0..1]</text>
-<text x="440" y="171" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ justificativa: String [0..1]</text>
-<text x="440" y="190" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataDecisao: Data [0..1]</text>
+<text x="440" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ motivo</text>
+<text x="440" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ descricao [0..1]</text>
+<text x="440" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ data</text>
+<text x="440" y="133" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ situacao</text>
+<text x="440" y="152" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ medida [0..1]</text>
+<text x="440" y="171" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ justificativa [0..1]</text>
+<text x="440" y="190" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ dataDecisao [0..1]</text>
 <rect x="30" y="30" width="270" height="97" fill="white" stroke="#2F6A8F" stroke-width="1.6"/>
 <rect x="30" y="30" width="270" height="30" fill="#BFE3F5" stroke="#2F6A8F" stroke-width="1.6"/>
 <text x="165.0" y="50" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Administrador</text>
-<text x="40" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome: String</text>
-<text x="40" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ email: String</text>
-<text x="40" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ senha: String</text>
+<text x="40" y="76" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ nome</text>
+<text x="40" y="95" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ email</text>
+<text x="40" y="114" font-family="Arial" font-size="12" font-weight="normal" text-anchor="start" fill="#1A1A1A">+ senha</text>
 <rect x="830" y="430" width="270" height="97" fill="white" stroke="#7A7A7A" stroke-width="1.6"/>
 <rect x="830" y="430" width="270" height="30" fill="#E4E4E4" stroke="#7A7A7A" stroke-width="1.6"/>
 <text x="965.0" y="450" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1A1A1A">Geocodificação</text>

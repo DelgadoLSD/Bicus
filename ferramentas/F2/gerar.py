@@ -416,8 +416,13 @@ def diagrama_modelo():
                                     anchor="start"))
         return h
 
+    def sem_tipo(a):   # "nome: Tipo [0..1]" -> "nome [0..1]" (o grupo pediu o modelo sem os tipos)
+        mult = a[a.index("["):] if "[" in a else ""
+        return (nome_atributo(a) + " " + mult).strip()
+
     for nome, attrs in C2.MODELO_CLASSES.items():
-        caixa(*MODELO_POS[nome], nome, attrs, None, G1.AZUL_TRACO, G1.AZUL_FILL)
+        caixa(*MODELO_POS[nome], nome, [sem_tipo(a) for a in attrs], None, G1.AZUL_TRACO,
+              G1.AZUL_FILL)
     aie = C2.AIE[0]
     x, y = MODELO_AIE_POS
     h = caixa(x, y, aie["nome"], aie["td"], None, CINZA_TRACO, "#E4E4E4")
