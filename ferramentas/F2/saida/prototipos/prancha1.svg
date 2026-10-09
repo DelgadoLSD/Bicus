@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="840" viewBox="0 0 1400 840">
+<rect width="1400" height="840" fill="white"/>
+<text x="40.0" y="101.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T01 · Login</text>
+<rect x="40.0" y="110.0" width="360.0" height="158.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="54.0" y="141.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">E-mail:</text>
+<rect x="124.0" y="124.0" width="262.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="54.0" y="175.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Senha:</text>
+<rect x="124.0" y="158.0" width="262.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<rect x="329.0" y="192.0" width="57.0" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="330.5" y="193.5" width="54.0" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="357.5" y="209.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Entrar</text>
+<rect x="99.7" y="228.0" width="84.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="101.2" y="229.5" width="81.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="142.1" y="245.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Criar conta</text>
+<rect x="194.6" y="228.0" width="145.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="196.1" y="229.5" width="142.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="267.5" y="245.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Esqueci minha senha</text>
+<text x="40.0" y="361.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T04 · Recuperar senha</text>
+<rect x="40.0" y="370.0" width="360.0" height="116.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="54.0" y="397.0" font-family="Arial" font-size="13" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">Informe o e-mail cadastrado.</text>
+<text x="54.0" y="429.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">E-mail:</text>
+<rect x="124.0" y="412.0" width="262.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<rect x="237.2" y="446.0" width="82.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="238.7" y="447.5" width="79.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="278.6" y="463.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Enviar link</text>
+<rect x="330.1" y="446.0" width="55.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="331.6" y="447.5" width="52.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="358.0" y="463.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Voltar</text>
+<text x="40.0" y="631.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T05 · Redefinir senha</text>
+<rect x="40.0" y="640.0" width="360.0" height="122.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="54.0" y="671.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Nova senha:</text>
+<rect x="184.0" y="654.0" width="202.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="54.0" y="705.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Confirmar senha:</text>
+<rect x="184.0" y="688.0" width="202.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<rect x="288.7" y="722.0" width="97.3" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="290.2" y="723.5" width="94.3" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="337.4" y="739.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Salvar senha</text>
+<text x="500.0" y="101.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T02 · Cadastro de usuário</text>
+<rect x="500.0" y="110.0" width="450.0" height="386.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="514.0" y="141.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Nome completo:</text>
+<rect x="664.0" y="124.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="514.0" y="175.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">E-mail:</text>
+<rect x="664.0" y="158.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="514.0" y="209.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Senha:</text>
+<rect x="664.0" y="192.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="514.0" y="243.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">CPF:</text>
+<rect x="664.0" y="226.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="670.0" y="242.5" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#777">000.000.000-00</text>
+<text x="514.0" y="277.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Telefone:</text>
+<rect x="664.0" y="260.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="514.0" y="311.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Data de nascimento:</text>
+<rect x="664.0" y="294.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="670.0" y="310.5" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#777">dd/mm/aaaa</text>
+<text x="514.0" y="345.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Endereço:</text>
+<rect x="664.0" y="328.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="514.0" y="379.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Complemento:</text>
+<rect x="664.0" y="362.0" width="272.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="670.0" y="378.5" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#777">(opcional)</text>
+<text x="514.0" y="413.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Foto de perfil:</text>
+<rect x="664.0" y="396.0" width="182.2" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<rect x="854.2" y="395.0" width="81.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="855.7" y="396.5" width="78.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="895.1" y="412.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Escolher...</text>
+<rect x="514.0" y="432.0" width="13.0" height="13.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="534.0" y="443.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Li e aceito os Termos de Uso e a Política de Privacidade</text>
+<rect x="792.4" y="456.0" width="77.6" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="793.9" y="457.5" width="74.6" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="831.3" y="473.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Cadastrar</text>
+<rect x="880.1" y="456.0" width="55.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="881.6" y="457.5" width="52.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="908.0" y="473.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Voltar</text>
+<text x="1030.0" y="101.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T03 · Confirmação de e-mail</text>
+<rect x="1030.0" y="110.0" width="330.0" height="113.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="1195.0" y="140.0" font-family="Arial" font-size="16" font-weight="bold" font-style="normal" text-anchor="middle" fill="#111">E-mail confirmado!</text>
+<text x="1195.0" y="168.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#444">Sua conta está ativa.</text>
+<rect x="1144.8" y="183.0" width="100.4" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="1146.3" y="184.5" width="97.4" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="1195.0" y="200.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Ir para o login</text>
+<rect x="53.0" y="291.0" width="270.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="50.0" y="288.0" width="270.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="185.0" y="313.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: E-mail ou senha</text>
+<text x="185.0" y="332.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">inválidos.</text>
+<rect x="53.0" y="505.0" width="290.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="50.0" y="502.0" width="290.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="195.0" y="527.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Link de redefinição</text>
+<text x="195.0" y="546.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">enviado para o seu e-mail.</text>
+<rect x="453.0" y="647.0" width="360.0" height="37.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="450.0" y="644.0" width="360.0" height="37.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="630.0" y="669.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Senha redefinida com sucesso!</text>
+<rect x="453.0" y="709.0" width="360.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="450.0" y="706.0" width="360.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="630.0" y="731.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Senha fora da política</text>
+<text x="630.0" y="750.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ou confirmação diferente.</text>
+<rect x="993.0" y="393.0" width="370.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="990.0" y="390.0" width="370.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="1175.0" y="415.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Cadastro realizado! Confirme</text>
+<text x="1175.0" y="434.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">seu e-mail pelo link enviado.</text>
+<rect x="993.0" y="473.0" width="370.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="990.0" y="470.0" width="370.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="1175.0" y="495.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Dados inválidos (CPF, idade</text>
+<text x="1175.0" y="514.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">mínima ou conta já existente).</text>
+<line x1="400.0" y1="233.2" x2="500.0" y2="187.2" stroke="#111" stroke-width="1.3"/>
+<polygon points="500.0,187.2 494.1,194.0 491.0,187.3" fill="#111"/>
+<polygon points="400.0,233.2 405.9,226.5 409.0,233.1" fill="#111"/>
+<text x="407.0" y="200.2" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">Criar conta</text>
+<line x1="364.0" y1="268.0" x2="364.0" y2="370.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="364.0,370.0 360.3,361.8 367.7,361.8" fill="#111"/>
+<polygon points="364.0,268.0 367.7,276.2 360.3,276.2" fill="#111"/>
+<rect x="370.0" y="311.0" width="122.2" height="16.0" rx="0" fill="white" stroke="none"/>
+<text x="374.0" y="323.0" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">Esqueci minha senha</text>
+<line x1="364.0" y1="486.0" x2="364.0" y2="640.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="364.0,640.0 360.3,631.8 367.7,631.8" fill="#111"/>
+<polygon points="364.0,486.0 367.7,494.2 360.3,494.2" fill="#111"/>
+<rect x="370.0" y="555.0" width="79.3" height="16.0" rx="0" fill="white" stroke="none"/>
+<text x="374.0" y="567.0" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">link no e-mail</text>
+<line x1="950.0" y1="140.9" x2="1030.0" y2="155.2" stroke="#111" stroke-width="1.3"/>
+<polygon points="1030.0,155.2 1021.3,157.4 1022.6,150.1" fill="#111"/>
+<polygon points="950.0,140.9 958.7,138.7 957.4,145.9" fill="#111"/>
+<text x="958.0" y="128.9" font-family="Arial" font-size="11" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">link no e-mail</text>
+</svg>

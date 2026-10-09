@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860">
+<rect width="1400" height="860" fill="white"/>
+<rect x="120.0" y="90.0" width="440.0" height="36.0" rx="5" fill="#f1f1f1" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="340.0" y="113.0" font-family="Arial" font-size="13" font-weight="normal" font-style="italic" text-anchor="middle" fill="#555">T22 · Menu do administrador (protótipo 8)</text>
+<text x="40.0" y="211.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="start" fill="#1d2a31">T25 · Categorias</text>
+<rect x="40.0" y="220.0" width="600.0" height="174.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<rect x="54.0" y="234.0" width="572.0" height="22.0" rx="0" fill="#dff1f4" stroke="none"/>
+<text x="101.7" y="249.0" font-family="Arial" font-size="11" font-weight="bold" font-style="normal" text-anchor="middle" fill="#21414a">Ícone</text>
+<text x="308.2" y="249.0" font-family="Arial" font-size="11" font-weight="bold" font-style="normal" text-anchor="middle" fill="#21414a">Nome</text>
+<text x="546.6" y="249.0" font-family="Arial" font-size="11" font-weight="bold" font-style="normal" text-anchor="middle" fill="#21414a">Situação</text>
+<line x1="54.0" y1="256.0" x2="626.0" y2="256.0" stroke="#000" stroke-width="1.0"/>
+<line x1="54.0" y1="278.0" x2="626.0" y2="278.0" stroke="#000" stroke-width="1.0"/>
+<line x1="54.0" y1="300.0" x2="626.0" y2="300.0" stroke="#000" stroke-width="1.0"/>
+<line x1="54.0" y1="322.0" x2="626.0" y2="322.0" stroke="#000" stroke-width="1.0"/>
+<line x1="149.3" y1="234.0" x2="149.3" y2="344.0" stroke="#000" stroke-width="1.0"/>
+<line x1="467.1" y1="234.0" x2="467.1" y2="344.0" stroke="#000" stroke-width="1.0"/>
+<rect x="54.0" y="234.0" width="572.0" height="110.0" rx="0" fill="none" stroke="#000" stroke-width="1.2"/>
+<rect x="54.0" y="354.0" width="51.4" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="55.5" y="355.5" width="48.4" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="79.7" y="371.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Nova</text>
+<rect x="115.4" y="354.0" width="55.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="116.9" y="355.5" width="52.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="143.3" y="371.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Editar</text>
+<rect x="181.3" y="354.0" width="61.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="182.8" y="355.5" width="58.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="212.2" y="371.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Excluir</text>
+<rect x="253.1" y="354.0" width="55.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="254.6" y="355.5" width="52.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="281.1" y="371.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Voltar</text>
+<text x="440.0" y="551.0" font-family="Arial" font-size="15" font-weight="bold" font-style="normal" text-anchor="end" fill="#1d2a31">T26 · Categoria</text>
+<rect x="40.0" y="560.0" width="400.0" height="156.0" rx="0" fill="white" stroke="#000" stroke-width="1.6"/>
+<text x="54.0" y="591.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Nome:</text>
+<rect x="134.0" y="574.0" width="292.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="54.0" y="625.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Ícone:</text>
+<rect x="134.0" y="608.0" width="202.2" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<rect x="344.2" y="607.0" width="81.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="345.7" y="608.5" width="78.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="385.1" y="624.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Escolher...</text>
+<text x="54.0" y="659.0" font-family="Arial" font-size="14" font-weight="normal" font-style="normal" text-anchor="start" fill="#111">Situação:</text>
+<rect x="134.0" y="642.0" width="292.0" height="24.0" rx="0" fill="white" stroke="#000" stroke-width="1.1"/>
+<text x="140.0" y="658.5" font-family="Arial" font-size="12" font-weight="normal" font-style="normal" text-anchor="start" fill="#333">Ativa</text>
+<rect x="402.0" y="642.0" width="24.0" height="24.0" rx="0" fill="#9a9a9a" stroke="#000" stroke-width="1.1"/>
+<polygon points="408.0,650.5 420.0,650.5 414.0,659.0" fill="#111"/>
+<rect x="301.4" y="676.0" width="58.7" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="302.9" y="677.5" width="55.7" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="330.7" y="693.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Salvar</text>
+<rect x="370.1" y="676.0" width="55.9" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="371.6" y="677.5" width="52.9" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="398.0" y="693.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Voltar</text>
+<rect x="463.0" y="423.0" width="220.0" height="92.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="460.0" y="420.0" width="220.0" height="92.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="570.0" y="445.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Confirma</text>
+<text x="570.0" y="464.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">exclusão?</text>
+<rect x="519.4" y="476.0" width="44.8" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="520.9" y="477.5" width="41.8" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="541.8" y="493.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Sim</text>
+<rect x="576.1" y="476.0" width="44.5" height="26.0" rx="3" fill="#5ab8c5" stroke="#2f8794" stroke-width="1.2"/>
+<rect x="577.6" y="477.5" width="41.5" height="11.5" rx="2" fill="#ffffff" fill-opacity="0.28" stroke="none"/>
+<text x="598.4" y="493.7" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#0c2a30">Não</text>
+<rect x="463.0" y="527.0" width="220.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="460.0" y="524.0" width="220.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="570.0" y="549.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Categoria</text>
+<text x="570.0" y="568.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">excluída.</text>
+<rect x="463.0" y="595.0" width="220.0" height="75.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="460.0" y="592.0" width="220.0" height="75.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="570.0" y="617.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Categoria com</text>
+<text x="570.0" y="636.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">serviços: desative-a</text>
+<text x="570.0" y="655.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">em Editar.</text>
+<rect x="463.0" y="682.0" width="220.0" height="37.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="460.0" y="679.0" width="220.0" height="37.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="570.0" y="704.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Categoria salva!</text>
+<rect x="463.0" y="731.0" width="220.0" height="56.0" rx="14" fill="#000" fill-opacity="0.14" stroke="none"/>
+<rect x="460.0" y="728.0" width="220.0" height="56.0" rx="14" fill="#f4f4f4" stroke="#9a9a9a" stroke-width="1.2"/>
+<text x="570.0" y="753.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">ALERTA: Já existe categoria</text>
+<text x="570.0" y="772.0" font-family="Arial" font-size="13" font-weight="normal" font-style="normal" text-anchor="middle" fill="#111">com este nome.</text>
+<line x1="340.0" y1="126.0" x2="340.0" y2="220.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="340.0,220.0 336.3,211.8 343.7,211.8" fill="#111"/>
+<polygon points="340.0,126.0 343.7,134.2 336.3,134.2" fill="#111"/>
+<rect x="346.0" y="165.0" width="64.8" height="16.0" rx="0" fill="white" stroke="none"/>
+<text x="350.0" y="177.0" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">Categorias</text>
+<line x1="79.7" y1="380.0" x2="79.7" y2="560.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="79.7,560.0 76.0,551.8 83.4,551.8" fill="#111"/>
+<polygon points="79.7,380.0 83.4,388.2 76.0,388.2" fill="#111"/>
+<line x1="143.3" y1="380.0" x2="143.3" y2="560.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="143.3,560.0 139.7,551.8 147.0,551.8" fill="#111"/>
+<polygon points="143.3,380.0 147.0,388.2 139.7,388.2" fill="#111"/>
+<rect x="149.3" y="462.0" width="78.0" height="16.0" rx="0" fill="white" stroke="none"/>
+<text x="153.3" y="474.0" font-family="Arial" font-size="12" font-weight="normal" font-style="italic" text-anchor="start" fill="#444">Nova / Editar</text>
+<line x1="212.2" y1="380.0" x2="490.0" y2="420.0" stroke="#111" stroke-width="1.3"/>
+<polygon points="490.0,420.0 481.3,422.5 482.4,415.2" fill="#111"/>
+</svg>

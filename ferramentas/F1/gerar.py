@@ -624,7 +624,7 @@ def margens(section, paisagem=False):
     section.right_margin = Cm(2.0)
 
 
-def capa(doc):
+def capa(doc, fases=("Fase 1 – Concepção",)):
     def linha(texto, tam=12, neg=False, antes=0, depois=4):
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -635,7 +635,8 @@ def capa(doc):
 
     linha(C.SISTEMA, 40, True, antes=150)
     linha(C.SUBTITULO, 14)
-    linha("Fase 1 – Concepção", 13, True, antes=18, depois=0)
+    for i, fase in enumerate(fases):
+        linha(fase, 13, True, antes=18 if i == 0 else 2, depois=0)
     linha("", antes=18)
     linha("Grupo:", 12, True, antes=18)
     for nome, mat in C.EQUIPE:
