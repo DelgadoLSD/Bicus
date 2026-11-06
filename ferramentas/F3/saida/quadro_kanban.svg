@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="380" viewBox="0 0 1240 380">
+<defs><marker id="seta" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker></defs>
+<rect width="1240" height="380" fill="white"/>
+<rect x="20" y="20" width="295" height="320" rx="8" fill="#F4F7F9" stroke="#9AB" stroke-width="1.2"/>
+<rect x="20" y="20" width="295" height="46" rx="8" fill="#2F6A8F"/>
+<text x="167.5" y="42" font-family="Arial" font-size="17" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">Backlog</text>
+<rect x="325" y="20" width="295" height="320" rx="8" fill="#F4F7F9" stroke="#9AB" stroke-width="1.2"/>
+<rect x="325" y="20" width="295" height="46" rx="8" fill="#2F6A8F"/>
+<text x="472.5" y="42" font-family="Arial" font-size="17" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">Fazendo</text>
+<text x="472.5" y="59" font-family="Arial" font-size="11.5" font-weight="normal" font-style="italic" text-anchor="middle" fill="#DDEEFF">limite: 1 por pessoa</text>
+<rect x="630" y="20" width="295" height="320" rx="8" fill="#F4F7F9" stroke="#9AB" stroke-width="1.2"/>
+<rect x="630" y="20" width="295" height="46" rx="8" fill="#2F6A8F"/>
+<text x="777.5" y="42" font-family="Arial" font-size="17" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">Testes</text>
+<text x="777.5" y="59" font-family="Arial" font-size="11.5" font-weight="normal" font-style="italic" text-anchor="middle" fill="#DDEEFF">limite: 1 por pessoa</text>
+<rect x="935" y="20" width="295" height="320" rx="8" fill="#F4F7F9" stroke="#9AB" stroke-width="1.2"/>
+<rect x="935" y="20" width="295" height="46" rx="8" fill="#2F6A8F"/>
+<text x="1082.5" y="42" font-family="Arial" font-size="17" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">Pronto</text>
+<rect x="34" y="85" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="44" y="107" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#31 · F18 Denunciar conteúdo</text>
+<text x="44" y="125" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Como usuário, quero denunciar</text>
+<text x="44" y="143" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">um perfil ou avaliação…</text>
+<rect x="34" y="170" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="44" y="192" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#32 · F19 Moderar denúncias</text>
+<text x="44" y="210" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Como administrador, quero…</text>
+<rect x="34" y="255" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="44" y="277" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#33 · F20 Gerenciar categorias</text>
+<text x="44" y="295" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Como administrador, quero…</text>
+<rect x="339" y="85" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="349" y="107" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#24 · F8 Buscar prestadores</text>
+<text x="349" y="125" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Hugo e Lucas (em par)</text>
+<rect x="528" y="93" width="70" height="18" rx="9" fill="#C26A00"/>
+<text x="563.0" y="106" font-family="Arial" font-size="11" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">complexa</text>
+<rect x="339" y="170" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="349" y="192" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#27 · F16 Responder avaliação</text>
+<text x="349" y="210" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Luis Felipe (individual + revisão)</text>
+<rect x="339" y="255" width="267" height="70" rx="6" fill="#FDECEC" stroke="#C0392B" stroke-width="1.2"/>
+<text x="349" y="277" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">Impedimento · #24</text>
+<text x="349" y="295" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">API de geocodificação fora do</text>
+<text x="349" y="313" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">ar; ver alternativa…</text>
+<rect x="507" y="263" width="91" height="18" rx="9" fill="#C0392B"/>
+<text x="552.5" y="276" font-family="Arial" font-size="11" font-weight="bold" font-style="normal" text-anchor="middle" fill="white">impedimento</text>
+<rect x="644" y="85" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="654" y="107" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#22 · F7 Obter localização</text>
+<text x="654" y="125" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Critérios de aceitação: 3/4 ✓</text>
+<rect x="949" y="85" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="959" y="107" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#20 · F1 Cadastrar usuário</text>
+<text x="959" y="125" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Testes ✓ · integrado ✓</text>
+<rect x="949" y="170" width="267" height="70" rx="6" fill="#FFFFFF" stroke="#7A93A8" stroke-width="1.2"/>
+<text x="959" y="192" font-family="Arial" font-size="12.5" font-weight="bold" font-style="normal" text-anchor="start" fill="#1A1A1A">#21 · F2 Login</text>
+<text x="959" y="210" font-family="Arial" font-size="12.5" font-weight="normal" font-style="normal" text-anchor="start" fill="#1A1A1A">Testes ✓ · integrado ✓</text>
+<text x="620" y="366" font-family="Arial" font-size="11.5" font-weight="normal" font-style="italic" text-anchor="middle" fill="#555">Exemplo ilustrativo de cartões: número da história · RF de origem · descrição</text>
+</svg>
