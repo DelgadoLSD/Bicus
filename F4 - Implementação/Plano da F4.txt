@@ -1,0 +1,236 @@
+PLANO DA F4 - IMPLEMENTAÇÃO DE PARTE DO SISTEMA (Bicus)
+Prazo: 22/11/2026. Entrega: só o link do repositório público no GitHub.
+
+O que o professor pede:
+- implementar 1 módulo relevante do sistema em uma linguagem para web (Python);
+- usar o processo da F3;
+- tomar medidas para não inserir os code smells vistos em sala;
+- código em repositório PÚBLICO no GitHub, com suíte de testes unitários.
+
+
+=====================================================================
+1. MÓDULO ESCOLHIDO: CONTRATAÇÃO DE SERVIÇO
+=====================================================================
+
+É o caso de uso principal do Bicus na F1 ("Contratar serviço"): o cliente acessa o sistema,
+busca prestadores perto dele por categoria e envia uma solicitação de serviço. Nada de
+administração, avaliações ou área do prestador nesta fase.
+
+Para o cliente conseguir usar a busca e solicitar, ele precisa estar cadastrado e logado:
+- a solicitação guarda quem é o cliente;
+- a busca usa a localização do endereço cadastrado (F7).
+Por isso cadastro e login entram no módulo, como a parte mais simples.
+
+O módulo foi dividido em 2 partes, conforme a F3 (par nas histórias complexas, individual nas
+simples):
+
+  PARTE A - Acesso do cliente (1 pessoa, individual, mais simples)
+    F1 Cadastrar usuário e F2 Login.
+
+  PARTE B - Busca e solicitação (2 pessoas, em par, exige mais atenção)
+    F8 Buscar prestadores por categoria, F9 Pontuação de recomendação, F7 Localização
+    (distância) e F11 Solicitar serviço.
+
+FORA DESTA FASE (não implementar):
+- administração (F19, F20);
+- avaliações (F14 a F16);
+- área do prestador (F4 a F6, F12, F13);
+- denúncias (F18);
+- perfil completo do prestador (F10);
+- confirmação de e-mail e recuperação de senha (NF1.8, NF2.2);
+- notificações por e-mail;
+- foto de perfil;
+- mapa.
+
+Prestadores, serviços e categorias entram como DADOS INICIAIS (carga inicial, como prevê o
+NF20.4), já que a área do prestador não será implementada.
+
+
+=====================================================================
+2. ETAPA 0 - BASE COMUM (os 3 juntos, ANTES de criar as branches)
+=====================================================================
+
+Feita direto na main, para as duas partes partirem da mesma base e não mexerem nos mesmos
+arquivos depois (é isso que evita conflito na integração).
+
+  [ ] Estrutura do projeto Flask + SQLite e requirements.txt (Flask, Flask-SQLAlchemy, pytest).
+  [ ] Modelos, seguindo o modelo conceitual revisado da F2 (só os atributos que o módulo usa):
+      Usuario, Prestador (subclasse de Usuario), Categoria, Servico, Solicitacao.
+  [ ] Enums no lugar de textos soltos: Turno (manhã/tarde/noite), EstadoSolicitacao (pendente,
+      aceita, ...), UnidadeCobranca (hora/diária/serviço).
+  [ ] Geocodificador SIMULADO (F7): uma classe com uma tabela fixa de endereços de Viçosa ->
+      latitude/longitude, com a mesma interface que uma API real teria. Assim os testes não
+      dependem de internet.
+  [ ] Dados iniciais (script seed):
+      - as 7 categorias do NF20.4;
+      - uns 6 a 8 prestadores em Viçosa, com serviços, notas e raios variados;
+      - 1 cliente de teste.
+  [ ] Contrato entre as partes: o usuário logado fica em session["usuario_id"] e existe uma
+      função usuario_logado() e um decorador login_obrigatorio. A Parte A implementa o login
+      que preenche a sessão; a Parte B só usa a função e o decorador.
+  [ ] pytest configurado, com um teste de exemplo passando.
+  [ ] GitHub Actions rodando os testes a cada push (integração contínua, F3).
+  [ ] Quadro Kanban (GitHub Projects) com as histórias da seção 3.
+
+
+=====================================================================
+3. HISTÓRIAS (cartões do quadro) E CRITÉRIOS DE ACEITAÇÃO
+=====================================================================
+
+--- PARTE A - Acesso do cliente (individual) -----------------------
+
+H01 [F1] Como visitante, quero me cadastrar para poder contratar serviços.
+  - Pede nome completo, e-mail, senha, CPF, telefone, data de nascimento, endereço e
+    aceite dos termos; complemento é opcional (NF1.2, NF1.3).
+  - CPF com dígitos verificadores inválidos é recusado (NF1.1).
+  - Não aceita e-mail ou CPF já cadastrado (NF1.4).
+  - Recusa quem tem menos de 18 anos (NF1.5).
+  - Senha com no mínimo 8 caracteres, ao menos uma letra e um número (NF1.6).
+  - Sem o aceite dos termos, não conclui o cadastro (NF1.7).
+  - A senha é guardada com hash, nunca em texto puro (S5).
+  - A localização (latitude/longitude) é obtida pelo geocodificador ao cadastrar (F7).
+  - Em qualquer erro: mostra a mensagem e não cadastra.
+
+H02 [F2] Como usuário, quero entrar com e-mail e senha para usar o sistema.
+  - Só entra se o e-mail existe e a senha confere (NF2.1).
+  - Erro com mensagem única "e-mail ou senha inválidos" (não revela qual dos dois errou).
+  - Botão Sair encerra a sessão.
+  - Páginas da Parte B só abrem com usuário logado.
+
+Testes unitários esperados (exemplos): validar CPF (válido, inválido, com máscara), idade
+mínima (exatamente 18 anos, 17 anos), política de senha, e-mail/CPF repetido, senha
+guardada com hash, login certo, login com senha errada.
+
+--- PARTE B - Busca e solicitação (em par) -------------------------
+
+H03 [F8, F7] Como cliente, quero buscar prestadores por categoria dentro de um raio, para
+encontrar quem atende perto de mim.
+  - A categoria é escolhida numa lista (NF5.1).
+  - O raio de busca em km é informado pelo cliente (NF8.1).
+  - Distância em linha reta entre cliente e prestador, pela fórmula de Haversine (NF8.2).
+  - Não aparecem (NF8.3):
+      - o próprio usuário;
+      - perfis desativados;
+      - serviços inativos;
+      - prestadores em período de indisponibilidade;
+      - prestador cujo raio de deslocamento não alcança o cliente.
+  - Cada item mostra: nome do prestador, título do serviço, faixa de preço, nota média,
+    nº de avaliações e distância aproximada (NF8.4).
+  - Sem resultado: avisa e sugere aumentar o raio (NF8.5).
+
+H04 [F9] Como cliente, quero ver primeiro os prestadores mais recomendados.
+  - A lista vem ordenada pela pontuação, maior primeiro.
+  - A nota pesa mais que a proximidade (NF9.1). Proposta de fórmula (o NF9.1 deixou "a
+    definir"; confirmar com o grupo):
+        pontuação = 0,6 x (nota média / 5) + 0,4 x (1 - distância / raio da busca)
+        Prestador sem avaliação usa nota 3,0 (neutra), para não ficar sempre em último.
+  - Opcional (NF9.2, desejável): em empate, mais serviços concluídos e depois o mais próximo.
+
+H05 [F11] Como cliente, quero solicitar um serviço de um prestador da lista.
+  - São obrigatórios o serviço, a descrição da necessidade, a data desejada e o turno; o
+    endereço do serviço vem preenchido com o endereço do cliente (NF11.1).
+  - A data desejada não pode ser anterior a hoje (NF11.2).
+  - O cliente não pode solicitar serviço do próprio perfil de prestador (NF11.3).
+  - No máximo 10 solicitações pendentes por cliente (NF11.5, desejável e simples).
+  - A solicitação é criada no estado Pendente, com a data de criação (NF13.1).
+
+Testes unitários esperados (exemplos):
+  - distância entre dois pontos conhecidos;
+  - prestador fora do raio da busca;
+  - prestador cujo raio de deslocamento não alcança o cliente;
+  - prestador indisponível;
+  - o próprio usuário fora da lista;
+  - ordenação pela pontuação;
+  - prestador sem avaliações;
+  - solicitação sem campo obrigatório;
+  - data no passado;
+  - autossolicitação;
+  - 11ª solicitação pendente.
+
+
+=====================================================================
+4. COMO APLICAMOS O PROCESSO DA F3 NESTA FASE
+=====================================================================
+
+  - Quadro Kanban no GitHub Projects: Backlog -> Fazendo -> Testes -> Pronto.
+    Cada história acima é um cartão que cita o RF de origem.
+  - Limite: cada pessoa com no máximo 1 cartão entre Fazendo e Testes (o par conta 1 para os
+    dois).
+  - Parte B em par: a revisão acontece durante a programação.
+    Parte A individual: antes de ir para Testes, alguém da dupla revisa o código (GRE4).
+  - Testes unitários escritos junto com o código; o GitHub Actions roda tudo a cada push.
+  - Cartão só vai para Pronto com critérios conferidos, testes passando e código integrado.
+  - Toda mensagem de commit cita o cartão, ex.: "H03: filtra prestador fora do raio (#3)"
+    (GRE3: requisito -> história -> commit/teste).
+  - Travou? Abre um cartão de Impedimento no quadro, registra a análise e a resolução nele
+    (GPR16).
+  - Check-in diário por mensagem no grupo: o que fiz, o que vou fazer, se estou travado.
+
+
+=====================================================================
+5. CODE SMELLS - MEDIDAS PREVENTIVAS
+=====================================================================
+
+Lista baseada no capítulo de refatoração do livro do Marco Tulio Valente (Engenharia de
+Software Moderna), em que os slides da disciplina se baseiam. CONFERIR com os slides de code
+smells da aula e ajustar se o professor usou outra lista.
+
+  Código duplicado        -> cada regra num lugar só (ex.: validações em um módulo de
+                             validação, usado pelo formulário e pelos testes).
+  Métodos longos          -> funções curtas, uma regra por função (validar_cpf,
+                             calcular_distancia, calcular_pontuacao...).
+  Classes grandes         -> separar rotas (web) das regras (domínio) e do acesso ao banco.
+  Feature envy            -> a regra fica perto dos dados que usa (ex.: "está indisponível
+                             hoje?" é método do Prestador).
+  Muitos parâmetros       -> agrupar em objetos (ex.: dataclass DadosCadastro, FiltroBusca).
+  Variáveis globais       -> nada de estado global; configuração via app factory do Flask.
+  Obsessão por primitivos -> Enums para turno, estado e unidade de cobrança; uma classe
+                             Coordenada em vez de dois floats soltos.
+  Objetos mutáveis        -> valores como Coordenada imutáveis (dataclass frozen).
+  Classes de dados        -> modelos com comportamento quando faz sentido, não só atributos.
+  Comentários             -> nomes claros no lugar de comentários explicando código confuso.
+
+Na prática:
+  - rodar o ruff (lint) no GitHub Actions, com limite de complexidade por função;
+  - quem revisa (par ou revisor da Parte A) confere esta lista antes de mover o cartão para
+    Testes.
+
+
+=====================================================================
+6. REPOSITÓRIO, PASTAS E BRANCHES
+=====================================================================
+
+Repositório: o próprio DelgadoLSD/Bicus, que será tornado PÚBLICO (o link dele é a entrega).
+  - O código fica na pasta "codigo/".
+  - O material de aula (livros e vídeos de terceiros) saiu do repositório; agora fica em
+    D:\UFV\Disciplinas\Eng. Soft. 2.
+  - Só os 3 integrantes (colaboradores) podem alterar o repositório. Num repositório público,
+    os outros só podem ver, copiar (fork) e sugerir mudanças, sem conseguir gravar nada nele.
+
+Branches (depois da Etapa 0 na main):
+  - parte-a-acesso       -> Parte A
+  - parte-b-contratacao  -> Parte B
+
+Integração sem merge, para o histórico ficar linear:
+  - Quem terminar PRIMEIRO: abre o pull request da branch para a main e integra com
+    "Rebase and merge". Como a main não mudou, não há conflito.
+  - Quem terminar DEPOIS:
+      1. atualiza a branch com a main nova:
+           git fetch origin
+           git rebase origin/main
+      2. se houver conflito, resolve e roda os testes de novo;
+      3. integra também com "Rebase and merge".
+    Graças à Etapa 0, as partes mexem em arquivos diferentes, então o conflito deve ser
+    pequeno (no máximo no menu/página inicial).
+
+
+=====================================================================
+7. CRONOGRAMA SUGERIDO (até 22/11)
+=====================================================================
+
+  15-16/11  Etapa 0 (base comum, quadro, CI) e repositório público.
+  16-20/11  Parte A e Parte B em paralelo, cada uma na sua branch.
+  20-21/11  Integração na main e testes do fluxo completo (cadastrar -> logar -> buscar ->
+            solicitar).
+  21/11     Revisão final (testes passando, README com como rodar) e link enviado ao
+            professor.
