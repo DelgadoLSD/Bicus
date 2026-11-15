@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Bicus – F4: o que vamos implementar e como</title>
+<style>
+  @page { size: A4; margin: 25mm 25mm 22mm 25mm; }
+  body { font-family: Calibri, "Segoe UI", sans-serif; font-size: 11.5pt; line-height: 1.45; color: #000; margin: 0; }
+  h1 { font-size: 16pt; margin: 0 0 14px 0; }
+  h2 { font-size: 12.5pt; margin: 20px 0 6px 0; break-after: avoid; }
+  p { margin: 0 0 8px 0; }
+  ul { margin: 0 0 8px 0; padding-left: 22px; }
+  li { margin: 1px 0; }
+  code { font-family: Consolas, monospace; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<h1>Bicus – F4: o que vamos implementar e como</h1>
+
+<p>Na F4 o professor quer que a gente implemente um módulo do sistema em Python, usando o processo
+que propusemos na F3, com testes unitários e cuidado com os code smells vistos em aula. Ele não quer
+o sistema pronto, e sim ver que conseguimos aplicar o que fizemos nas fases anteriores. Então a ideia
+é fazer pouca coisa, mas bem feita e bem testada.</p>
+
+<h2>1. O módulo</h2>
+<p>Escolhemos o "Contratar serviço", que é o caso de uso principal do Bicus. O cliente escolhe uma
+categoria e um raio de busca, o sistema mostra os prestadores que atendem perto dele, ordenados pela
+pontuação de recomendação, e o cliente envia uma solicitação para um deles. Depois ele consegue ver as
+solicitações que enviou e cancelar as que ainda estão pendentes.</p>
+<p>As telas seguem os protótipos da F2: menu (T06), busca (T07), solicitar serviço (T09) e minhas
+solicitações (T12). O perfil do prestador (T08) fica de fora, então o botão "Solicitar" da busca leva
+direto para a T09.</p>
+
+<h2>2. O que vai ser simulado</h2>
+<p>Login, cadastro, área do prestador e avaliações são de outros módulos, então não vamos implementar.
+Para o fluxo funcionar, um script de carga preenche o banco com dados de exemplo: alguns clientes em
+bairros diferentes de Viçosa (um deles também prestador), uns 6 a 8 prestadores com serviços, preços,
+raios de deslocamento e períodos de indisponibilidade, as 7 categorias e uma nota média para cada
+prestador. Cada endereço já vem com latitude e longitude, no lugar de um serviço de geolocalização.</p>
+<p>No lugar do login fica uma tela "Entrar como", que lista os clientes de exemplo. Clicando em um, ele
+passa a ser o usuário da sessão, sem senha. Isso também ajuda a mostrar a busca mudando conforme o
+bairro do cliente.</p>
+<p>O que é do módulo (busca, pontuação, solicitação e cancelamento) é feito de verdade e testado.</p>
+
+<h2>3. Como o código fica organizado</h2>
+<p>Vamos usar Flask com SQLite (pelo Flask-SQLAlchemy), pytest para os testes e ruff para o lint. Tudo é
+gratuito e roda no próprio computador, sem precisar hospedar nada.</p>
+<p>O código fica separado em três partes: as rotas do Flask, que recebem o formulário e mostram a
+página; as regras, em Python puro, onde ficam a busca, a pontuação e as validações da solicitação; e os
+modelos, que são as classes do modelo conceitual da F2 (Usuario, Prestador, Categoria, Servico e
+Solicitacao). Como as regras não dependem do Flask nem do banco, dá para testar cada uma direto com o
+pytest, sem subir o servidor.</p>
+<p>Antes de dividir o trabalho, fazemos a base juntos: a estrutura do projeto, os modelos, a carga de
+dados, a tela "Entrar como", o menu, as rotas ainda vazias de cada parte e o GitHub Actions rodando os
+testes a cada push. Assim cada parte mexe só nos seus próprios arquivos e quase não há conflito na hora
+de juntar.</p>
+
+<h2>4. Parte B: busca e pontuação (em dupla)</h2>
+<p>É a parte mais trabalhosa, por isso fica com a dupla, em programação em par, como definimos na F3.</p>
+<p>A busca recebe o cliente, a categoria e o raio. Para cada serviço ativo da categoria, calcula a
+distância em linha reta entre o cliente e o prestador pela fórmula de Haversine e descarta:</p>
+<ul>
+  <li>o próprio cliente, se ele também for prestador;</li>
+  <li>prestadores com perfil desativado ou indisponíveis no período;</li>
+  <li>prestadores fora do raio da busca;</li>
+  <li>prestadores cujo raio de deslocamento não chega até o cliente.</li>
+</ul>
+<p>Os que sobram recebem uma pontuação em que a nota pesa mais que a distância. A proposta é
+0,6 × (nota / 5) + 0,4 × (1 − distância / raio), com nota 3 para quem ainda não tem avaliação. O NF9.1
+deixou a fórmula em aberto, então precisamos fechar isso. A lista sai em ordem de pontuação e, se não
+sobrar ninguém, a tela sugere aumentar o raio.</p>
+<p>Cada regra dessas vira pelo menos um teste: a distância entre dois pontos conhecidos, um teste para
+cada caso descartado e um para a ordenação.</p>
+
+<h2>5. Parte A: solicitação (individual)</h2>
+<p>A tela de solicitar já abre com o serviço escolhido na busca e o endereço do cliente preenchido. A
+solicitação só é criada se tiver descrição, data e turno, se a data não for anterior a hoje, se o cliente
+não estiver pedindo o próprio serviço e se ele tiver menos de 10 solicitações pendentes. Ela nasce no
+estado Pendente.</p>
+<p>Em "Minhas solicitações" o cliente vê só as dele, com o estado de cada uma, e pode cancelar as
+pendentes sem precisar justificar. Uma solicitação cancelada deixa de contar no limite de 10.</p>
+<p>Aqui também cada validação tem o seu teste. Para os testes não dependerem do dia em que rodam, as
+regras recebem a data de hoje como parâmetro.</p>
+
+<h2>6. Como vamos trabalhar</h2>
+<p>O processo é o da F3. Cada história (H01 e H02 da Parte A, H03 e H04 da Parte B) vira um cartão no
+GitHub Projects, com as colunas Backlog, Fazendo, Testes e Pronto, e cada pessoa (ou a dupla) pega um
+cartão por vez.</p>
+<p>Cada cartão é feito numa branch própria, criada a partir da main, por exemplo <code>h03-busca</code>.
+Quando termina, a pessoa abre um pull request, outra pessoa revisa e aprova, e o código entra na main
+pelo "Rebase and merge", que mantém o histórico em linha reta, sem commit de merge. Só a base inicial é
+feita direto na main. Para o <code>git pull</code> também não criar merge, cada um roda uma vez
+<code>git config --global pull.rebase true</code>.</p>
+<p>Os commits citam o cartão (por exemplo "H03: filtra prestador fora do raio") e os cartões citam os
+requisitos da F1, o que dá a rastreabilidade do GRE3. A aprovação no pull request é a revisão do GRE4.
+Quando alguém travar, abre um cartão de impedimento contando o problema e como resolveu, que é o GPR16.
+O check-in diário continua sendo pelo grupo.</p>
+
+<h2>7. Code smells</h2>
+<p>Para não criar os code smells vistos em aula: funções curtas, cada uma com uma regra só; nenhuma
+variável global; enums para turno e estado da solicitação, em vez de textos soltos; uma classe Coordenada
+em vez de latitude e longitude separadas; e cada regra num lugar só, sem repetir validação na rota. O ruff
+roda no GitHub Actions com limite de complexidade, de tamanho de função e de número de parâmetros, e o
+que ele não pega fica para quem revisa o pull request. Ainda falta conferir essa lista com os slides da
+aula.</p>
+
+<h2>8. O que falta decidir</h2>
+<p>Quem fica com a Parte A e quem forma a dupla, e se a fórmula da pontuação fica essa mesma. Os critérios
+detalhados de cada cartão estão no Plano da F4.txt.</p>
+
+</body>
+</html>

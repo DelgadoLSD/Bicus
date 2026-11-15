@@ -12,6 +12,7 @@ O grupo edita esses documentos à mão.
 | `F2/saida/` | Figuras geradas (protótipos e modelo conceitual revisado). |
 | `F3/` | Diagrama do processo (`diagrama.py`) e texto do documento (`gerar.py`). |
 | `F3/saida/` | Diagrama do processo e quadro Kanban ilustrativo. |
+| `F4/` | Guia da implementação: texto em `guia.html` e `gerar_pdf.py`, que imprime o PDF com o Edge e numera as páginas. Saída: `F4 - Implementação/Guia da F4.pdf`. |
 
 Nunca regenerar um `.docx` que o grupo já editou: as alterações são aplicadas sobre o documento
 do grupo, trocando só os trechos necessários.

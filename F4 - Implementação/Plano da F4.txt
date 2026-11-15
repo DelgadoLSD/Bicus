@@ -1,4 +1,5 @@
 PLANO DA F4 - IMPLEMENTAÇÃO DE PARTE DO SISTEMA (Bicus)
+Versão detalhada (critérios de aceitação). Visão geral: "Guia da F4.pdf", nesta pasta.
 Prazo: 22/11/2026. Entrega: só o link do repositório público no GitHub.
 
 O que o professor pede:
@@ -98,7 +99,8 @@ arquivos depois (é isso que evita conflito na integração).
       solicitações (Parte A).
   [ ] pytest configurado, com um teste de exemplo passando.
   [ ] GitHub Actions rodando os testes e o ruff a cada push (integração contínua, F3).
-  [ ] Quadro Kanban (GitHub Projects) com as histórias da seção 4.
+  [ ] Quadro Kanban (GitHub Projects) com as histórias da seção 4, uma issue por história.
+  [ ] Configuração do GitHub (seção 7) e, por último, a proteção da main.
 
 
 =====================================================================
@@ -180,10 +182,13 @@ Testes unitários esperados (exemplos):
     Cada história acima é um cartão que cita o RF de origem.
   - Limite: cada pessoa com no máximo 1 cartão entre Fazendo e Testes (o par conta 1 para os
     dois).
-  - Parte B em par: a revisão acontece durante a programação.
-    Parte A individual: antes de ir para Testes, alguém da dupla revisa o código (GRE4).
+  - Cada história é feita numa branch própria e entra na main por pull request (PR).
+  - Revisão no PR (GRE4): na Parte A, alguém da dupla revisa; na Parte B, quem não abriu o PR
+    aprova (o par já revisou enquanto programava). O cartão fica em Testes enquanto o PR
+    espera revisão.
   - Testes unitários escritos junto com o código; o GitHub Actions roda tudo a cada push.
-  - Cartão só vai para Pronto com critérios conferidos, testes passando e código integrado.
+  - Cartão só vai para Pronto com critérios conferidos, PR aprovado, Actions verde e código
+    integrado na main ("Closes #N" no PR fecha a issue sozinho).
   - Toda mensagem de commit cita o cartão, ex.: "H03: filtra prestador fora do raio (#3)"
     (GRE3: requisito -> história -> commit/teste).
   - Travou? Abre um cartão de Impedimento no quadro, registra a análise e a resolução nele
@@ -233,30 +238,43 @@ Repositório: o próprio DelgadoLSD/Bicus, que será tornado PÚBLICO (o link de
   - Só os 3 integrantes (colaboradores) podem alterar o repositório. Num repositório público,
     os outros só podem ver, copiar (fork) e sugerir mudanças, sem conseguir gravar nada nele.
 
-Branches (depois da Etapa 0 na main):
-  - parte-a-solicitacao  -> Parte A
-  - parte-b-busca        -> Parte B
+Quando usar branch:
+  - Etapa 0: direto na main (é a única vez).
+  - Cada história: uma branch própria, criada da main atualizada e apagada depois de
+    integrada: h01-solicitar, h02-minhas-solicitacoes, h03-busca, h04-pontuacao.
+  - Correção depois de integrado: branch curta, também com cartão (ex.: fix-h03-raio).
+  - README, plano e documentos: também por branch e PR (a main fica protegida).
+Motivo de ser uma branch por história, e não uma por parte: cada história entra na main assim
+que fica pronta (integração contínua, F3) e as branches vivem 1 ou 2 dias, com pouco conflito.
 
 Integração sem merge, para o histórico ficar linear:
-  - Quem terminar PRIMEIRO: abre o pull request da branch para a main e integra com
-    "Rebase and merge". Como a main não mudou, não há conflito.
-  - Quem terminar DEPOIS:
-      1. atualiza a branch com a main nova:
+  - Uma vez, em cada computador: git config --global pull.rebase true
+    (o git pull deixa de criar o commit "Merge branch 'main' of ...").
+  - Começar uma história:  git switch main ; git pull ; git switch -c h03-busca
+  - Terminar: PR com "Closes #N" -> aprovação -> Actions verde -> "Rebase and merge".
+  - Se o GitHub acusar conflito no PR:
            git fetch origin
            git rebase origin/main
-      2. se houver conflito, resolve e roda os testes de novo;
-      3. integra também com "Rebase and merge".
-    Como o menu e as rotas das duas partes já existem desde a Etapa 0, o conflito deve ser
-    pequeno ou nenhum.
+      resolver, rodar os testes, git add <arquivo>, git rebase --continue
+           git push --force-with-lease      (só na própria branch)
+  - Nunca: git merge, push --force na main, commit direto na main depois da Etapa 0.
+
+Configuração do GitHub (uma vez):
+  - Settings > General > Pull Requests: só "Allow rebase merging" e "Automatically delete
+    head branches".
+  - Settings > Branches, regra para a main (depois da Etapa 0): exigir PR com 1 aprovação e o
+    Actions passando.
+  - Público; colaboradores: só Hugo e Luis Felipe.
 
 
 =====================================================================
 8. CRONOGRAMA SUGERIDO (até 22/11)
 =====================================================================
 
-  15-16/11  Etapa 0 (base comum, dados simulados, quadro, CI) e repositório público.
-  16-20/11  Parte A e Parte B em paralelo, cada uma na sua branch.
-  20-21/11  Integração na main e teste do fluxo completo (entrar como cliente -> buscar ->
+  15/11     Leitura do guia e decisões (quem faz a Parte A, fórmula do F9).
+  16/11     Etapa 0 (base comum, dados simulados, quadro, CI) e repositório público.
+  17-19/11  H01 e H03 em paralelo; integradas, H02 e H04.
+  20/11     Últimas integrações e teste do fluxo completo (entrar como cliente -> buscar ->
             solicitar -> ver em Minhas solicitações -> cancelar).
   21/11     Revisão final (testes passando, README com como rodar) e link enviado ao
             professor.
