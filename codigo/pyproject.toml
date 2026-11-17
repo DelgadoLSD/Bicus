@@ -1,0 +1,41 @@
+[project]
+name = "bicus"
+version = "0.1.0"
+description = "Bicus: módulo de contratação de serviço (INF323, UFV)"
+requires-python = ">=3.14"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # estilo (pycodestyle)
+    "F",        # erros prováveis (pyflakes)
+    "I",        # ordem dos imports
+    "N",        # nomes
+    "B",        # bugs comuns
+    "UP",       # sintaxe moderna
+    "SIM",      # simplificações
+    "C90",      # complexidade ciclomática
+    "PLR",      # métodos longos, muitos parâmetros, números mágicos
+]
+
+# Limites contra os code smells do plano da F4 (seção 6).
+# F5: o smell escolhido para o detector do pipeline sai desta barreira e passa a ser só reportado.
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-statements = 30
+max-branches = 8
+max-returns = 4
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["PLR2004"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

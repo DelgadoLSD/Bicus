@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}Entrar como{% endblock %}
+{% block conteudo %}
+<h1 class="h3 mb-1">Entrar como</h1>
+<p class="text-body-secondary mb-4">Login simulado: escolha um usuário de exemplo.</p>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  {% for usuario in usuarios %}
+  <div class="col">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h2 class="h5 card-title mb-1">{{ usuario.nome }}</h2>
+        <p class="card-text text-body-secondary small mb-2">{{ usuario.endereco }}</p>
+        {% if usuario.prestador %}
+        <span class="badge text-bg-info">também prestador</span>
+        {% endif %}
+      </div>
+      <div class="card-footer bg-transparent border-0 pb-3">
+        <form method="post" action="{{ url_for('sessao.entrar_como', usuario_id=usuario.id) }}">
+          <button class="btn btn-primary w-100" type="submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

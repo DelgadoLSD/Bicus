@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: codigo
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: codigo/.python-version
+          cache: pip
+          cache-dependency-path: codigo/requirements*.txt
+
+      - name: Instalar dependências
+        run: pip install -r requirements-dev.txt
+
+      - name: Ruff
+        run: ruff check .
+
+  testes:
+    name: testes
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: bicus
+          POSTGRES_PASSWORD: bicus
+          POSTGRES_DB: bicus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      SECRET_KEY: ci
+      DATABASE_URL: postgresql://bicus:bicus@localhost:5432/bicus
+      TEST_DATABASE_URL: postgresql://bicus:bicus@localhost:5432/bicus
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: codigo/.python-version
+          cache: pip
+          cache-dependency-path: codigo/requirements*.txt
+
+      - name: Instalar dependências
+        run: pip install -r requirements-dev.txt
+
+      - name: Migrações aplicam do zero
+        run: flask db upgrade
+
+      - name: Modelos e migrações em sincronia
+        run: flask db check
+
+      - name: Uma única head de migração
+        run: test "$(flask db heads | wc -l)" -eq 1
+
+      - name: Testes unitários
+        # código 5 = nenhum teste coletado (aceito até o primeiro teste chegar)
+        run: pytest || [ $? -eq 5 ]
+
+  # F5: detecção de code smell e criação de issues
+  # smells:
+  #   needs: testes
+  #   if: github.ref == 'refs/heads/main'
+
+  # F5: deploy no Render depois de "testes" passar na main
+  # deploy:
+  #   needs: testes
+  #   if: github.ref == 'refs/heads/main'
