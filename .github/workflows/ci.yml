@@ -49,7 +49,9 @@ jobs:
     env:
       SECRET_KEY: ci
       DATABASE_URL: postgresql://bicus:bicus@localhost:5432/bicus
-      TEST_DATABASE_URL: postgresql://bicus:bicus@localhost:5432/bicus
+      # Banco separado: o conftest cria e apaga as tabelas a cada teste, e não pode
+      # mexer no banco das migrações (que já tem as categorias do NF20.4).
+      TEST_DATABASE_URL: postgresql://bicus:bicus@localhost:5432/bicus_test
     steps:
       - uses: actions/checkout@v4
 
@@ -71,9 +73,15 @@ jobs:
       - name: Uma única head de migração
         run: test "$(flask db heads | wc -l)" -eq 1
 
+      - name: Criar o banco dos testes
+        env:
+          PGPASSWORD: bicus
+        run: psql -h localhost -U bicus -d bicus -c "CREATE DATABASE bicus_test"
+
       - name: Testes unitários
-        # código 5 = nenhum teste coletado (aceito até o primeiro teste chegar)
-        run: pytest || [ $? -eq 5 ]
+        # código 5 = nenhum teste coletado. Aceito só até o primeiro teste chegar;
+        # depois, trocar a linha por:  run: pytest -v
+        run: pytest -v || [ $? -eq 5 ]
 
   # F5: detecção de code smell e criação de issues
   # smells:
