@@ -17,8 +17,7 @@ if TYPE_CHECKING:
 class Prestador(db.Model):
     __tablename__ = "prestador"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    usuario_id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), unique=True)
+    id: Mapped[int] = mapped_column(ForeignKey("usuario.id"), primary_key=True)
     latitude_base: Mapped[float]
     longitude_base: Mapped[float]
     raio_deslocamento_km: Mapped[float | None]

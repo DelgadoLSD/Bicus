@@ -37,7 +37,6 @@ def upgrade():
     )
     op.create_table('prestador',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('usuario_id', sa.Integer(), nullable=False),
     sa.Column('latitude_base', sa.Double(), nullable=False),
     sa.Column('longitude_base', sa.Double(), nullable=False),
     sa.Column('raio_deslocamento_km', sa.Double(), nullable=True),
@@ -46,9 +45,8 @@ def upgrade():
     sa.Column('ativo', sa.Boolean(), nullable=False),
     sa.Column('nota_media', sa.Double(), nullable=True),
     sa.Column('total_avaliacoes', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['usuario_id'], ['usuario.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('usuario_id')
+    sa.ForeignKeyConstraint(['id'], ['usuario.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('servico',
     sa.Column('id', sa.Integer(), nullable=False),
