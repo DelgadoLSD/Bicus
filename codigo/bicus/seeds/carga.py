@@ -5,15 +5,15 @@ from sqlalchemy import select
 
 from bicus.extensions import db
 from bicus.models import Categoria, Prestador, Servico, Usuario
-from bicus.seeds.dados_simulados import BAIRROS, CATEGORIAS, CLIENTES, PRESTADORES
+from bicus.seeds.dados_simulados import BAIRROS, CLIENTES, PRESTADORES
 
 
 def carregar_dados(hoje: date) -> bool:
-    if db.session.scalar(select(Categoria).limit(1)) is not None:
+    if db.session.scalar(select(Usuario).limit(1)) is not None:
         return False
 
-    categorias = {nome: Categoria(nome=nome) for nome in CATEGORIAS}
-    db.session.add_all(categorias.values())
+    # As categorias já existem: são criadas pela migração (dados de referência, NF20.4).
+    categorias = {categoria.nome: categoria for categoria in db.session.scalars(select(Categoria))}
     db.session.add_all(_criar_usuario(dados) for dados in CLIENTES)
     db.session.add_all(_criar_prestador(dados, categorias, hoje) for dados in PRESTADORES)
     db.session.commit()

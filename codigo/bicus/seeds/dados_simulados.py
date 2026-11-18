@@ -1,15 +1,5 @@
 from bicus.domain import UnidadeCobranca
 
-CATEGORIAS = [
-    "Jardinagem",
-    "Aulas particulares",
-    "Pequenos reparos domésticos",
-    "Faxina",
-    "Pintura",
-    "Montagem de móveis",
-    "Cuidado de animais",
-]
-
 # Coordenadas aproximadas dos bairros de Viçosa (simulam a geocodificação do F7).
 BAIRROS = {
     "Centro": (-20.7546, -42.8826),
