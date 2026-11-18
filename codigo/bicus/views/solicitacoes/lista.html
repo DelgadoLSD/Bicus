@@ -1,6 +1,78 @@
 {% extends "base.html" %}
 {% block titulo %}Minhas solicitações{% endblock %}
 {% block conteudo %}
+{# Cor do selo de cada estado (classes text-bg-* do Bootstrap). #}
+{% set cor_do_estado = {
+  "PENDENTE": "warning",
+  "ACEITA": "success",
+  "RECUSADA": "danger",
+  "EXPIRADA": "dark",
+  "CANCELADA": "secondary",
+  "CONCLUIDA": "primary",
+} %}
+
 <h1 class="h3 mb-3">Minhas solicitações</h1>
-<div class="alert alert-secondary">Em construção: H02, Parte A.</div>
+
+{% if solicitacoes %}
+<div class="table-responsive">
+  <table class="table table-hover align-middle bg-white">
+    <thead class="table-light">
+      <tr>
+        <th>Serviço</th><th>Prestador</th><th>Data desejada</th>
+        <th>Turno</th><th>Estado</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for solicitacao in solicitacoes %}
+      <tr>
+        <td>{{ solicitacao.servico.titulo }}</td>
+        <td>{{ solicitacao.servico.prestador.usuario.nome }}</td>
+        <td>{{ solicitacao.data_desejada.strftime('%d/%m/%Y') }}</td>
+        <td>{{ solicitacao.turno.value|capitalize }}</td>
+        <td><span class="badge text-bg-{{ cor_do_estado[solicitacao.estado.name] }}">{{ solicitacao.estado.value|capitalize }}</span></td>
+        <td class="text-end">
+          {% if solicitacao.pode_cancelar() %}
+          <button class="btn btn-sm btn-outline-danger" type="button"
+                  data-bs-toggle="modal" data-bs-target="#confirmar-cancelamento"
+                  data-acao="{{ url_for('solicitacoes.cancelar', solicitacao_id=solicitacao.id) }}"
+                  data-servico="{{ solicitacao.servico.titulo }}">
+            Cancelar
+          </button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">Você ainda não enviou nenhuma solicitação.</div>
+{% endif %}
+
+<div class="modal fade" id="confirmar-cancelamento" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" method="post">
+      <div class="modal-header">
+        <h2 class="modal-title h5">Cancelar solicitação</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja cancelar a solicitação de
+        <strong data-campo="servico"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+        <button type="submit" class="btn btn-danger">Sim, cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if servico %}
+  {% include "solicitacoes/nova.html" %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/solicitacoes.js') }}"></script>
 {% endblock %}

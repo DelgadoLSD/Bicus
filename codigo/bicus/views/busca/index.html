@@ -51,7 +51,7 @@
           <td>{{ "%.1f"|format(distancia) }} km</td>
           <td class="text-end">
             <a class="btn btn-sm btn-primary"
-               href="{{ url_for('solicitacoes.nova', servico_id=servico.id) }}">Solicitar</a>
+               href="{{ url_for('solicitacoes.listar', servico=servico.id) }}">Solicitar</a>
           </td>
         </tr>
         {% endfor %}

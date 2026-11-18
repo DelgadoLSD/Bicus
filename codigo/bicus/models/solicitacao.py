@@ -32,3 +32,6 @@ class Solicitacao(db.Model):
 
     cliente: Mapped[Usuario] = relationship(back_populates="solicitacoes")
     servico: Mapped[Servico] = relationship()
+
+    def pode_cancelar(self) -> bool:
+        return self.estado == EstadoSolicitacao.PENDENTE

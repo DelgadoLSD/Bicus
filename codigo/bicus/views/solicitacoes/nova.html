@@ -1,6 +1,41 @@
-{% extends "base.html" %}
-{% block titulo %}Solicitar serviço{% endblock %}
-{% block conteudo %}
-<h1 class="h3 mb-3">Solicitar serviço</h1>
-<div class="alert alert-secondary">Em construção: H01, Parte A (serviço {{ servico_id }}).</div>
-{% endblock %}
+{# Modal de nova solicitação (H01). Incluído em lista.html quando a página vem da busca
+   (?servico=<id>); usa as variáveis servico, turnos, hoje e usuario_atual. #}
+<div class="modal fade" id="nova-solicitacao" tabindex="-1" data-abrir="sim">
+  <div class="modal-dialog">
+    <form class="modal-content" method="post" action="{{ url_for('solicitacoes.criar') }}">
+      <input type="hidden" name="servico_id" value="{{ servico.id }}">
+      <div class="modal-header">
+        <h2 class="modal-title h5">{{ servico.titulo }} · {{ servico.prestador.usuario.nome }}</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descreva o que você precisa</label>
+          <textarea id="descricao" name="descricao" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <label for="data_desejada" class="form-label">Data desejada</label>
+            <input id="data_desejada" name="data_desejada" type="date" class="form-control"
+                   min="{{ hoje.isoformat() }}" required>
+          </div>
+          <div class="col-sm-6">
+            <label for="turno" class="form-label">Turno</label>
+            <select id="turno" name="turno" class="form-select" required>
+              {% for turno in turnos %}
+              <option value="{{ turno.name }}">{{ turno.value|capitalize }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <label for="endereco" class="form-label">Endereço do serviço</label>
+        <input id="endereco" name="endereco" class="form-control"
+               value="{{ usuario_atual.endereco }}" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary">Enviar solicitação</button>
+      </div>
+    </form>
+  </div>
+</div>
