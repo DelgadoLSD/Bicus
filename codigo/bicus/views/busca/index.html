@@ -2,5 +2,64 @@
 {% block titulo %}Buscar prestadores{% endblock %}
 {% block conteudo %}
 <h1 class="h3 mb-3">Buscar prestadores</h1>
-<div class="alert alert-secondary">Em construção: H03 (busca) e H04 (pontuação), Parte B.</div>
+
+<form method="get" class="card card-body mb-4">
+  <div class="row g-3 align-items-end">
+    <div class="col-md-6">
+      <label for="categoria" class="form-label">Categoria</label>
+      <select id="categoria" name="categoria" class="form-select" required>
+        <option value="" {{ 'selected' if not categoria_id }}>Escolha uma categoria</option>
+        {% for categoria in categorias %}
+        <option value="{{ categoria.id }}" {{ 'selected' if categoria.id == categoria_id }}>
+          {{ categoria.nome }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="raio" class="form-label">Raio de busca</label>
+      <div class="input-group">
+        <input id="raio" name="raio" type="number" class="form-control"
+               min="1" step="0.5" value="{{ raio or 5 }}" required>
+        <span class="input-group-text">km</span>
+      </div>
+    </div>
+    <div class="col-md-3 d-grid">
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </div>
+  </div>
+</form>
+
+{% if categoria_id %}
+  {% if resultados %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr>
+          <th>Prestador</th><th>Serviço</th><th>Preço (R$)</th>
+          <th>Nota</th><th>Aval.</th><th>Dist.</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for prestador, servico, distancia in resultados %}
+        <tr>
+          <td>{{ prestador.usuario.nome }}</td>
+          <td>{{ servico.titulo }}</td>
+          <td>{{ servico.preco_minimo }} – {{ servico.preco_maximo }} / {{ servico.unidade_cobranca.value }}</td>
+          <td>{{ prestador.nota_media if prestador.nota_media is not none else '—' }}</td>
+          <td>{{ prestador.total_avaliacoes }}</td>
+          <td>{{ "%.1f"|format(distancia) }} km</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-primary"
+               href="{{ url_for('solicitacoes.nova', servico_id=servico.id) }}">Solicitar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-warning">Nenhum prestador encontrado. Tente ampliar o raio de busca.</div>
+  {% endif %}
+{% endif %}
 {% endblock %}

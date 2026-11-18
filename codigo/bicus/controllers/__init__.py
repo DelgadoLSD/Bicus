@@ -1,9 +1,9 @@
 from flask import Flask
 
-from bicus.controllers.busca import bp as busca_bp
-from bicus.controllers.saude import bp as saude_bp
-from bicus.controllers.sessao import bp as sessao_bp
-from bicus.controllers.solicitacoes import bp as solicitacoes_bp
+from bicus.controllers.busca_controller import bp as busca_bp
+from bicus.controllers.saude_controller import bp as saude_bp
+from bicus.controllers.sessao_controller import bp as sessao_bp
+from bicus.controllers.solicitacoes_controller import bp as solicitacoes_bp
 
 
 def registrar_blueprints(app: Flask) -> None:

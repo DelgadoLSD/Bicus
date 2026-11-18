@@ -36,16 +36,16 @@ codigo/
 navegador
    │  GET /busca?categoria=4&raio=5
    ▼
-controllers/busca.py      lê a requisição e a sessão, chama o service, escolhe o template
+controllers/busca_controller.py   lê a requisição e a sessão, chama o service, escolhe o template
    │
    ▼
-services/busca.py         aplica as regras (filtros, distância, pontuação) — sem Flask
+services/busca_service.py         aplica as regras (filtros, distância, pontuação) — sem Flask
    │
    ▼
 models/                   consulta e grava no banco via SQLAlchemy
    │
    ▼
-controllers/busca.py      recebe o resultado
+controllers/busca_controller.py   recebe o resultado
    │
    ▼
 views/busca/index.html    monta o HTML com os dados
@@ -113,13 +113,13 @@ devolvem resultados ou erros. Começa vazia; cada parte cria seus arquivos.
 
 | Arquivo | Blueprint | Rotas |
 |---|---|---|
-| `saude.py` | `saude` | `GET /saude` (health check) |
-| `sessao.py` | `sessao` | `/`, `/entrar`, `POST /entrar/<id>`, `POST /sair` |
-| `busca.py` | `busca` | `GET /busca` (Parte B) |
-| `solicitacoes.py` | `solicitacoes` | `/solicitacoes/nova/<servico_id>`, `/solicitacoes` (Parte A) |
+| `saude_controller.py` | `saude` | `GET /saude` (health check) |
+| `sessao_controller.py` | `sessao` | `/`, `/entrar`, `POST /entrar/<id>`, `POST /sair` |
+| `busca_controller.py` | `busca` | `GET /busca` (Parte B) |
+| `solicitacoes_controller.py` | `solicitacoes` | `/solicitacoes/nova/<servico_id>`, `/solicitacoes` (Parte A) |
 | `__init__.py` | — | `registrar_blueprints(app)`: único lugar onde os blueprints entram no app |
 
-`sessao.py` também fornece o que as outras rotas usam:
+`sessao_controller.py` também fornece o que as outras rotas usam:
 - `usuario_logado()`: o `Usuario` da sessão, ou `None`;
 - `@usuario_obrigatorio`: manda para `/entrar` quem não estiver logado;
 - `usuario_atual`: disponível em todos os templates.
@@ -183,8 +183,8 @@ Uma forma de encaixar cada parte na estrutura, cada uma mexendo só nos próprio
 
 | | Parte A – Solicitação (H01, H02) | Parte B – Busca e recomendação (H03, H04) |
 |---|---|---|
-| services | `solicitacao.py` | `busca.py`, `distancia.py`, `pontuacao.py` |
-| controller | `solicitacoes.py` (já existe) | `busca.py` (já existe) |
+| services | `solicitacao_service.py` | `busca_service.py`, `distancia_service.py`, `pontuacao_service.py` |
+| controller | `solicitacoes_controller.py` (já existe) | `busca_controller.py` (já existe) |
 | views | `solicitacoes/nova.html`, `lista.html` | `busca/index.html` |
 | métodos de modelo | `Solicitacao.pode_cancelar()` | `Prestador.indisponivel_em(data)` |
 | testes | `tests/unit/test_solicitacao.py` | `test_busca.py`, `test_distancia.py`, `test_pontuacao.py` |

@@ -67,11 +67,11 @@ Divisão entre as partes:
 
 | Parte | Controller | Templates | Rotas |
 |---|---|---|---|
-| A – Solicitação (H01, H02) | `controllers/solicitacoes.py` | `views/solicitacoes/` | `/solicitacoes/nova/<servico_id>`, `/solicitacoes` |
-| B – Busca e recomendação (H03, H04) | `controllers/busca.py` | `views/busca/` | `/busca` |
+| A – Solicitação (H01, H02) | `controllers/solicitacoes_controller.py` | `views/solicitacoes/` | `/solicitacoes/nova/<servico_id>`, `/solicitacoes` |
+| B – Busca e recomendação (H03, H04) | `controllers/busca_controller.py` | `views/busca/` | `/busca` |
 
 Nas rotas que exigem usuário, use `@usuario_obrigatorio`; para obter o usuário da sessão, use
-`usuario_logado()` (ambos em `controllers/sessao.py`).
+`usuario_logado()` (ambos em `controllers/sessao_controller.py`).
 
 ## O que é simulado
 
@@ -80,8 +80,9 @@ foram implementados. No lugar deles:
 
 - **Login:** a tela "Entrar como" lista os usuários de exemplo; escolher um grava
   `session["usuario_id"]`, sem senha. Desligada com `MODO_DEMO=0`.
-- **Usuários, prestadores, serviços e categorias:** carregados por `flask carregar-dados`
-  (`bicus/seeds/dados_simulados.py`). Cada prestador exercita um caso da busca (raio curto,
+- **Usuários, prestadores e serviços:** carregados por `flask carregar-dados`
+  (`bicus/seeds/dados_simulados.py`). As 7 categorias do NF20.4 não são simuladas: são dados de
+  referência, criados pela migração `categorias_iniciais` no `flask db upgrade`. Cada prestador exercita um caso da busca (raio curto,
   indisponível, perfil desativado, serviço inativo, sem avaliação).
 - **Avaliações:** `nota_media` e `total_avaliacoes` são colunas preenchidas pela carga (na F2 são
   atributos derivados das avaliações).
@@ -89,7 +90,8 @@ foram implementados. No lugar deles:
 
 ## Decisões de modelagem
 
-- **Prestador como perfil 1:1 do usuário** (`prestador.usuario_id` único), e não como subclasse
+- **Prestador como perfil 1:1 do usuário** (chave primária compartilhada: `prestador.id` é o
+  `usuario.id`), e não como subclasse
   como no modelo conceitual da F2: pelo NF4.1, o usuário vira prestador e continua contratando
   como cliente.
 - **Enums gravados como texto**, para acrescentar valores sem migração complicada.

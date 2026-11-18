@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from bicus.controllers.sessao import usuario_obrigatorio
+from bicus.controllers.sessao_controller import usuario_obrigatorio
 
 bp = Blueprint("solicitacoes", __name__, url_prefix="/solicitacoes")
 
