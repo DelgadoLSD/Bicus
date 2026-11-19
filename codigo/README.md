@@ -5,7 +5,8 @@ disciplina INF323 – Engenharia de Software II (UFV).
 
 O módulo cobre o fluxo principal do cliente:
 
-1. Busca de prestadores por categoria, perto do cliente, ordenada pela pontuação de recomendação.
+1. Busca de prestadores por categoria, perto do cliente, ordenada pela pontuação de recomendação
+   ou, se o cliente preferir, por avaliação, distância ou preço.
 2. Envio de uma solicitação de serviço.
 3. Lista das próprias solicitações, com cancelamento das pendentes.
 
@@ -57,7 +58,7 @@ bicus/
 ├── views/           View: templates Jinja + Bootstrap
 ├── controllers/     Controller: blueprints com as rotas
 ├── services/        regras do módulo, em Python puro (busca, pontuação, solicitação)
-├── domain/          enums (Turno, EstadoSolicitacao, UnidadeCobranca) e Coordenada
+├── domain/          enums (Turno, EstadoSolicitacao, UnidadeCobranca, OrdemBusca) e Coordenada
 ├── seeds/           dados simulados e o comando `flask carregar-dados`
 └── static/          css/js/imagens
 migrations/          histórico do schema (Flask-Migrate)
@@ -106,6 +107,9 @@ foram implementados. No lugar deles:
   3 (neutra). Não aparece na tela: só define a ordem da lista.
 - **Desempate** (NF9.2): mais avaliações (no lugar de "serviços concluídos", que o sistema não
   registra; cada avaliação vem de um serviço concluído) e, depois, o mais próximo.
+- **Ordem escolhida pelo cliente** (NF8.8, requisito acrescentado na F4): a recomendação é a
+  ordem padrão; clicando no título da coluna, o cliente ordena por avaliação (maior primeiro; sem
+  avaliação no fim), distância (mais perto) ou preço (mais barato). No empate, a recomendação.
 - Pelo NF4.2, a busca mostra bairro e distância, nunca o endereço completo do prestador.
 
 ## Convenções

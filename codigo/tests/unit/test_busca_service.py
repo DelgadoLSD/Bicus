@@ -1,10 +1,12 @@
-"""Busca de prestadores: quem aparece e quem não aparece (H03, NF8.1 a NF8.3) e em que ordem
-(H04, F9 e NF9.2)."""
+"""Busca de prestadores: quem aparece e quem não aparece (H03, NF8.1 a NF8.3), a ordem de
+recomendação (H04, F9 e NF9.2) e a ordem escolhida pelo cliente (H05, NF8.8)."""
 
 from datetime import date, timedelta
+from decimal import Decimal
 
 import pytest
 
+from bicus.domain import OrdemBusca
 from bicus.models import Prestador, Servico
 from bicus.services.busca_service import (
     ResultadoBusca,
@@ -27,10 +29,22 @@ def prestador_a(km: float, nome: str = "Lúcia", **campos):
     return criar_prestador(nome, ponto_ao_norte(km), **campos)
 
 
-def encontrados(cliente, categoria_id: int, raio: float = RAIO_DA_BUSCA) -> list[str]:
-    """Títulos dos serviços que a busca devolve."""
-    resultados = buscar_prestadores(categoria_id, cliente, raio, HOJE)
+def encontrados(cliente, categoria_id: int, raio: float = RAIO_DA_BUSCA, **opcoes) -> list[str]:
+    """Títulos dos serviços que a busca devolve, na ordem em que vêm."""
+    resultados = buscar_prestadores(categoria_id, cliente, raio, HOJE, **opcoes)
     return [resultado.servico.titulo for resultado in resultados]
+
+
+def criar_as_quatro_faxineiras() -> int:
+    """O cenário dos dados de exemplo (busca da Ana em Faxina, 5 km), criado fora de ordem de
+    propósito para nenhuma ordem sair certa por acaso. Devolve o id da categoria."""
+    criar_servico(prestador_a(3.7, "Carla", nota_media=4.0), preco_minimo=Decimal(100))
+    criar_servico(prestador_a(2.9, "Helena", nota_media=5.0), preco_minimo=Decimal(150))
+    criar_servico(
+        prestador_a(0.6, "Rosa", nota_media=None, total_avaliacoes=0), preco_minimo=Decimal(80)
+    )
+    lucia = criar_servico(prestador_a(0.7, "Lúcia", nota_media=4.5), preco_minimo=Decimal(120))
+    return lucia.categoria_id
 
 
 # --- H03: busca por categoria e raio (NF8.1, NF8.2) -----------------------------------------------
@@ -142,13 +156,9 @@ def test_f9_cada_resultado_traz_a_pontuacao(cliente):
 
 
 def test_f9_lista_vem_da_maior_para_a_menor_pontuacao(cliente):
-    # Criadas na ordem "errada", para a lista não sair certa por acaso.
-    criar_servico(prestador_a(3.7, "Carla", nota_media=4.0))
-    criar_servico(prestador_a(2.9, "Helena", nota_media=5.0))
-    criar_servico(prestador_a(0.6, "Rosa", nota_media=None, total_avaliacoes=0))
-    lucia = criar_servico(prestador_a(0.7, "Lúcia", nota_media=4.5))
+    faxina = criar_as_quatro_faxineiras()
 
-    assert encontrados(cliente, lucia.categoria_id) == [
+    assert encontrados(cliente, faxina) == [
         "Faxina com Lúcia",  # 0,88: boa nota e bem perto
         "Faxina com Helena",  # 0,77: nota máxima, mas 2 km mais longe
         "Faxina com Rosa",  # 0,71: sem avaliação conta como nota 3, mas é a mais perto
@@ -186,3 +196,34 @@ def test_pontuacao_maior_vence_mesmo_com_menos_avaliacoes():
     melhor = resultado(0.8, avaliacoes=1, distancia=1.0, titulo="melhor")
 
     assert titulos(ordenar_por_recomendacao([popular, melhor])) == ["melhor", "popular"]
+
+
+# --- H05: ordem escolhida pelo cliente (NF8.8) ---------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("ordem", "esperado"),
+    [
+        (OrdemBusca.RECOMENDACAO, ["Lúcia", "Helena", "Rosa", "Carla"]),
+        (OrdemBusca.AVALIACAO, ["Helena", "Lúcia", "Carla", "Rosa"]),  # sem avaliação no fim
+        (OrdemBusca.DISTANCIA, ["Rosa", "Lúcia", "Helena", "Carla"]),  # 0,6 0,7 2,9 3,7 km
+        (OrdemBusca.PRECO, ["Rosa", "Carla", "Lúcia", "Helena"]),  # R$ 80 100 120 150
+    ],
+    ids=["recomendacao", "avaliacao", "distancia", "preco"],
+)
+def test_nf8_8_cliente_escolhe_a_ordem_da_lista(cliente, ordem, esperado):
+    faxina = criar_as_quatro_faxineiras()
+
+    titulos_encontrados = encontrados(cliente, faxina, ordem=ordem)
+
+    assert titulos_encontrados == [f"Faxina com {nome}" for nome in esperado]
+
+
+def test_nf8_8_no_empate_da_coluna_escolhida_decide_a_recomendacao(cliente):
+    # Mesma nota; a mais perto tem pontuação maior e deve vir primeiro ao ordenar por avaliação.
+    criar_servico(prestador_a(3.0, "Longe", nota_media=4.5))
+    perto = criar_servico(prestador_a(1.0, "Perto", nota_media=4.5))
+
+    lista = encontrados(cliente, perto.categoria_id, ordem=OrdemBusca.AVALIACAO)
+
+    assert lista == ["Faxina com Perto", "Faxina com Longe"]

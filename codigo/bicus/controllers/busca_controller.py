@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request
 from sqlalchemy import select
 
 from bicus.controllers.sessao_controller import usuario_logado, usuario_obrigatorio
+from bicus.domain import OrdemBusca
 from bicus.extensions import db
 from bicus.models import Categoria
 from bicus.services.busca_service import buscar_prestadores
@@ -19,15 +20,25 @@ def buscar():
     ).all()
     categoria_id = request.args.get("categoria", type=int)
     raio = request.args.get("raio", type=float)
+    ordem = _ordem_escolhida(request.args.get("ordem"))
 
     resultados = []
     if categoria_id and raio:
-        resultados = buscar_prestadores(categoria_id, usuario_logado(), raio, date.today())
+        resultados = buscar_prestadores(categoria_id, usuario_logado(), raio, date.today(), ordem)
 
     return render_template(
         "busca/index.html",
         categorias=categorias,
         categoria_id=categoria_id,
         raio=raio,
+        ordem=ordem,
         resultados=resultados,
     )
+
+
+def _ordem_escolhida(valor: str | None) -> OrdemBusca:
+    """NF8.8: a ordem pedida no endereço (?ordem=); ausente ou inválida, a recomendação."""
+    try:
+        return OrdemBusca(valor)
+    except ValueError:
+        return OrdemBusca.RECOMENDACAO

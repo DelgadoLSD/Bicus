@@ -85,7 +85,7 @@ Por isso os services e o domain podem ser testados direto no pytest, sem subir s
 
 | Arquivo | Conteúdo |
 |---|---|
-| `enums.py` | `Turno`, `EstadoSolicitacao` (os 6 estados do NF13.1), `UnidadeCobranca` |
+| `enums.py` | `Turno`, `EstadoSolicitacao` (os 6 estados do NF13.1), `UnidadeCobranca`, `OrdemBusca` (NF8.8) |
 | `coordenada.py` | `Coordenada(latitude, longitude)`, imutável |
 
 Evita texto solto (`"manha"`) e pares de floats soltos (obsessão por primitivos).

@@ -1,4 +1,4 @@
 from bicus.domain.coordenada import Coordenada
-from bicus.domain.enums import EstadoSolicitacao, Turno, UnidadeCobranca
+from bicus.domain.enums import EstadoSolicitacao, OrdemBusca, Turno, UnidadeCobranca
 
-__all__ = ["Coordenada", "EstadoSolicitacao", "Turno", "UnidadeCobranca"]
+__all__ = ["Coordenada", "EstadoSolicitacao", "OrdemBusca", "Turno", "UnidadeCobranca"]

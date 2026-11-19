@@ -4,6 +4,7 @@ from datetime import date
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
+from bicus.domain import OrdemBusca
 from bicus.extensions import db
 from bicus.models import Prestador, Servico, Usuario
 from bicus.services.distancia_service import distancia_km
@@ -21,10 +22,14 @@ class ResultadoBusca:
 
 
 def buscar_prestadores(
-    categoria_id: int, cliente: Usuario, raio_km: float, hoje: date
+    categoria_id: int,
+    cliente: Usuario,
+    raio_km: float,
+    hoje: date,
+    ordem: OrdemBusca = OrdemBusca.RECOMENDACAO,
 ) -> list[ResultadoBusca]:
-    """H03 (F8): serviços ativos da categoria cujo prestador atende o cliente (NF8.3),
-    H04 (F9): ordenados do mais para o menos recomendado."""
+    """H03 (F8): serviços ativos da categoria cujo prestador atende o cliente (NF8.3), na ordem
+    escolhida (H05); por padrão, do mais para o menos recomendado (H04)."""
     consulta = (
         select(Prestador, Servico)
         .join(Prestador.servicos)
@@ -43,7 +48,29 @@ def buscar_prestadores(
         if _atende(prestador, distancia, raio_km, hoje):
             pontuacao = calcular_pontuacao(prestador.nota_media, distancia, raio_km)
             resultados.append(ResultadoBusca(prestador, servico, distancia, pontuacao))
-    return ordenar_por_recomendacao(resultados)
+    return ordenar(resultados, ordem)
+
+
+def ordenar(resultados: list[ResultadoBusca], ordem: OrdemBusca) -> list[ResultadoBusca]:
+    """H05 (NF8.8): a ordem escolhida pelo cliente. Parte da ordem de recomendação; como a
+    ordenação do Python mantém a posição dos empatados, no empate decide a recomendação."""
+    recomendados = ordenar_por_recomendacao(resultados)
+    if ordem is OrdemBusca.RECOMENDACAO:
+        return recomendados
+    return sorted(recomendados, key=_CRITERIOS[ordem])
+
+
+def _maior_nota_primeiro(resultado: ResultadoBusca) -> tuple[bool, float]:
+    """Por avaliação: maior nota primeiro; quem ainda não tem avaliação vai para o fim."""
+    nota = resultado.prestador.nota_media
+    return (nota is None, -(nota or 0))
+
+
+_CRITERIOS = {
+    OrdemBusca.AVALIACAO: _maior_nota_primeiro,
+    OrdemBusca.DISTANCIA: lambda resultado: resultado.distancia_km,
+    OrdemBusca.PRECO: lambda resultado: resultado.servico.preco_minimo,
+}
 
 
 def ordenar_por_recomendacao(resultados: list[ResultadoBusca]) -> list[ResultadoBusca]:

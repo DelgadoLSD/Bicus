@@ -1,9 +1,32 @@
 {% extends "base.html" %}
 {% block titulo %}Buscar prestadores{% endblock %}
 {% block conteudo %}
+{# Ordem da lista (H05, NF8.8): o que aparece acima da tabela para cada opção. #}
+{% set descricao_da_ordem = {
+  "recomendacao": "recomendação (nota e distância)",
+  "avaliacao": "avaliação, da maior para a menor",
+  "distancia": "distância, da mais perto para a mais longe",
+  "preco": "preço, do mais barato para o mais caro",
+} %}
+
+{# Título de coluna que ordena a lista ao ser clicado; a coluna escolhida fica com a seta azul. #}
+{% macro coluna_ordenavel(titulo, valor, seta) %}
+  {% if ordem.value == valor %}
+  <th class="text-nowrap">{{ titulo }} <span class="text-primary" aria-hidden="true">{{ seta }}</span></th>
+  {% else %}
+  <th class="text-nowrap">
+    <a class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover"
+       href="{{ url_for('busca.buscar', categoria=categoria_id, raio=raio, ordem=valor) }}"
+       title="Ordenar por {{ descricao_da_ordem[valor] }}">{{ titulo }}
+      <span class="text-body-tertiary" aria-hidden="true">{{ seta }}</span></a>
+  </th>
+  {% endif %}
+{% endmacro %}
+
 <h1 class="h3 mb-3">Buscar prestadores</h1>
 
 <form method="get" class="card card-body mb-4">
+  <input type="hidden" name="ordem" value="{{ ordem.value }}">
   <div class="row g-3 align-items-end">
     <div class="col-md-6">
       <label for="categoria" class="form-label">Categoria</label>
@@ -32,16 +55,25 @@
 
 {% if categoria_id %}
   {% if resultados %}
+  <p class="small text-body-secondary mb-2">
+    Ordenado por <strong>{{ descricao_da_ordem[ordem.value] }}</strong>
+    {% if ordem.value != "recomendacao" %}
+    · <a href="{{ url_for('busca.buscar', categoria=categoria_id, raio=raio, ordem='recomendacao') }}">voltar para recomendados</a>
+    {% endif %}
+  </p>
   <div class="table-responsive">
     <table class="table table-hover align-middle bg-white">
       <thead class="table-light">
         <tr>
-          <th>Prestador</th><th>Serviço</th><th>Preço</th>
-          <th>Avaliação</th><th>Distância</th><th></th>
+          <th>Prestador</th><th>Serviço</th>
+          {{ coluna_ordenavel("Preço", "preco", "▲") }}
+          {{ coluna_ordenavel("Avaliação", "avaliacao", "▼") }}
+          {{ coluna_ordenavel("Distância", "distancia", "▲") }}
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        {# Já vem ordenada do mais para o menos recomendado (H04). #}
+        {# Já vem na ordem escolhida; por padrão, do mais para o menos recomendado (H04). #}
         {% for resultado in resultados %}
         {% set prestador, servico = resultado.prestador, resultado.servico %}
         <tr>

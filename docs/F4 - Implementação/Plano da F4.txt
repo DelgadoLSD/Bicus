@@ -164,6 +164,16 @@ H04 [F9] Como cliente, quero ver primeiro os prestadores mais recomendados.
   - Desempate (NF9.2): mais avaliações (no lugar de serviços concluídos, que o sistema não
     registra) e depois o mais próximo.
 
+H05 [NF8.8] Como cliente, quero escolher a ordem da lista.
+  - Requisito novo, acrescentado pelo grupo na F4 (não está na F1/F2):
+        NF8.8 Ordenação escolhida pelo cliente: a lista vem, por padrão, pela recomendação (F9);
+        o cliente pode ordenar por avaliação, distância ou preço clicando no título da coluna.
+  - Avaliação: maior primeiro, e quem não tem avaliação vai para o fim. Distância: mais perto
+    primeiro. Preço: mais barato primeiro (preço mínimo). Sem ordem invertida.
+  - Empate na coluna escolhida: decide a recomendação.
+  - A ordem vai no endereço (?ordem=), continua numa nova busca e, se for inválida, volta para a
+    recomendação.
+
 Testes unitários esperados (exemplos):
   - distância entre dois pontos conhecidos;
   - prestador fora do raio da busca;
@@ -172,7 +182,8 @@ Testes unitários esperados (exemplos):
   - perfil desativado e serviço inativo;
   - o próprio usuário fora da lista;
   - ordenação pela pontuação;
-  - prestador sem avaliações.
+  - prestador sem avaliações;
+  - cada ordem escolhida pelo cliente e o empate dentro dela.
 
 
 =====================================================================

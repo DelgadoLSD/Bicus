@@ -63,7 +63,14 @@ busca devolve `ResultadoBusca(prestador, servico, distancia_km, pontuacao)` orde
 pontuação; no empate, mais avaliações e depois o mais próximo (`ordenar_por_recomendacao`, NF9.2).
 Nos dados simulados, Helena e Rosa (Faxina) mostram a ordem funcionando.
 
-### 5. Fechamento
+### 5. H05: ordem escolhida pelo cliente (feito)
+
+Requisito novo (NF8.8, registrado no plano da F4). `OrdemBusca` em `domain/enums.py`; a busca
+recebe a ordem e `ordenar` aplica o critério sobre a ordem de recomendação (no empate, decide a
+recomendação). A rota lê `?ordem=` (inválida = recomendação); na tela, os títulos Preço,
+Avaliação e Distância são links com seta e a ordem atual aparece acima da tabela.
+
+### 6. Fechamento
 
 - [ ] `ruff check .` e `pytest` passando localmente e no Actions
 - [ ] README: fluxo do modal e o que ficou fora do escopo (grade semanal do F6 e filtros por
