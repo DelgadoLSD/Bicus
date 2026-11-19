@@ -14,7 +14,8 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 | Arquivo | O que faz |
 |---|---|
 | `services/distancia_service.py` | `distancia_km(origem, destino)`: Haversine (NF8.2) |
-| `services/busca_service.py` | `buscar_prestadores(categoria_id, cliente, raio_km, hoje)` → lista de `(prestador, servico, distancia)`, com todos os filtros do NF8.3 (H03) |
+| `services/busca_service.py` | `buscar_prestadores(categoria_id, cliente, raio_km, hoje)` → lista de `ResultadoBusca`, com todos os filtros do NF8.3 (H03) e já ordenada pela recomendação (H04) |
+| `services/pontuacao_service.py` | `calcular_pontuacao(nota, distancia, raio)`: a fórmula do F9 |
 | `services/solicitacoes_service.py` | `criar_solicitacao` (H01, com as regras), `listar_solicitacoes`, `cancelar_solicitacao` e a exceção `SolicitacaoInvalidaError` |
 | `models/solicitacao.py` | `Solicitacao.pode_cancelar()` |
 | `controllers/busca_controller.py` | `GET /busca` |
@@ -27,8 +28,8 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 
 ### 1. Testes unitários (prioridade: o professor exige a suíte)
 
-H01, H02 e H03 estão testadas (`tests/unit/` e `tests/integration/`); falta só a H04
-(pontuação). Cada teste monta só os dados de que precisa, com as funções de `tests/fabricas.py`
+As quatro histórias (H01 a H04) estão testadas, em `tests/unit/` e `tests/integration/`. Cada
+teste monta só os dados de que precisa, com as funções de `tests/fabricas.py`
 (`criar_usuario`, `criar_prestador`, `criar_servico`, `nova_solicitacao` e `ponto_ao_norte`, que
 cria um ponto a uma distância exata do Centro) e as fixtures
 `app` e `db` do `tests/conftest.py` (banco SQLite em memória). Datas sempre por parâmetro, nunca
@@ -54,14 +55,13 @@ A busca recebe `hoje` e descarta, além do que já descartava, quem está indisp
 cliente (`Prestador.alcanca`, NF4.3; raio vazio = qualquer distância). A tabela mostra os números
 no formato brasileiro e a nota com estrela (`bicus/formatos.py`).
 
-### 4. H04: pontuação e ordenação
+### 4. H04: pontuação e ordenação (feito)
 
-- `services/pontuacao_service.py`: `0,6 × (nota / 5) + 0,4 × (1 − distância / raio)`; sem
-  avaliação → nota 3,0 (constantes com nome, nada de número solto)
-- trocar a tupla da busca por uma dataclass `ResultadoBusca(prestador, servico, distancia_km, pontuacao)`
-  e ajustar o `{% for %}` do `busca/index.html`
-- ordenar pela pontuação (maior primeiro); empate → mais próximo
-- testes: ordenação; prestador sem avaliação
+`calcular_pontuacao` em `services/pontuacao_service.py`: `0,6 × (nota / 5) + 0,4 × (1 −
+distância / raio)`, com sem avaliação = nota 3,0 (pesos e nota neutra em constantes com nome). A
+busca devolve `ResultadoBusca(prestador, servico, distancia_km, pontuacao)` ordenados pela
+pontuação; no empate, mais avaliações e depois o mais próximo (`ordenar_por_recomendacao`, NF9.2).
+Nos dados simulados, Helena e Rosa (Faxina) mostram a ordem funcionando.
 
 ### 5. Fechamento
 

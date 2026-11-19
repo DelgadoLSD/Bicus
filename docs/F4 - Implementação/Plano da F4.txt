@@ -157,11 +157,12 @@ encontrar quem atende perto de mim.
 
 H04 [F9] Como cliente, quero ver primeiro os prestadores mais recomendados.
   - A lista vem ordenada pela pontuação, maior primeiro.
-  - A nota pesa mais que a proximidade (NF9.1). Proposta de fórmula (o NF9.1 deixou "a
-    definir"; confirmar com o grupo):
+  - A nota pesa mais que a proximidade (NF9.1). Fórmula (o NF9.1 deixou "a definir";
+    confirmada pelo grupo em 19/11):
         pontuação = 0,6 x (nota média / 5) + 0,4 x (1 - distância / raio da busca)
         Prestador sem avaliação usa nota 3,0 (neutra), para não ficar sempre em último.
-  - Opcional (NF9.2, desejável): em empate, mais serviços concluídos e depois o mais próximo.
+  - Desempate (NF9.2): mais avaliações (no lugar de serviços concluídos, que o sistema não
+    registra) e depois o mais próximo.
 
 Testes unitários esperados (exemplos):
   - distância entre dois pontos conhecidos;

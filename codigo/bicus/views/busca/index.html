@@ -41,7 +41,9 @@
         </tr>
       </thead>
       <tbody>
-        {% for prestador, servico, distancia in resultados %}
+        {# Já vem ordenada do mais para o menos recomendado (H04). #}
+        {% for resultado in resultados %}
+        {% set prestador, servico = resultado.prestador, resultado.servico %}
         <tr>
           <td>{{ prestador.usuario.nome }}</td>
           <td>{{ servico.titulo }}</td>
@@ -58,7 +60,7 @@
             <span class="text-body-secondary">Sem avaliações</span>
             {% endif %}
           </td>
-          <td>{{ distancia|numero }} km</td>
+          <td>{{ resultado.distancia_km|numero }} km</td>
           <td class="text-end">
             <a class="btn btn-sm btn-primary"
                href="{{ url_for('solicitacoes.listar', servico=servico.id) }}">Solicitar</a>

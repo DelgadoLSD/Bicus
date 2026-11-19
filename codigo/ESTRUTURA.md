@@ -108,8 +108,8 @@ que envolvem vários objetos ficam nos services.
 ### `services/`
 
 Regras do módulo, em funções Python que recebem tudo por parâmetro (inclusive a data de hoje) e
-devolvem resultados ou erros: `distancia_service.py`, `busca_service.py` e
-`solicitacoes_service.py` (cada parte cria os seus).
+devolvem resultados ou erros: `distancia_service.py`, `busca_service.py`,
+`pontuacao_service.py` e `solicitacoes_service.py`.
 
 ### `controllers/`
 
@@ -191,7 +191,7 @@ Uma forma de encaixar cada parte na estrutura, cada uma mexendo só nos próprio
 | controller | `solicitacoes_controller.py` (já existe) | `busca_controller.py` (já existe) |
 | views | `solicitacoes/nova.html`, `lista.html` | `busca/index.html` |
 | métodos de modelo | `Solicitacao.pode_cancelar()`, `Servico.disponivel()`, `Servico.oferecido_por(usuario)` | `Prestador.indisponivel_em(data)`, `Prestador.alcanca(distancia)` |
-| testes | `unit/test_solicitacoes_service.py`, `unit/test_modelos.py`, `integration/test_solicitacoes_rotas.py` | `unit/test_busca_service.py`, `unit/test_distancia_service.py`, `unit/test_modelos.py`, `integration/test_busca_rotas.py` (e `test_pontuacao_service.py` na H04) |
+| testes | `unit/test_solicitacoes_service.py`, `unit/test_modelos.py`, `integration/test_solicitacoes_rotas.py` | `unit/test_busca_service.py`, `unit/test_distancia_service.py`, `unit/test_modelos.py`, `unit/test_pontuacao_service.py`, `integration/test_busca_rotas.py` |
 
 Ponto de integração: o botão "Solicitar" da busca aponta para a rota da Parte A:
 

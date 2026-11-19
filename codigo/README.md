@@ -83,8 +83,9 @@ foram implementados. No lugar deles:
   `session["usuario_id"]`, sem senha. Desligada com `MODO_DEMO=0`.
 - **Usuários, prestadores e serviços:** carregados por `flask carregar-dados`
   (`bicus/seeds/dados_simulados.py`). As 7 categorias do NF20.4 não são simuladas: são dados de
-  referência, criados pela migração `categorias_iniciais` no `flask db upgrade`. Cada prestador exercita um caso da busca (raio curto,
-  indisponível, perfil desativado, serviço inativo, sem avaliação).
+  referência, criados pela migração `categorias_iniciais` no `flask db upgrade`. Cada prestador
+  exercita um caso da busca (raio curto, indisponível, perfil desativado, serviço inativo, sem
+  avaliação); na Faxina, quatro prestadoras mostram a ordem da recomendação (H04).
 - **Avaliações:** `nota_media` e `total_avaliacoes` são colunas preenchidas pela carga (na F2 são
   atributos derivados das avaliações).
 - **Localização:** coordenadas fixas por bairro de Viçosa, no lugar da API de geocodificação (F7).
@@ -100,6 +101,11 @@ foram implementados. No lugar deles:
   distância. O NF4.3 diz que ele "pode" definir o raio, ou seja, é opcional.
 - **Indisponibilidade** (NF6.2): o prestador some da busca se hoje está dentro do período marcado,
   contando o primeiro e o último dia; sem data de fim, continua indisponível.
+- **Pontuação de recomendação** (F9, NF9.1): `0,6 × nota/5 + 0,4 × (1 − distância/raio da busca)`,
+  de 0 a 1; a nota vale até 0,6 e a proximidade até 0,4. Prestador sem avaliação conta como nota
+  3 (neutra). Não aparece na tela: só define a ordem da lista.
+- **Desempate** (NF9.2): mais avaliações (no lugar de "serviços concluídos", que o sistema não
+  registra; cada avaliação vem de um serviço concluído) e, depois, o mais próximo.
 - Pelo NF4.2, a busca mostra bairro e distância, nunca o endereço completo do prestador.
 
 ## Convenções

@@ -1,4 +1,4 @@
-"""H03: a página de busca, como o navegador usa."""
+"""A página de busca, como o navegador usa: filtros (H03) e ordem de recomendação (H04)."""
 
 from datetime import date, timedelta
 
@@ -64,3 +64,12 @@ def test_busca_usa_a_data_de_hoje_para_a_indisponibilidade(client, cliente_logad
     servico = criar_servico(rafael)
 
     assert servico.titulo not in buscar(client, servico)
+
+
+def test_f9_pagina_mostra_o_mais_recomendado_primeiro(client, cliente_logado):
+    carla = criar_servico(criar_prestador("Carla", ponto_ao_norte(3.7), nota_media=4.0))
+    criar_servico(criar_prestador("Lúcia", ponto_ao_norte(0.7), nota_media=4.5))
+
+    pagina = buscar(client, carla)
+
+    assert pagina.index("Faxina com Lúcia") < pagina.index("Faxina com Carla")
