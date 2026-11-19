@@ -13,8 +13,10 @@ def create_app(config: type[Config] = Config) -> Flask:
 
     from bicus import models  # noqa: F401  (registra os modelos para as migrações)
     from bicus.controllers import registrar_blueprints
+    from bicus.formatos import registrar_formatos
     from bicus.seeds import registrar_comandos
 
     registrar_blueprints(app)
+    registrar_formatos(app)
     registrar_comandos(app)
     return app

@@ -33,3 +33,15 @@ class Prestador(db.Model):
     @property
     def localizacao_base(self) -> Coordenada:
         return Coordenada(self.latitude_base, self.longitude_base)
+
+    def indisponivel_em(self, data: date) -> bool:
+        """NF6.2: a data cai no período marcado como indisponível (primeiro e último dia inclusos).
+        Sem data de fim, a indisponibilidade continua até ser encerrada."""
+        inicio, fim = self.inicio_indisponibilidade, self.fim_indisponibilidade
+        if inicio is None:
+            return False
+        return inicio <= data and (fim is None or data <= fim)
+
+    def alcanca(self, distancia_km: float) -> bool:
+        """NF4.3: a distância cabe no raio de deslocamento; sem raio definido, vale qualquer uma."""
+        return self.raio_deslocamento_km is None or distancia_km <= self.raio_deslocamento_km

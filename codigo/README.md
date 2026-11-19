@@ -52,6 +52,7 @@ bicus/
 ├── __init__.py      create_app (app factory)
 ├── config.py        configuração lida das variáveis de ambiente
 ├── extensions.py    db e migrate
+├── formatos.py      números no formato brasileiro nas páginas (filtros do Jinja)
 ├── models/          Model: classes do SQLAlchemy
 ├── views/           View: templates Jinja + Bootstrap
 ├── controllers/     Controller: blueprints com as rotas
@@ -95,8 +96,11 @@ foram implementados. No lugar deles:
   como no modelo conceitual da F2: pelo NF4.1, o usuário vira prestador e continua contratando
   como cliente.
 - **Enums gravados como texto**, para acrescentar valores sem migração complicada.
-- **A combinar na Parte B:** `raio_deslocamento_km` vazio significa "atende qualquer distância"?
-  Pelo NF4.2, a busca mostra bairro e distância, nunca o endereço completo do prestador.
+- **Raio de deslocamento vazio** (`raio_deslocamento_km` = `None`): o prestador atende qualquer
+  distância. O NF4.3 diz que ele "pode" definir o raio, ou seja, é opcional.
+- **Indisponibilidade** (NF6.2): o prestador some da busca se hoje está dentro do período marcado,
+  contando o primeiro e o último dia; sem data de fim, continua indisponível.
+- Pelo NF4.2, a busca mostra bairro e distância, nunca o endereço completo do prestador.
 
 ## Convenções
 

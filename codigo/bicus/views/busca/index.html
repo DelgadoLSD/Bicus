@@ -36,8 +36,8 @@
     <table class="table table-hover align-middle bg-white">
       <thead class="table-light">
         <tr>
-          <th>Prestador</th><th>Serviço</th><th>Preço (R$)</th>
-          <th>Nota</th><th>Aval.</th><th>Dist.</th><th></th>
+          <th>Prestador</th><th>Serviço</th><th>Preço</th>
+          <th>Avaliação</th><th>Distância</th><th></th>
         </tr>
       </thead>
       <tbody>
@@ -45,10 +45,20 @@
         <tr>
           <td>{{ prestador.usuario.nome }}</td>
           <td>{{ servico.titulo }}</td>
-          <td>{{ servico.preco_minimo }} – {{ servico.preco_maximo }} / {{ servico.unidade_cobranca.value }}</td>
-          <td>{{ prestador.nota_media if prestador.nota_media is not none else '—' }}</td>
-          <td>{{ prestador.total_avaliacoes }}</td>
-          <td>{{ "%.1f"|format(distancia) }} km</td>
+          <td>
+            {{ servico.preco_minimo|dinheiro }} – {{ servico.preco_maximo|dinheiro }}
+            <span class="text-body-secondary">/ {{ servico.unidade_cobranca.value }}</span>
+          </td>
+          <td>
+            {% if prestador.nota_media is not none %}
+            <span class="text-warning" aria-hidden="true">★</span> {{ prestador.nota_media|numero }}
+            {% set total = prestador.total_avaliacoes %}
+            <span class="text-body-secondary small">({{ total }} {{ "avaliação" if total == 1 else "avaliações" }})</span>
+            {% else %}
+            <span class="text-body-secondary">Sem avaliações</span>
+            {% endif %}
+          </td>
+          <td>{{ distancia|numero }} km</td>
           <td class="text-end">
             <a class="btn btn-sm btn-primary"
                href="{{ url_for('solicitacoes.listar', servico=servico.id) }}">Solicitar</a>

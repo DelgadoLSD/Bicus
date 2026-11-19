@@ -10,6 +10,7 @@ codigo/
 │   ├── __init__.py            create_app: monta o app (app factory)
 │   ├── config.py              configuração por ambiente (lida das variáveis de ambiente)
 │   ├── extensions.py          db (SQLAlchemy) e migrate (Flask-Migrate)
+│   ├── formatos.py            números no formato brasileiro (filtros do Jinja)
 │   ├── domain/                vocabulário do sistema: enums e objetos de valor
 │   ├── models/                MODEL: tabelas do banco (SQLAlchemy)
 │   ├── services/              regras de negócio em Python puro
@@ -151,6 +152,8 @@ Um template de tela segue sempre o mesmo formato:
 ```
 
 Mensagens: `flash("texto", "erro")` aparece vermelha; `flash("texto", "sucesso")`, verde.
+Números: `{{ distancia|numero }}` mostra `3,7` e `{{ preco|dinheiro }}` mostra `R$ 100,00`
+(funções em `formatos.py`, registradas no `create_app`).
 `static/` guarda arquivos usados pelas telas, referenciados com
 `url_for('static', filename='...')`.
 
@@ -187,8 +190,8 @@ Uma forma de encaixar cada parte na estrutura, cada uma mexendo só nos próprio
 | services | `solicitacoes_service.py` | `busca_service.py`, `distancia_service.py`, `pontuacao_service.py` |
 | controller | `solicitacoes_controller.py` (já existe) | `busca_controller.py` (já existe) |
 | views | `solicitacoes/nova.html`, `lista.html` | `busca/index.html` |
-| métodos de modelo | `Solicitacao.pode_cancelar()` | `Prestador.indisponivel_em(data)` |
-| testes | `tests/unit/test_solicitacao.py` | `test_busca.py`, `test_distancia.py`, `test_pontuacao.py` |
+| métodos de modelo | `Solicitacao.pode_cancelar()`, `Servico.disponivel()`, `Servico.oferecido_por(usuario)` | `Prestador.indisponivel_em(data)`, `Prestador.alcanca(distancia)` |
+| testes | `unit/test_solicitacoes_service.py`, `unit/test_modelos.py`, `integration/test_solicitacoes_rotas.py` | `unit/test_busca_service.py`, `unit/test_distancia_service.py`, `unit/test_modelos.py`, `integration/test_busca_rotas.py` (e `test_pontuacao_service.py` na H04) |
 
 Ponto de integração: o botão "Solicitar" da busca aponta para a rota da Parte A:
 

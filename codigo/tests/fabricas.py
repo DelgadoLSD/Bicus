@@ -2,14 +2,21 @@
 
 from datetime import date
 from decimal import Decimal
+from math import degrees
 
 from sqlalchemy import select
 
 from bicus.domain import Coordenada, Turno, UnidadeCobranca
 from bicus.extensions import db
 from bicus.models import Categoria, Prestador, Servico, Solicitacao, Usuario
+from bicus.services.distancia_service import RAIO_TERRA_KM
 
 CENTRO = Coordenada(-20.7546, -42.8826)
+
+
+def ponto_ao_norte(km: float, origem: Coordenada = CENTRO) -> Coordenada:
+    """Ponto a `km` quilômetros ao norte da origem, para montar distâncias exatas nos testes."""
+    return Coordenada(origem.latitude + degrees(km / RAIO_TERRA_KM), origem.longitude)
 
 
 def criar_usuario(nome: str, local: Coordenada = CENTRO) -> Usuario:

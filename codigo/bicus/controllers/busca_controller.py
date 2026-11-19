@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask import Blueprint, render_template, request
 from sqlalchemy import select
 
@@ -20,7 +22,7 @@ def buscar():
 
     resultados = []
     if categoria_id and raio:
-        resultados = buscar_prestadores(categoria_id, usuario_logado(), raio)
+        resultados = buscar_prestadores(categoria_id, usuario_logado(), raio, date.today())
 
     return render_template(
         "busca/index.html",

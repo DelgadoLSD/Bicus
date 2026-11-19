@@ -14,7 +14,7 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 | Arquivo | O que faz |
 |---|---|
 | `services/distancia_service.py` | `distancia_km(origem, destino)`: Haversine (NF8.2) |
-| `services/busca_service.py` | `buscar_prestadores(categoria_id, cliente, raio_km)` → lista de `(prestador, servico, distancia)` |
+| `services/busca_service.py` | `buscar_prestadores(categoria_id, cliente, raio_km, hoje)` → lista de `(prestador, servico, distancia)`, com todos os filtros do NF8.3 (H03) |
 | `services/solicitacoes_service.py` | `criar_solicitacao` (H01, com as regras), `listar_solicitacoes`, `cancelar_solicitacao` e a exceção `SolicitacaoInvalidaError` |
 | `models/solicitacao.py` | `Solicitacao.pode_cancelar()` |
 | `controllers/busca_controller.py` | `GET /busca` |
@@ -27,19 +27,15 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 
 ### 1. Testes unitários (prioridade: o professor exige a suíte)
 
-A Parte A está toda testada: H01 e H02 em `tests/unit/test_solicitacoes_service.py`,
-`tests/unit/test_modelos.py` e `tests/integration/test_solicitacoes_rotas.py`. Falta a Parte B.
-Cada teste monta só os dados de que precisa, com as funções de `tests/fabricas.py`
-(`criar_usuario`, `criar_prestador`, `criar_servico`, `nova_solicitacao`) e as fixtures
+H01, H02 e H03 estão testadas (`tests/unit/` e `tests/integration/`); falta só a H04
+(pontuação). Cada teste monta só os dados de que precisa, com as funções de `tests/fabricas.py`
+(`criar_usuario`, `criar_prestador`, `criar_servico`, `nova_solicitacao` e `ponto_ao_norte`, que
+cria um ponto a uma distância exata do Centro) e as fixtures
 `app` e `db` do `tests/conftest.py` (banco SQLite em memória). Datas sempre por parâmetro, nunca
 `date.today()`. Rodar: `.\.venv\Scripts\pytest`.
 
-- `tests/unit/test_distancia_service.py`: dois pontos conhecidos; mesmo ponto = 0
-- `tests/unit/test_busca_service.py`: um teste por regra
-  - fora do raio da busca
-  - próprio usuário fora da lista
-  - perfil desativado; serviço inativo
-  - (depois do item 3) prestador indisponível; raio de deslocamento que não alcança o cliente
+- ~~`tests/unit/test_distancia_service.py` e `tests/unit/test_busca_service.py`: um teste por
+  regra da busca~~ (feito)
 - ~~`tests/unit/test_solicitacoes_service.py`: validações do H01; lista e cancelamento do H02~~
   (feito)
 
@@ -51,14 +47,12 @@ em `DadosSolicitacao`. Recusa com `SolicitacaoInvalidaError` e mensagem: campos 
 próprio serviço (NF11.3, `Servico.oferecido_por`) e mais de `LIMITE_PENDENTES` = 10 pendentes
 (NF11.5). Endereço vazio usa o do cliente. A rota mostra a mensagem em vermelho e reabre o modal.
 
-### 3. H03: filtros que faltam na busca (NF8.3)
+### 3. H03: filtros que faltam na busca (feito)
 
-- **indisponibilidade**: método `Prestador.indisponivel_em(data) -> bool` no model; a busca recebe
-  `hoje` por parâmetro e descarta quem está indisponível
-- **raio de deslocamento**: descartar quem tem `distancia > prestador.raio_deslocamento_km`
-  (decidir: `None` = sem limite?)
-- os dois entram no `for` de `buscar_prestadores` (são regras em Python, não no `where`)
-- se a função passar de 5 parâmetros (limite do ruff), agrupar numa dataclass `FiltroBusca`
+A busca recebe `hoje` e descarta, além do que já descartava, quem está indisponível hoje
+(`Prestador.indisponivel_em`, NF6.2, primeiro e último dia inclusos) e quem não se desloca até o
+cliente (`Prestador.alcanca`, NF4.3; raio vazio = qualquer distância). A tabela mostra os números
+no formato brasileiro e a nota com estrela (`bicus/formatos.py`).
 
 ### 4. H04: pontuação e ordenação
 
