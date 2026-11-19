@@ -1,7 +1,7 @@
 # Próximos passos da F4 (entrega: 22/11)
 
 Estado do módulo "Contratar serviço" e o que falta para fechar as histórias. Critérios completos em
-`F4 - Implementação/Plano da F4.txt`, seção 4. Estrutura do código em `ESTRUTURA.md`.
+`docs/F4 - Implementação/Plano da F4.txt`, seção 4. Estrutura do código em `ESTRUTURA.md`.
 
 Quase tudo que falta é lógica interna (services, models e testes). Nenhum item exige tela nova:
 os efeitos aparecem nas telas que já existem (quem aparece na busca, a ordem da lista e as mensagens
@@ -80,7 +80,7 @@ Hoje a rota `criar` monta a `Solicitacao` e grava direto, sem validar nada. Move
 - [ ] `ruff check .` e `pytest` passando localmente e no Actions
 - [ ] README: fluxo do modal e o que ficou fora do escopo (grade semanal do F6 e filtros por
       dia/turno do NF8.6)
-- [ ] commits citando a história (`H01: ...`, `H03: ...`), PR para a `main`, "Rebase and merge"
+- [ ] commits citando a história (`H01: ...`, `H03: ...`), direto na `main`
 - [ ] teste do fluxo completo, entrando como Ana e como Bruno
 
 ## Combinados do código

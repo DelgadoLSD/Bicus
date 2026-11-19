@@ -1,4 +1,4 @@
-"""Gera "F4 - Implementação/Guia da F4.pdf" a partir de guia.html (Edge em modo headless)."""
+"""Gera "docs/F4 - Implementação/Guia da F4.pdf" a partir de guia.html (Edge em modo headless)."""
 import subprocess
 import sys
 import tempfile
@@ -9,7 +9,7 @@ import pymupdf
 AQUI = Path(__file__).resolve().parent
 RAIZ = AQUI.parents[1]
 HTML = AQUI / "guia.html"
-SAIDA = RAIZ / "F4 - Implementação" / "Guia da F4.pdf"
+SAIDA = RAIZ / "docs" / "F4 - Implementação" / "Guia da F4.pdf"
 EDGE = Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe")
 
 

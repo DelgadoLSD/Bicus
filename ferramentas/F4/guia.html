@@ -87,13 +87,12 @@ regras recebem a data de hoje como parâmetro.</p>
 <p>O processo é o da F3. Cada história (H01 e H02 da Parte A, H03 e H04 da Parte B) vira um cartão no
 GitHub Projects, com as colunas Backlog, Fazendo, Testes e Pronto, e cada pessoa (ou a dupla) pega um
 cartão por vez.</p>
-<p>Cada cartão é feito numa branch própria, criada a partir da main, por exemplo <code>h03-busca</code>.
-Quando termina, a pessoa abre um pull request, outra pessoa revisa e aprova, e o código entra na main
-pelo "Rebase and merge", que mantém o histórico em linha reta, sem commit de merge. Só a base inicial é
-feita direto na main. Para o <code>git pull</code> também não criar merge, cada um roda uma vez
-<code>git config --global pull.rebase true</code>.</p>
+<p>Os commits vão direto na main, sem branches. Antes de começar e antes de dar push, cada um faz
+<code>git pull</code>. Para o <code>git pull</code> não criar commit de merge e o histórico continuar em
+linha reta, cada um roda uma vez <code>git config --global pull.rebase true</code>.</p>
 <p>Os commits citam o cartão (por exemplo "H03: filtra prestador fora do raio") e os cartões citam os
-requisitos da F1, o que dá a rastreabilidade do GRE3. A aprovação no pull request é a revisão do GRE4.
+requisitos da F1, o que dá a rastreabilidade do GRE3. Antes de um cartão ir para Pronto, outra pessoa revisa o
+código (na dupla, a revisão acontece enquanto programam), que é a revisão do GRE4.
 Quando alguém travar, abre um cartão de impedimento contando o problema e como resolveu, que é o GPR16.
 O check-in diário continua sendo pelo grupo.</p>
 
@@ -102,7 +101,7 @@ O check-in diário continua sendo pelo grupo.</p>
 variável global; enums para turno e estado da solicitação, em vez de textos soltos; uma classe Coordenada
 em vez de latitude e longitude separadas; e cada regra num lugar só, sem repetir validação na rota. O ruff
 roda no GitHub Actions com limite de complexidade, de tamanho de função e de número de parâmetros, e o
-que ele não pega fica para quem revisa o pull request. Ainda falta conferir essa lista com os slides da
+que ele não pega fica para quem revisa o código. Ainda falta conferir essa lista com os slides da
 aula.</p>
 
 <h2>8. O que falta decidir</h2>

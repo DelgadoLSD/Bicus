@@ -3,7 +3,7 @@
 Gera o documento da F3 (processo de desenvolvimento customizado) do Bicus.
 
 Uso:  python gerar.py   -> desenha as figuras em saida/ e cria o .docx em
-      D:/UFV/Bicus/F3 - Processo de Desenvolvimento/ (só se ainda não existir: depois que o grupo
+      docs/F3 - Processo de Desenvolvimento/ (só se ainda não existir: depois que o grupo
       editar o documento, alterações são aplicadas sobre o arquivo deles, sem regerar).
 """
 import importlib.util
@@ -19,7 +19,7 @@ from docx.shared import Cm, Pt
 AQUI = Path(__file__).resolve().parent
 F1_GER = AQUI.parent / "F1"
 SAIDA = AQUI / "saida"
-PASTA = AQUI.parent.parent / "F3 - Processo de Desenvolvimento"
+PASTA = AQUI.parent.parent / "docs" / "F3 - Processo de Desenvolvimento"
 DOCX = PASTA / "Bicus - F3 Processo de Desenvolvimento.docx"
 
 sys.path.insert(0, str(AQUI))

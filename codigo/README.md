@@ -102,8 +102,8 @@ foram implementados. No lugar deles:
 
 - **Mensagens na tela:** `flash("texto", "erro")` (vermelha) ou `flash("texto", "sucesso")` (verde).
 - **Mudou um modelo?** `flask db migrate -m "descrição"`, confira o arquivo gerado em
-  `migrations/versions/` e rode `flask db upgrade`. A migração vai no mesmo PR da mudança.
-- **Branches:** uma por história (`h01-solicitar`, `h02-minhas-solicitacoes`, `h03-busca`,
-  `h04-pontuacao`), criada da main atualizada. Entra na main por PR com "Rebase and merge".
+  `migrations/versions/` e rode `flask db upgrade`. A migração vai no mesmo commit da mudança.
+- **Commits direto na `main`**, sem branches. Antes de começar, `git pull`; o histórico fica em
+  linha reta, sem commit de merge.
 - **Commits:** citam o cartão, ex.: `H03: filtra prestador fora do raio (#3)`.
 - **Uma vez por computador:** `git config --global pull.rebase true`.

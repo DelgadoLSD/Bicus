@@ -107,7 +107,8 @@ que envolvem vários objetos ficam nos services.
 ### `services/`
 
 Regras do módulo, em funções Python que recebem tudo por parâmetro (inclusive a data de hoje) e
-devolvem resultados ou erros. Começa vazia; cada parte cria seus arquivos.
+devolvem resultados ou erros: `distancia_service.py`, `busca_service.py` e
+`solicitacoes_service.py` (cada parte cria os seus).
 
 ### `controllers/`
 
@@ -183,7 +184,7 @@ Uma forma de encaixar cada parte na estrutura, cada uma mexendo só nos próprio
 
 | | Parte A – Solicitação (H01, H02) | Parte B – Busca e recomendação (H03, H04) |
 |---|---|---|
-| services | `solicitacao_service.py` | `busca_service.py`, `distancia_service.py`, `pontuacao_service.py` |
+| services | `solicitacoes_service.py` | `busca_service.py`, `distancia_service.py`, `pontuacao_service.py` |
 | controller | `solicitacoes_controller.py` (já existe) | `busca_controller.py` (já existe) |
 | views | `solicitacoes/nova.html`, `lista.html` | `busca/index.html` |
 | métodos de modelo | `Solicitacao.pode_cancelar()` | `Prestador.indisponivel_em(data)` |
@@ -198,4 +199,4 @@ Ponto de integração: o botão "Solicitar" da busca aponta para a rota da Parte
 Arquivos compartilhados (mexer só combinando com o grupo): atributos em `models/`, `domain/`,
 `views/base.html`, `seeds/`, `migrations/`, `tests/conftest.py`, `pyproject.toml`, `.github/`.
 
-Os critérios de aceitação de cada história estão em `F4 - Implementação/Plano da F4.txt`.
+Os critérios de aceitação de cada história estão em `docs/F4 - Implementação/Plano da F4.txt`.

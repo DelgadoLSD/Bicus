@@ -26,7 +26,7 @@ from docx.shared import Cm, Pt
 
 AQUI = Path(__file__).resolve().parent              # .../Bicus/ferramentas/F2
 FERRAMENTAS = AQUI.parent
-RAIZ = FERRAMENTAS.parent / "F2 - Análise de Pontos de Função"
+RAIZ = FERRAMENTAS.parent / "docs" / "F2 - Análise de Pontos de Função"
 F1_GER = FERRAMENTAS / "F1"
 F1_DIAG = F1_GER / "diagramas"
 SAIDA = AQUI / "saida"
