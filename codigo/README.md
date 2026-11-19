@@ -32,6 +32,38 @@ Abra http://127.0.0.1:5000 e escolha um usuário em "Entrar como".
 Para recomeçar o banco do zero: apague `instance/bicus.db` e rode `flask db upgrade` e
 `flask carregar-dados` de novo.
 
+## Como usar
+
+1. Em **Entrar como**, escolha um usuário de exemplo: por exemplo, Ana (no Centro) ou Bruno (no
+   Ramos). Os prestadores também aparecem na lista, porque também podem contratar.
+2. Em **Buscar prestadores**, escolha a categoria e o raio. A lista vem do mais para o menos
+   recomendado; clicando nos títulos Preço, Avaliação ou Distância, ela muda de ordem.
+3. Em **Solicitar**, o formulário abre numa janela sobre a página Minhas solicitações, já com o
+   serviço escolhido e o endereço do cliente. Falta informar a descrição, a data (digitando ou
+   pelo calendário ao lado do campo) e o turno. Se algo estiver errado, a mensagem aparece em
+   vermelho e o formulário reabre.
+4. Em **Minhas solicitações**, a solicitação aparece como Pendente e pode ser cancelada; a
+   cancelada continua na lista, no histórico.
+
+Bons exemplos com os dados simulados, entrando como Ana: Faxina com 5 km mostra quatro
+prestadoras e as ordens possíveis; Montagem de móveis e Pequenos reparos domésticos não mostram
+ninguém (um prestador está indisponível e o outro não se desloca até a Ana).
+
+## Histórias implementadas
+
+Os códigos de requisito são os da F1/F2.
+
+| História | Requisitos | Testes |
+|---|---|---|
+| H01 – Solicitar serviço | F11: NF11.1, NF11.2, NF11.3, NF11.5, NF13.1 | `unit/test_solicitacoes_service.py`, `integration/test_solicitacoes_rotas.py` |
+| H02 – Ver e cancelar minhas solicitações | F17 (simplificado), NF11.6 | `unit/test_solicitacoes_service.py`, `unit/test_modelos.py`, `integration/test_solicitacoes_rotas.py` |
+| H03 – Buscar prestadores por categoria e raio | F8, F7: NF5.1, NF8.1 a NF8.5, NF4.3, NF6.2 | `unit/test_busca_service.py`, `unit/test_distancia_service.py`, `unit/test_modelos.py`, `unit/test_formatos.py`, `integration/test_busca_rotas.py` |
+| H04 – Ver primeiro os mais recomendados | F9: NF9.1, NF9.2 | `unit/test_pontuacao_service.py`, `unit/test_busca_service.py`, `integration/test_busca_rotas.py` |
+| H05 – Escolher a ordem da lista | NF8.8 (requisito acrescentado na F4) | `unit/test_busca_service.py`, `integration/test_busca_rotas.py` |
+
+O NF8.8 não está na F1/F2; foi acrescentado pelo grupo durante a F4: a lista vem, por padrão,
+pela recomendação (F9), e o cliente pode ordená-la por avaliação, distância ou preço.
+
 ## Testes e lint
 
 ```powershell
@@ -45,6 +77,20 @@ usados nos testes. Regras que dependem da data de hoje recebem a data como parâ
 
 O GitHub Actions (`.github/workflows/ci.yml`) roda, a cada push: o ruff, as migrações num Postgres
 vazio, a conferência entre modelos e migrações e o pytest.
+
+## Fora do escopo
+
+O módulo é a contratação de serviço pelo cliente. Ficaram de fora, por pertencerem a outros
+módulos ou por serem desejáveis:
+
+- cadastro, login e gestão da conta (F1, F2, F3), substituídos pela tela "Entrar como";
+- área do prestador: perfil e serviços (F4, F5), disponibilidade com grade semanal (F6) e resposta
+  e conclusão das solicitações (F12, F13);
+- perfil do prestador (F10), avaliações (F14 a F16), denúncias (F18) e administração (F19, F20);
+- na busca: filtros adicionais (NF8.6), mapa (NF8.7), outro ponto de partida (NF7.4) e foto do
+  prestador (NF8.4);
+- na solicitação: notificação por e-mail (NF11.4) e expiração em 72 horas (NF11.7);
+- em Minhas solicitações: filtros e ordenação (resto do F17).
 
 ## Estrutura
 
@@ -69,8 +115,8 @@ Divisão entre as partes:
 
 | Parte | Controller | Templates | Rotas |
 |---|---|---|---|
-| A – Solicitação (H01, H02) | `controllers/solicitacoes_controller.py` | `views/solicitacoes/` | `/solicitacoes/nova/<servico_id>`, `/solicitacoes` |
-| B – Busca e recomendação (H03, H04) | `controllers/busca_controller.py` | `views/busca/` | `/busca` |
+| A – Solicitação (H01, H02) | `controllers/solicitacoes_controller.py` | `views/solicitacoes/` | `GET /solicitacoes` (com `?servico=<id>` abre o formulário), `POST /solicitacoes`, `POST /solicitacoes/<id>/cancelar` |
+| B – Busca e recomendação (H03 a H05) | `controllers/busca_controller.py` | `views/busca/` | `GET /busca?categoria=<id>&raio=<km>&ordem=<ordem>` |
 
 Nas rotas que exigem usuário, use `@usuario_obrigatorio`; para obter o usuário da sessão, use
 `usuario_logado()` (ambos em `controllers/sessao_controller.py`).
@@ -114,6 +160,16 @@ foram implementados. No lugar deles:
 
 ## Convenções
 
+- **Nomes de arquivo:** `*_controller.py` em `controllers/` e `*_service.py` em `services/`.
+- **Regras no service**, não no controller: o controller só lê a requisição, chama o service e
+  escolhe a resposta. Regra recusada = `SolicitacaoInvalidaError("mensagem")` no service; o
+  controller mostra a mensagem com `flash`.
+- **JavaScript só em `static/js/`** (e CSS em `static/css/`), carregado pelos blocos do
+  `base.html`; dados do servidor vão por atributos `data-*` no HTML, nunca por código dentro do
+  template.
+- **Depois de todo POST, `redirect`**, para o navegador não reenviar o formulário ao recarregar.
+- **Dados do banco:** as categorias vêm da migração (`flask db upgrade`); usuários e serviços de
+  exemplo vêm do `flask carregar-dados`.
 - **Mensagens na tela:** `flash("texto", "erro")` (vermelha) ou `flash("texto", "sucesso")` (verde).
 - **Mudou um modelo?** `flask db migrate -m "descrição"`, confira o arquivo gerado em
   `migrations/versions/` e rode `flask db upgrade`. A migração vai no mesmo commit da mudança.

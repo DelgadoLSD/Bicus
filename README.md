@@ -5,22 +5,18 @@ Software II (UFV).
 
 **Grupo:** Hugo Costa Araújo, Lucas Silva Delgado e Luis Felipe Martins Pereira.
 
-## Organização do repositório
+Este repositório traz a implementação da F4: o módulo **Contratação de serviço**, em que o cliente
+busca prestadores perto dele, solicita um serviço e acompanha (ou cancela) o que pediu.
+
+## Onde está cada coisa
 
 ```
 Bicus/
-├── codigo/                 implementação da F4: módulo "Contratação de serviço" (Flask)
-├── docs/                   documentos de cada fase e o tema do projeto
-│   ├── F1 - Concepção/
-│   ├── F2 - Análise de Pontos de Função/
-│   ├── F3 - Processo de Desenvolvimento/
-│   ├── F4 - Implementação/
-│   └── Tema do Projeto.pdf
-├── ferramentas/            scripts usados para gerar as figuras e os documentos das fases
-└── .github/workflows/      integração contínua: lint e testes a cada push
+├── codigo/              o sistema (Flask), os testes e a documentação do código
+│   ├── README.md        como rodar e testar, histórias implementadas, o que é simulado
+│   └── ESTRUTURA.md     papel de cada pasta e como as camadas se ligam
+├── .github/workflows/   integração contínua: lint e testes a cada push
+└── Tema do Projeto.pdf  o tema do projeto proposto na disciplina
 ```
 
-## Código (F4)
-
-Como rodar e testar: [codigo/README.md](codigo/README.md). Papel de cada pasta do código:
-[codigo/ESTRUTURA.md](codigo/ESTRUTURA.md).
+Para começar: [codigo/README.md](codigo/README.md).

@@ -202,4 +202,5 @@ Ponto de integração: o botão "Solicitar" da busca aponta para a rota da Parte
 Arquivos compartilhados (mexer só combinando com o grupo): atributos em `models/`, `domain/`,
 `views/base.html`, `seeds/`, `migrations/`, `tests/conftest.py`, `pyproject.toml`, `.github/`.
 
-Os critérios de aceitação de cada história estão em `docs/F4 - Implementação/Plano da F4.txt`.
+As histórias, os requisitos de cada uma e onde estão os testes ficam no `README.md` (seção
+"Histórias implementadas").
