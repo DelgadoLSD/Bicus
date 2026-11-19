@@ -1,0 +1,21 @@
+/* Campo da data desejada. O flatpickr envolve o campo numa caixa própria (.flatpickr-wrapper);
+   dentro do grupo com o botão do calendário, ela ocupa o espaço livre e o campo fica com os
+   cantos da direita retos, colado no botão. */
+.flatpickr-wrapper {
+  display: block;
+}
+
+.input-group > .flatpickr-wrapper {
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+}
+
+.input-group > .flatpickr-wrapper:focus-within {
+  z-index: 5;
+}
+
+.input-group > .flatpickr-wrapper > .form-control {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

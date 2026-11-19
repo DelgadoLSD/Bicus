@@ -16,8 +16,24 @@
         <div class="row g-3 mb-3">
           <div class="col-sm-6">
             <label for="data_desejada" class="form-label">Data desejada</label>
-            <input id="data_desejada" name="data_desejada" type="date" class="form-control"
-                   min="{{ hoje.isoformat() }}" required>
+            {# O static/js/solicitacoes.js troca este campo por um "dd/mm/aaaa" que aceita digitar;
+               o botão ao lado abre o calendário. #}
+            <div class="input-group">
+              <input id="data_desejada" name="data_desejada" type="text" class="form-control"
+                     placeholder="dd/mm/aaaa" data-calendario data-minimo="{{ hoje.isoformat() }}">
+              <button type="button" class="btn btn-outline-secondary" data-abrir-calendario
+                      title="Abrir calendário" aria-label="Abrir calendário">
+                {# Ícone "calendar3" do Bootstrap Icons (licença MIT) #}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                  <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                </svg>
+              </button>
+            </div>
+            <div class="form-text text-danger" data-campo="erro-data" hidden>
+              Data inválida ou anterior a hoje.
+            </div>
           </div>
           <div class="col-sm-6">
             <label for="turno" class="form-label">Turno</label>
