@@ -12,6 +12,7 @@ from bicus.extensions import db
 if TYPE_CHECKING:
     from bicus.models.categoria import Categoria
     from bicus.models.prestador import Prestador
+    from bicus.models.usuario import Usuario
 
 
 class Servico(db.Model):
@@ -31,3 +32,10 @@ class Servico(db.Model):
 
     prestador: Mapped[Prestador] = relationship(back_populates="servicos")
     categoria: Mapped[Categoria] = relationship(back_populates="servicos")
+
+    def disponivel(self) -> bool:
+        """Pode ser contratado: o serviço e o perfil do prestador estão ativos."""
+        return self.ativo and self.prestador.ativo
+
+    def oferecido_por(self, usuario: Usuario) -> bool:
+        return self.prestador_id == usuario.id

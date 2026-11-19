@@ -15,7 +15,7 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 |---|---|
 | `services/distancia_service.py` | `distancia_km(origem, destino)`: Haversine (NF8.2) |
 | `services/busca_service.py` | `buscar_prestadores(categoria_id, cliente, raio_km)` → lista de `(prestador, servico, distancia)` |
-| `services/solicitacoes_service.py` | `listar_solicitacoes`, `cancelar_solicitacao` e a exceção `SolicitacaoInvalidaError` |
+| `services/solicitacoes_service.py` | `criar_solicitacao` (H01, com as regras), `listar_solicitacoes`, `cancelar_solicitacao` e a exceção `SolicitacaoInvalidaError` |
 | `models/solicitacao.py` | `Solicitacao.pode_cancelar()` |
 | `controllers/busca_controller.py` | `GET /busca` |
 | `controllers/solicitacoes_controller.py` | `GET /solicitacoes` (lista + modal se vier `?servico=`), `POST /solicitacoes` (criar), `POST /solicitacoes/<id>/cancelar` |
@@ -27,8 +27,11 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 
 ### 1. Testes unitários (prioridade: o professor exige a suíte)
 
-Hoje não há nenhum teste. Cada teste monta só os dados de que precisa (fixtures `app` e `db` do
-`tests/conftest.py`, banco SQLite em memória). Datas sempre por parâmetro, nunca `date.today()`.
+Já existem os testes da H01 (`tests/unit/test_solicitacoes_service.py` e
+`tests/integration/test_solicitacoes_rotas.py`). Cada teste monta só os dados de que precisa, com as
+funções de `tests/fabricas.py` (`criar_usuario`, `criar_prestador`, `criar_servico`) e as fixtures
+`app` e `db` do `tests/conftest.py` (banco SQLite em memória). Datas sempre por parâmetro, nunca
+`date.today()`. Rodar: `.\.venv\Scripts\pytest`.
 
 - `tests/unit/test_distancia_service.py`: dois pontos conhecidos; mesmo ponto = 0
 - `tests/unit/test_busca_service.py`: um teste por regra
@@ -41,21 +44,15 @@ Hoje não há nenhum teste. Cada teste monta só os dados de que precisa (fixtur
   - cancelar pendente → Cancelada
   - cancelar solicitação de outro cliente → erro
   - cancelar solicitação que não está pendente → erro
-  - (depois do item 2) as validações do H01
+  - ~~as validações do H01~~ (feito)
 
-### 2. H01: validações ao criar a solicitação
+### 2. H01: validações ao criar a solicitação (feito)
 
-Hoje a rota `criar` monta a `Solicitacao` e grava direto, sem validar nada. Mover para o service:
-
-- `criar_solicitacao(cliente, dados, hoje) -> Solicitacao` em `solicitacoes_service.py`, com os
-  dados do formulário numa dataclass `DadosSolicitacao` (evita muitos parâmetros)
-- regras, cada uma levantando `SolicitacaoInvalidaError` com a mensagem para o usuário:
-  - campos obrigatórios: serviço, descrição, data desejada e turno (NF11.1)
-  - data desejada ≥ hoje (NF11.2)
-  - não solicitar o próprio serviço: `servico.prestador.id == cliente.id` (NF11.3)
-  - no máximo 10 solicitações pendentes por cliente (NF11.5)
-- a rota fica: `try` → `criar_solicitacao(...)` → `flash` de sucesso; `except SolicitacaoInvalidaError`
-  → `flash(str(erro), "erro")` e `redirect` para `/solicitacoes?servico=<id>` (o modal reabre sozinho)
+`criar_solicitacao(cliente, dados, hoje)` em `solicitacoes_service.py`, com os dados do formulário
+em `DadosSolicitacao`. Recusa com `SolicitacaoInvalidaError` e mensagem: campos obrigatórios
+(NF11.1), serviço inexistente/inativo ou prestador desativado, data anterior a hoje (NF11.2), o
+próprio serviço (NF11.3, `Servico.oferecido_por`) e mais de `LIMITE_PENDENTES` = 10 pendentes
+(NF11.5). Endereço vazio usa o do cliente. A rota mostra a mensagem em vermelho e reabre o modal.
 
 ### 3. H03: filtros que faltam na busca (NF8.3)
 

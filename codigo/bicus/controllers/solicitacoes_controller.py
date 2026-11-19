@@ -1,19 +1,22 @@
 from datetime import date
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from werkzeug.datastructures import MultiDict
 
 from bicus.controllers.sessao_controller import usuario_logado, usuario_obrigatorio
 from bicus.domain import Turno
 from bicus.extensions import db
 from bicus.models import Servico
-from bicus.models.solicitacao import Solicitacao
 from bicus.services.solicitacoes_service import (
+    DadosSolicitacao,
     SolicitacaoInvalidaError,
     cancelar_solicitacao,
+    criar_solicitacao,
     listar_solicitacoes,
 )
 
 bp = Blueprint("solicitacoes", __name__, url_prefix="/solicitacoes")
+
 
 @bp.get("")
 @usuario_obrigatorio
@@ -27,19 +30,16 @@ def listar():
         hoje=date.today(),
     )
 
+
 @bp.post("")
 @usuario_obrigatorio
 def criar():
-    solicitacao = Solicitacao(
-        cliente = usuario_logado(),
-        servico_id = request.form.get("servico_id", type=int),
-        descricao = request.form.get("descricao"),
-        data_desejada = request.form.get("data_desejada", type=date.fromisoformat),
-        turno = Turno[request.form["turno"]],
-        endereco = request.form.get("endereco"),
-    )
-    db.session.add(solicitacao)
-    db.session.commit()
+    dados = _dados_do_formulario(request.form)
+    try:
+        criar_solicitacao(usuario_logado(), dados, date.today())
+    except SolicitacaoInvalidaError as erro:
+        flash(str(erro), "erro")
+        return redirect(url_for("solicitacoes.listar", servico=dados.servico_id))
     flash("Solicitação enviada.", "sucesso")
     return redirect(url_for("solicitacoes.listar"))
 
@@ -54,3 +54,14 @@ def cancelar(solicitacao_id: int):
     else:
         flash("Solicitação cancelada.", "sucesso")
     return redirect(url_for("solicitacoes.listar"))
+
+
+def _dados_do_formulario(formulario: MultiDict) -> DadosSolicitacao:
+    """Converte o formulário; o que vier vazio ou inválido vira None e a regra recusa."""
+    return DadosSolicitacao(
+        servico_id=formulario.get("servico_id", type=int),
+        descricao=formulario.get("descricao", ""),
+        data_desejada=formulario.get("data_desejada", type=date.fromisoformat),
+        turno=Turno.__members__.get(formulario.get("turno", "")),
+        endereco=formulario.get("endereco", ""),
+    )
