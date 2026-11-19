@@ -1,7 +1,7 @@
-"""H01 (F11 Solicitar serviço): regras de criar_solicitacao."""
+"""Regras do service de solicitações: H01 (criar) e H02 (listar e cancelar)."""
 
 from dataclasses import replace
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import pytest
 from sqlalchemy import func, select
@@ -15,8 +15,9 @@ from bicus.services.solicitacoes_service import (
     SolicitacaoInvalidaError,
     cancelar_solicitacao,
     criar_solicitacao,
+    listar_solicitacoes,
 )
-from tests.fabricas import criar_prestador, criar_servico, criar_usuario
+from tests.fabricas import criar_prestador, criar_servico, criar_usuario, nova_solicitacao
 
 HOJE = date(2026, 11, 20)
 AMANHA = HOJE + timedelta(days=1)
@@ -53,7 +54,7 @@ def enviar_ate_o_limite(cliente, servico) -> list[Solicitacao]:
     ]
 
 
-# --- caso válido (NF13.1) -------------------------------------------------------------------
+# --- H01: caso válido (NF13.1) --------------------------------------------------------------------
 
 
 def test_nf13_1_solicitacao_valida_nasce_pendente(cliente, servico):
@@ -66,7 +67,7 @@ def test_nf13_1_solicitacao_valida_nasce_pendente(cliente, servico):
     assert solicitacao.data_criacao is not None
 
 
-# --- campos obrigatórios (NF11.1) -----------------------------------------------------------
+# --- H01: campos obrigatórios (NF11.1) ------------------------------------------------------------
 
 
 @pytest.mark.parametrize(
@@ -117,7 +118,7 @@ def test_servico_de_prestador_desativado_e_recusado(cliente):
         criar_solicitacao(cliente, dados_validos(servico), HOJE)
 
 
-# --- data válida (NF11.2) -------------------------------------------------------------------
+# --- H01: data válida (NF11.2) --------------------------------------------------------------------
 
 
 def test_nf11_2_data_de_ontem_e_recusada(cliente, servico):
@@ -134,7 +135,7 @@ def test_nf11_2_data_de_hoje_e_aceita(cliente, servico):
     assert criar_solicitacao(cliente, dados, HOJE).data_desejada == HOJE
 
 
-# --- autossolicitação (NF11.3) --------------------------------------------------------------
+# --- H01: autossolicitação (NF11.3) ---------------------------------------------------------------
 
 
 def test_nf11_3_prestador_nao_solicita_o_proprio_servico(servico):
@@ -145,7 +146,7 @@ def test_nf11_3_prestador_nao_solicita_o_proprio_servico(servico):
     assert total_de_solicitacoes() == 0
 
 
-# --- limite de pendentes (NF11.5) -----------------------------------------------------------
+# --- H01: limite de pendentes (NF11.5) ------------------------------------------------------------
 
 
 def test_nf11_5_pendente_alem_do_limite_e_recusada(cliente, servico):
@@ -169,3 +170,65 @@ def test_nf11_5_pendentes_de_outro_cliente_nao_contam(cliente, servico):
     enviar_ate_o_limite(criar_usuario("Bruno"), servico)
 
     assert criar_solicitacao(cliente, dados_validos(servico), HOJE).id is not None
+
+
+# --- H02: Minhas solicitações (F17) ---------------------------------------------------------------
+
+
+def test_f17_lista_so_as_solicitacoes_do_cliente(cliente, servico):
+    minhas = [nova_solicitacao(cliente, servico), nova_solicitacao(cliente, servico)]
+    nova_solicitacao(criar_usuario("Bruno"), servico)
+
+    listadas = listar_solicitacoes(cliente)
+
+    assert {s.id for s in listadas} == {s.id for s in minhas}
+
+
+def test_f17_lista_a_mais_recente_primeiro(cliente, servico):
+    # Criadas fora de ordem, para a ordem da lista não coincidir com a ordem de inserção.
+    antiga = nova_solicitacao(cliente, servico, data_criacao=datetime(2026, 11, 18, 9, 0))
+    recente = nova_solicitacao(cliente, servico, data_criacao=datetime(2026, 11, 20, 9, 0))
+    do_meio = nova_solicitacao(cliente, servico, data_criacao=datetime(2026, 11, 19, 9, 0))
+
+    assert listar_solicitacoes(cliente) == [recente, do_meio, antiga]
+
+
+def test_f17_cliente_sem_solicitacoes_recebe_lista_vazia(cliente):
+    assert listar_solicitacoes(cliente) == []
+
+
+# --- H02: cancelamento pelo cliente (NF11.6) ------------------------------------------------------
+
+
+def test_nf11_6_cancelar_pendente_vira_cancelada(cliente, servico):
+    solicitacao = nova_solicitacao(cliente, servico)
+
+    cancelar_solicitacao(cliente, solicitacao.id)
+
+    assert solicitacao.estado == EstadoSolicitacao.CANCELADA
+
+
+def test_nf11_6_nao_cancela_solicitacao_de_outro_cliente(cliente, servico):
+    de_outro = nova_solicitacao(criar_usuario("Bruno"), servico)
+
+    with pytest.raises(SolicitacaoInvalidaError, match="não encontrada"):
+        cancelar_solicitacao(cliente, de_outro.id)
+    assert de_outro.estado == EstadoSolicitacao.PENDENTE
+
+
+def test_cancelar_solicitacao_inexistente_e_recusado(cliente):
+    with pytest.raises(SolicitacaoInvalidaError, match="não encontrada"):
+        cancelar_solicitacao(cliente, 999)
+
+
+@pytest.mark.parametrize(
+    "estado",
+    [estado for estado in EstadoSolicitacao if estado != EstadoSolicitacao.PENDENTE],
+    ids=lambda estado: estado.name.lower(),
+)
+def test_nf11_6_so_cancela_solicitacao_pendente(cliente, servico, estado):
+    solicitacao = nova_solicitacao(cliente, servico, estado=estado)
+
+    with pytest.raises(SolicitacaoInvalidaError, match="pendentes"):
+        cancelar_solicitacao(cliente, solicitacao.id)
+    assert solicitacao.estado == estado

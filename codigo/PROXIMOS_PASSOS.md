@@ -27,9 +27,10 @@ O fluxo completo funciona: **Entrar como → Buscar → Solicitar → modal → 
 
 ### 1. Testes unitários (prioridade: o professor exige a suíte)
 
-Já existem os testes da H01 (`tests/unit/test_solicitacoes_service.py` e
-`tests/integration/test_solicitacoes_rotas.py`). Cada teste monta só os dados de que precisa, com as
-funções de `tests/fabricas.py` (`criar_usuario`, `criar_prestador`, `criar_servico`) e as fixtures
+A Parte A está toda testada: H01 e H02 em `tests/unit/test_solicitacoes_service.py`,
+`tests/unit/test_modelos.py` e `tests/integration/test_solicitacoes_rotas.py`. Falta a Parte B.
+Cada teste monta só os dados de que precisa, com as funções de `tests/fabricas.py`
+(`criar_usuario`, `criar_prestador`, `criar_servico`, `nova_solicitacao`) e as fixtures
 `app` e `db` do `tests/conftest.py` (banco SQLite em memória). Datas sempre por parâmetro, nunca
 `date.today()`. Rodar: `.\.venv\Scripts\pytest`.
 
@@ -39,12 +40,8 @@ funções de `tests/fabricas.py` (`criar_usuario`, `criar_prestador`, `criar_ser
   - próprio usuário fora da lista
   - perfil desativado; serviço inativo
   - (depois do item 3) prestador indisponível; raio de deslocamento que não alcança o cliente
-- `tests/unit/test_solicitacoes_service.py`
-  - lista só as do cliente, a mais recente primeiro
-  - cancelar pendente → Cancelada
-  - cancelar solicitação de outro cliente → erro
-  - cancelar solicitação que não está pendente → erro
-  - ~~as validações do H01~~ (feito)
+- ~~`tests/unit/test_solicitacoes_service.py`: validações do H01; lista e cancelamento do H02~~
+  (feito)
 
 ### 2. H01: validações ao criar a solicitação (feito)
 

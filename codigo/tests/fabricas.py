@@ -1,12 +1,13 @@
 """Cria no banco de teste só o que cada teste precisa (os dados simulados não são usados)."""
 
+from datetime import date
 from decimal import Decimal
 
 from sqlalchemy import select
 
-from bicus.domain import Coordenada, UnidadeCobranca
+from bicus.domain import Coordenada, Turno, UnidadeCobranca
 from bicus.extensions import db
-from bicus.models import Categoria, Prestador, Servico, Usuario
+from bicus.models import Categoria, Prestador, Servico, Solicitacao, Usuario
 
 CENTRO = Coordenada(-20.7546, -42.8826)
 
@@ -52,6 +53,22 @@ def criar_servico(prestador: Prestador, categoria: str = "Faxina", **campos) -> 
     db.session.add(servico)
     db.session.commit()
     return servico
+
+
+def nova_solicitacao(cliente: Usuario, servico: Servico, **campos) -> Solicitacao:
+    """Grava a solicitação direto no banco, sem passar pelas regras da H01, em qualquer estado;
+    `campos` troca os valores padrão (estado, data_criacao, data_desejada...)."""
+    valores = {
+        "descricao": "Pedido de teste.",
+        "data_desejada": date(2026, 11, 30),
+        "turno": Turno.MANHA,
+        "endereco": cliente.endereco,
+        **campos,
+    }
+    solicitacao = Solicitacao(cliente=cliente, servico=servico, **valores)
+    db.session.add(solicitacao)
+    db.session.commit()
+    return solicitacao
 
 
 def _categoria(nome: str) -> Categoria:
