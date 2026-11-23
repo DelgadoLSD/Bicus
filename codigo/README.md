@@ -14,23 +14,9 @@ O módulo cobre o fluxo principal do cliente:
 
 ## Como rodar
 
-Requisitos: Python 3.14 e git.
-
-```powershell
-cd codigo
-py -3.14 -m venv .venv
-.\.venv\Scripts\Activate.ps1          # Linux/Mac: source .venv/bin/activate
-pip install -r requirements-dev.txt
-copy .env.example .env                # Linux/Mac: cp .env.example .env
-flask db upgrade                      # cria o banco (instance/bicus.db)
-flask carregar-dados                  # dados simulados
-flask run
-```
-
-Abra http://127.0.0.1:5000 e escolha um usuário em "Entrar como".
-
-Para recomeçar o banco do zero: apague `instance/bicus.db` e rode `flask db upgrade` e
-`flask carregar-dados` de novo.
+Os passos para rodar o site e os testes, no Windows, no Linux e no macOS, estão no
+[README da raiz do repositório](../README.md). As configurações têm valores padrão, então o
+arquivo `.env` é opcional; o `.env.example` mostra as variáveis que dá para trocar.
 
 ## Como usar
 
@@ -66,10 +52,7 @@ pela recomendação (F9), e o cliente pode ordená-la por avaliação, distânci
 
 ## Testes e lint
 
-```powershell
-pytest
-ruff check .
-```
+Comandos no [README da raiz](../README.md#como-rodar-os-testes).
 
 Os testes usam um banco em memória criado do zero a cada teste (fixtures em `tests/conftest.py`:
 `app`, `db` e `client`). Cada teste monta só os dados de que precisa; os dados simulados não são
